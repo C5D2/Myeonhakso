@@ -1,3 +1,7 @@
+import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
+import './globals.css';
+
 export default function RootLayout({
   children,
 }: {
@@ -5,7 +9,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <div className="flex flex-col h-lvh border-red-500 border">
+          <Header />
+          {children}
+          <Footer />
+        </div>
+      </body>
     </html>
   );
 }

@@ -1,7 +1,9 @@
 export default function RootPage() {
   return (
     <>
-      <h1>ddd</h1>
+      <div className="grow-1 h-100">
+        <p className="text-lg">body</p>
+      </div>
     </>
   );
 }
