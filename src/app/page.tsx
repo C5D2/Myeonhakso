@@ -11,7 +11,7 @@ export default function RootPage() {
         <SwiperBanner />
       </div>
       <div className="flex flex-col">
-        <div className="mx-auto px-10 w-full max-w-screen-xxl">
+        <div className="mx-auto px-10 w-full max-w-screen-xxl mt-10">
           <h2 className="font-bold">지금 인기있는 강의</h2>
           <SwiperCard sortParam="popular" />
           <h2 className="font-bold">최근에 열린 강의</h2>
