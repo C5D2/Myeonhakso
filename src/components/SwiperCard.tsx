@@ -11,7 +11,7 @@ import { Pagination, Navigation } from 'swiper/modules';
 import Card from './Card';
 import { useEffect, useState } from 'react';
 import { Ilecture } from '@/types/lecture';
-import { fetchLecture } from '@/data/FetchLecture';
+import { fetchLecture } from '@/data/fetchLecture';
 import useSWR from 'swr';
 
 interface SwiperCardProps {
