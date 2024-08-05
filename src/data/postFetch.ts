@@ -24,8 +24,12 @@ export async function fetchPosts(
   return resJson.item;
 }
 
+//export async function fetchPost(path: string) {
+//const url = `${SERVER}/${path}`;
+
 export async function fetchPost(_id: string) {
   const url = `${SERVER}/posts/${_id}`;
+
   const res = await fetch(url);
   const resJson: ApiRes<SingleItem<Post>> = await res.json();
   if (!resJson.ok) {
@@ -33,3 +37,13 @@ export async function fetchPost(_id: string) {
   }
   return resJson.item;
 }
+
+// export async function fetchPost(_id: string) {
+//   const url = `${SERVER}/posts/${_id}`;
+//   const res = await fetch(url);
+//   const resJson: ApiRes<SingleItem<Post>> = await res.json();
+//   if (!resJson.ok) {
+//     return null;
+//   }
+//   return resJson.item;
+// }
