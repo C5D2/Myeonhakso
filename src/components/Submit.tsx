@@ -1,5 +1,7 @@
-function Submit() {
-  return <div>Submit</div>;
+import Button, { ButtonProps } from "./Button";
+
+function Submit({ children, ...rest }: ButtonProps) {
+  return <Button type="submit" { ...rest }>{ children }</Button>;
 }
 
 export default Submit;

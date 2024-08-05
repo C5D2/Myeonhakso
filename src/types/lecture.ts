@@ -1,3 +1,5 @@
+import { UserData } from '@/types/user';
+
 export interface Ilecture {
   _id: number;
   seller_id: number;
@@ -18,4 +20,18 @@ export interface IlectureImage {
   path: string;
   name: string;
   originalname: string;
+}
+
+export interface ILectureRegister extends Ilecture {
+  extra: {
+    type?: string;
+    level: string;
+    schedule: string;
+    preview: string;
+    content: string;
+    options: string;
+    curriculum: string;
+    address?: string;
+    url?: string;
+  };
 }
