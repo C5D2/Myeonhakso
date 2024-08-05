@@ -10,7 +10,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <div className="flex flex-col h-lvh border-red-500 border">
+        <div className="flex flex-col h-lvh">
           <Header />
           {children}
           <Footer />
