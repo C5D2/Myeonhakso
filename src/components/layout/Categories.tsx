@@ -10,8 +10,8 @@ function Categories() {
   return (
     <>
       <ul className="flex gap-20">
-        <li className={isActive('/it')}>
-          <Link href="/it">IT</Link>
+        <li className={isActive('/tech')}>
+          <Link href="/tech">IT</Link>
         </li>
         <li className={isActive('/language')}>
           <Link href="/language">어학</Link>

@@ -14,6 +14,20 @@ export interface Ilecture {
   createdAt: string;
   updatedAt: string;
   extra: any;
+  seller: Iseller;
+  replies: number;
+  bookmarks: number;
+  options: number;
+}
+
+export interface Iseller {
+  _id: number;
+  email: string;
+  name: string;
+  phone: string;
+  address: string;
+  image: string;
+  extra: any;
 }
 
 export interface IlectureImage {

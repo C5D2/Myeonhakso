@@ -9,8 +9,8 @@ export default async function Header() {
 
   return (
     <div className="box-border px-10 py-3 border-b-[3px] h-[85px] flex-shrink-0 flex items-center">
-      <Link href="/">
-        <img src="/logo.svg" className="w-14 h-14 mr-20" />
+      <Link href="/" className="w-14 h-14 mr-20">
+        <img src="/logo.svg" className="h-full min-w-full" />
       </Link>
       <Categories />
 

@@ -32,9 +32,6 @@ export async function fetchCategory(
   const params = new URLSearchParams();
   type && params.set('custom', JSON.stringify(type));
 
-  console.log('type', type);
-  console.log('params', params);
-
   const url = `${SERVER}/${path}?${params.toString()}`;
   console.log('url', url);
 
@@ -42,6 +39,8 @@ export async function fetchCategory(
     headers: {
       'client-id': '00-sample',
     },
+
+    next: { revalidate: 10 },
   });
   const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
   if (!resJson.ok) {
