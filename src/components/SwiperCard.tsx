@@ -11,10 +11,9 @@ import { Pagination, Navigation } from 'swiper/modules';
 import Card from './Card';
 import { useEffect, useState } from 'react';
 import { Ilecture } from '@/types/lecture';
-import { fetchLecture } from '@/data/fetchLecture';
-import { fetchLecture } from '@/data/fetchLecture';
 import useSWR from 'swr';
 import TeacherCard from './TeacherCard';
+import { fetchLecture } from '@/data/fetchLecture';
 
 interface SwiperCardProps {
   sortParam: string; // prop 이름과 타입 정의
