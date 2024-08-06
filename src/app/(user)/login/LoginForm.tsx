@@ -5,7 +5,7 @@ function LoginForm() {
   return (
     <form
       action={signInWithCredentials}
-      className="max-w-screen-md mx-auto mt-14"
+      className="max-w-screen-md mt-14"
     >
       <div className="mb-8">
         <label
