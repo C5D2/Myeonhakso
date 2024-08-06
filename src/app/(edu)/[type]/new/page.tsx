@@ -1,5 +1,7 @@
-function Page() {
-  return <div>Page</div>;
+import RegisterForm from '@/app/(edu)/[type]/new/RegisterForm';
+
+function RegisterPage() {
+  return <RegisterForm />;
 }
 
-export default Page;
+export default RegisterPage;

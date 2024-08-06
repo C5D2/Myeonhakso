@@ -11,34 +11,23 @@ import { Pagination, Navigation } from 'swiper/modules';
 import Card from './Card';
 import { useEffect, useState } from 'react';
 import { Ilecture } from '@/types/lecture';
-import { lectureFetch } from '@/data/lectureFetch';
+import { fetchLecture } from '@/data/fetchLecture';
 import useSWR from 'swr';
+import TeacherCard from './TeacherCard';
 
 interface SwiperCardProps {
   sortParam: string; // prop 이름과 타입 정의
 }
-const getLectures = async (path: string, sort?: object) => {
-  const data = await lectureFetch(path, sort);
-  return data;
-};
 
 function SwiperCard({ sortParam }: SwiperCardProps) {
   const path = 'products';
-  const [sort, setSort] = useState<object>({});
+  const sort = { [sortParam]: -1 };
+  let list;
 
-  useEffect(() => {
-    switch (sortParam) {
-      case 'popular':
-        setSort({ bookmarks: -1 });
-
-        break;
-      case 'recent':
-        setSort({ createdAt: -1 });
-        break;
-      case 'teacher':
-        break;
-    }
-  }, []);
+  const getLectures = async (path: string, sort?: object) => {
+    const data = await fetchLecture(path, sort);
+    return data;
+  };
 
   const { data, error, isLoading } = useSWR<Ilecture[] | null>(
     [path, sort],
@@ -46,22 +35,39 @@ function SwiperCard({ sortParam }: SwiperCardProps) {
   );
 
   if (isLoading) return <p>loading...</p>;
+  if (error) return <p>error</p>;
 
-  const list = data?.map((item, index) => (
-    <SwiperSlide key={index}>
-      <Card key={index} item={item} />
-    </SwiperSlide>
-  ));
+  if (sortParam === 'buyQuantity') {
+    list = data?.map((item, index) => (
+      <SwiperSlide key={index}>
+        <TeacherCard key={index} item={item} />
+      </SwiperSlide>
+    ));
+  } else {
+    list = data?.map((item, index) => (
+      <SwiperSlide key={index}>
+        <Card key={index} item={item} />
+      </SwiperSlide>
+    ));
+  }
 
   return (
     <>
       <Swiper
-        slidesPerView={4}
+        slidesPerView={2}
         // centeredSlides={true}
-        spaceBetween={30}
+        spaceBetween={0}
         navigation={true}
         modules={[Navigation]}
-        className="mySwiper"
+        className="cardSwiper"
+        breakpoints={{
+          768: {
+            slidesPerView: 3,
+          },
+          1280: {
+            slidesPerView: 4,
+          },
+        }}
       >
         {list}
         {/* <SwiperSlide>Slide 2</SwiperSlide>
@@ -71,6 +77,11 @@ function SwiperCard({ sortParam }: SwiperCardProps) {
         <SwiperSlide>Slide 6</SwiperSlide>
         <SwiperSlide>Slide 7</SwiperSlide>
         <SwiperSlide>Slide 8</SwiperSlide> */}
+
+        {/* <div className="navigation-wrapper">
+          <div className="swiper-button-prev">prev</div>
+          <div className="swiper-button-next">next</div>
+        </div> */}
       </Swiper>
     </>
   );
