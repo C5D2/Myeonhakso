@@ -12,12 +12,17 @@ import Card from './Card';
 import { useEffect, useState } from 'react';
 import { Ilecture } from '@/types/lecture';
 import { fetchLecture } from '@/data/fetchLecture';
+import { fetchLecture } from '@/data/fetchLecture';
 import useSWR from 'swr';
 import TeacherCard from './TeacherCard';
 
 interface SwiperCardProps {
   sortParam: string; // prop 이름과 타입 정의
 }
+const getLectures = async (path: string, sort?: object) => {
+  const data = await fetchLecture(path, sort);
+  return data;
+};
 
 function SwiperCard({ sortParam }: SwiperCardProps) {
   const path = 'products';
@@ -35,6 +40,7 @@ function SwiperCard({ sortParam }: SwiperCardProps) {
   );
 
   if (isLoading) return <p>loading...</p>;
+  if (error) return <p>error</p>;
   if (error) return <p>error</p>;
 
   if (sortParam === 'buyQuantity') {
@@ -77,6 +83,11 @@ function SwiperCard({ sortParam }: SwiperCardProps) {
         <SwiperSlide>Slide 6</SwiperSlide>
         <SwiperSlide>Slide 7</SwiperSlide>
         <SwiperSlide>Slide 8</SwiperSlide> */}
+
+        {/* <div className="navigation-wrapper">
+          <div className="swiper-button-prev">prev</div>
+          <div className="swiper-button-next">next</div>
+        </div> */}
 
         {/* <div className="navigation-wrapper">
           <div className="swiper-button-prev">prev</div>
