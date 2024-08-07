@@ -5,13 +5,34 @@ import useUserStore from '@/zustand/userStore';
 import { Session } from 'next-auth';
 
 function SessionHandler({ session }: { session: Session | null }) {
-  const setUser = useUserStore((state) => state.setUser);
-  const clearUser = useUserStore((state) => state.clearUser);
+  const setUser = useUserStore(state => state.setUser);
+  const clearUser = useUserStore(state => state.clearUser);
 
   useEffect(() => {
     if (session?.user) {
-      setUser(session.user);
-    } else {
+      setUser({
+        id: session.user.id!,
+        name: session.user.name!,
+        email: session.user.email!,
+        image: session.user.image,
+        type: session.user.type,
+        accessToken: session.accessToken,
+        refreshToken: session.refreshToken,
+      });
+    }
+    // if (session?.user) {
+    //   console.log("session", session)
+    //   setUser({
+    //     _id: session.user._id,
+    //     name: session.user.name,
+    //     email: session.user.email,
+    //     image: session.user.image,
+    //     type: session.user.type,
+    //     accessToken: session.accessToken,
+    //     refreshToken: session.refreshToken,
+    //   });
+    // }
+    else {
       clearUser();
     }
   }, [session, setUser, clearUser]);
