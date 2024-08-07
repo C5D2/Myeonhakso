@@ -36,15 +36,19 @@ export interface IlectureImage {
   originalname: string;
 }
 
-export interface ILectureRegister extends Ilecture {
+export interface ILectureRegister extends Omit<Ilecture, 'extra'> {
+  content: string;
   extra: {
-    type?: string;
+    type: string;
     level: string;
-    schedule: string;
+    schedule: Date | null;
     preview: string;
-    content: string;
-    options: string;
-    curriculum: string;
+    options: {
+      days: string[];
+      startTime: Date | null | undefined;
+      endTime: Date | null | undefined;
+    }[];
+    curriculum: { content: string }[];
     address?: string;
     url?: string;
   };
