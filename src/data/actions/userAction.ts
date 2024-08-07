@@ -3,7 +3,7 @@
 import { ApiResWithValidation, FileRes, MultiItem, SingleItem, UserData, UserForm } from '@/types';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
-
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 console.log("SERVER", SERVER)
 
 export async function signup(formData: FormData): Promise<ApiResWithValidation<SingleItem<UserData>, UserForm>> {
@@ -19,15 +19,18 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
 
 	  // 이미지 먼저 업로드
 		const attach = formData.get('attach') as File;
+    console.log("attach", attach)
 
    if (attach && attach.size > 0) {
+    const fileFormData = new FormData();
+    fileFormData.append('attach', attach);
     // 프로필 이미지를 추가한 경우
     const fileRes = await fetch(`${SERVER}/files`, {
       method: 'POST',
       headers: {
-        'client-id': '07-myeonhakso',
+        'client-id': `${CLIENT_ID}`,
       },
-      body: attach,
+      body: fileFormData,
     });
 
     if(!fileRes.ok){
@@ -44,7 +47,7 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-			'client-id': '07-myeonhakso'
+			'client-id': `${CLIENT_ID}`
     },
     body: JSON.stringify(userData)
   });
@@ -53,3 +56,4 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
   console.log('data', data);
   return data;
 }
+

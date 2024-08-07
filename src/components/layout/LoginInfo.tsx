@@ -1,8 +1,11 @@
 'use client'
 
-import { signOut } from "next-auth/react";
+import {  signOut } from "next-auth/react";
 import Submit from "../Submit"
 import Image from "next/image";
+import useUserStore from "@/zustand/userStore";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 function LoginInfo({
   name,
@@ -11,8 +14,20 @@ function LoginInfo({
   name: string;
   image?: string | null;
 }) {
+	const clearUser = useUserStore((state) => state.clearUser);
+  const router = useRouter();
+
+  const handleSignOut = async (event: React.FormEvent) => {
+    event.preventDefault();
+    await signOut({ redirect: false });
+    clearUser();
+		window.location.reload();
+    router.push('/');
+  };
+
+
 	return (
-		<form action={ () => signOut() }>
+		<form onSubmit={handleSignOut}>
 		<p className="flex items-center">
 			{image && (
 				<Image

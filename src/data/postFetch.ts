@@ -3,6 +3,7 @@ import { ApiRes, MultiItem, Post, SingleItem } from '@/types';
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const LIMIT = process.env.NEXT_PUBLIC_LIMIT;
 const DELAY = process.env.NEXT_PUBLIC_DELAY;
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
 export async function fetchPosts(
   type: string | undefined,
@@ -38,12 +39,18 @@ export async function fetchPost(_id: string) {
   return resJson.item;
 }
 
-// export async function fetchPost(_id: string) {
-//   const url = `${SERVER}/posts/${_id}`;
-//   const res = await fetch(url);
-//   const resJson: ApiRes<SingleItem<Post>> = await res.json();
-//   if (!resJson.ok) {
-//     return null;
-//   }
-//   return resJson.item;
-// }
+export const fetchEmailValidation = async (email: string) => {
+  try {
+    const response = await fetch(`${SERVER}/users/email?email=${email}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'client-id': `${CLIENT_ID}`,
+      },
+    });
+    return response.json();
+  } catch (error) {
+    console.error('Error during email validation:', error);
+    throw error;
+  }
+};
