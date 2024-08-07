@@ -23,12 +23,14 @@ const config: Config = {
         'light-green': '#F4FBE8',
         'light-yellow': '#FBF9E8',
         'light-orange': '#FFF6EF',
-        'gray-90': '#666666',  
-        'gray-30': '#D9D9D9', 
+
+        'gray-90': '#666666',
+        'gray-30': '#D9D9D9',
         'gray-10': '#FAFAFA',
       },
     },
-    screens: { // max : 00px 보다 작을 때 동작
+    screens: {
+      // max : 00px 보다 작을 때 동작
       sm: { max: '640px' },
       md: { max: '768px' }, //모바일
       lg: { max: '1024px' },

@@ -3,15 +3,18 @@ import Link from 'next/link';
 import LoginInfo from './LoginInfo';
 import SessionHandler from './SessionHandler';
 import { Session } from 'next-auth';
+import Categories from './Categories';
 
 export default async function Header() {
   const session: Session | null = await auth();
   console.log('session', session);
 
   return (
-    <div className="box-border px-10 py-3 border-b-[3px] h-[85px] flex-shrink-0 flex justify-between">
-      <img src="/logo.svg" className="w-14 h-14" />
-
+    <div className="box-border px-10 py-3 border-b-[3px] h-[85px] flex-shrink-0 flex items-center">
+      <Link href="/" className="w-14 h-14 mr-20">
+        <img src="/logo.svg" className="h-full min-w-full" />
+      </Link>
+      <Categories />
     <div className='flex justify-end items-center'>
       {session?.user ? (
         <>
