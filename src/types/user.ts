@@ -6,7 +6,7 @@ export interface UserData {
   address?: string,
   type: 'user' | 'seller' | 'admin',
   loginType?: 'email' | 'kakao',
-  profileImage?: string,
+  image?: string,
   profile?: string,
   token?: {
     accessToken: string,
@@ -30,3 +30,4 @@ export type UserForm = {
   profileImage?: string,
 };
 
+export type UserLoginForm = Pick<UserForm, 'email' | 'password' >

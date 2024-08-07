@@ -1,8 +1,15 @@
 import NextAuth from 'next-auth';
-import CredentialsProvider from "next-auth/providers/credentials";
-import NaverProvider from "next-auth/providers/naver";
-import GoogleProvider from "next-auth/providers/google";
-import KakaoProvider from "next-auth/providers/kakao"
+import CredentialsProvider from 'next-auth/providers/credentials';
+import NaverProvider from 'next-auth/providers/naver';
+import GoogleProvider from 'next-auth/providers/google';
+import KakaoProvider from 'next-auth/providers/kakao';
+import useUserStore from './zustand/userStore';
+import {
+  ApiResWithValidation,
+  SingleItem,
+  UserData,
+  UserLoginForm,
+} from './types';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -10,6 +17,10 @@ const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
+      credentials: {
+        email: {},
+        password: {},
+      },
       async authorize(credentials) {
         const res = await fetch(`${SERVER}/users/login`, {
           method: 'POST',
@@ -20,21 +31,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           body: JSON.stringify(credentials),
         });
 
-        const resJson = await res.json();
-        console.log(resJson);
+        const resJson: ApiResWithValidation<
+          SingleItem<UserData>,
+          UserLoginForm
+        > = await res.json();
         if (resJson.ok) {
+          console.log('resJson', resJson.item);
           const user = resJson.item;
+
           return {
-            id: user._id,
+            id: String(user._id),
             name: user.name,
             email: user.email,
-            image: user.profileImage && SERVER + user.profileImage,
+            image: user.image && SERVER + user.image,
             type: user.type,
-            accessToken: user.token.accessToken,
-            refreshToken: user.token.refreshToken,
+            accessToken: user.token?.accessToken!,
+            refreshToken: user.token?.refreshToken!,
           };
         } else {
           return null;
+          // throw new Error();
         }
       },
     }),
@@ -51,12 +67,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.KAKAO_CLIENT_SECRET,
     }),
   ],
-	session: {
-    strategy: "jwt", 
+  session: {
+    strategy: 'jwt',
     maxAge: 60 * 60 * 24,
   },
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
   callbacks: {
     // 로그인 처리를 계속 할지 여부 결정
@@ -64,19 +80,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // user: authorize()가 리턴한 값
     async signIn({ user }) {
       return true;
+
       // user에 들어있는 사용자 정보를 이용해서 우리쪽 DB에 저장 (회원가입) 절차 필요
-      // 가입된 회원의 경우 자동으로 로그인 처리 
+      // 가입된 회원의 경우 자동으로 로그인 처리
     },
 
     // 로그인 성공한 회원 정보로 token 객체 설정
     // 최초 로그인시 user 객체 전달,
+
     async jwt({ token, user }) {
-      // 토큰 만료 체크, refreshToken으로 accessToken 갱신
-      // refreshToken도 만료되었을 경우 로그아웃 처리
-      if (user?.accessToken) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
+        token.type = user.type;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
       }
+      // 토큰 만료 체크, refreshToken으로 accessToken 갱신
+      
+      // refreshToken도 만료되었을 경우 로그아웃 처리
+      // if (user?.accessToken) {
+      //   token.accessToken = user.accessToken;
+      //   token.refreshToken = user.refreshToken;
+      // }
       return token;
     },
 
@@ -84,9 +112,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // token 객체 정보로 session 객체 설정
     async session({ session, token }) {
       console.log('Session Callback:', { session, token });
+      session.user.id = token.id as string;
+      session.user.name = token.name;
+      session.user.email = token.email as string;
+      session.user.image = token.image as string;
+      session.user.type = token.type as string;
+
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
+
       return session;
+
+      // console.log('Session Callback:', { session, token });
+
+      // return session;
     },
   },
 });
