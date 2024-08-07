@@ -1,27 +1,25 @@
 import { ILectureRegister } from '@/types/lecture';
-import { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 
-interface ILevelProps {
+interface ITypeProps {
   register: UseFormRegister<ILectureRegister>;
 }
 
-export const LEVEL = ['입문', '초급', '중급', '고급'];
+//TODO: tech, language, hobby
+export const CATEGORY = ['IT', '어학', '취미'];
 
-export default function Level({ register }: ILevelProps) {
-  // const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-
+export default function Category({ register }: ITypeProps) {
   return (
     <>
-      {LEVEL.map((item: string, index: number) => (
+      {CATEGORY.map((item: string, index: number) => (
         <li key={index}>
           <label>
             <input
               className="mr-1"
               type="radio"
               value={item}
-              {...register('extra.level', {
-                required: '난이도를 선택해주시기 바랍니다.',
+              {...register('extra.type', {
+                required: '강의 카테고리를 선택해주시기 바랍니다.',
               })}
             />
             {item}
