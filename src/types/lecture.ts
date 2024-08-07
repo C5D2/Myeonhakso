@@ -18,6 +18,7 @@ export interface Ilecture {
   replies: number;
   bookmarks: number;
   options: number;
+  image?: IlectureImage;
 }
 
 export interface Iseller {

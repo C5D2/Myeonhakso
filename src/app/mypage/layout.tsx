@@ -83,7 +83,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full">
       <div className="basis-1/5 flex justify-center">{sideBar}</div>
-      <div className="basis-4/5 border border-black">
+      <div className="border border-black basis-3/5">
         <div className="mt-10 border border-black flex flex-col">
           {children}
         </div>
