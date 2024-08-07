@@ -1,11 +1,18 @@
+import { User } from 'next-auth';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-const useUserStore = create(
+type UserState = {
+  user: User | null | undefined;
+  setUser: (user : User | undefined) => void ;
+  clearUser: () => void;
+}
+
+const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       user: null,
-      setUser: (user : 'user' | 'seller' | 'admin') => set({ user }),
+      setUser: (user) => set({ user }),
 			clearUser: () => set({ user: null }),
     }),
     {

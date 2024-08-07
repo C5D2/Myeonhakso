@@ -3,6 +3,7 @@
 import Button from '@/components/Button';
 import Submit from '@/components/Submit';
 import { signup } from '@/data/actions/userAction';
+import { fetchEmailValidation } from '@/data/postFetch';
 import { UserForm } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -14,6 +15,7 @@ function Signupform() {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
     setError,
   } = useForm<UserForm>();
@@ -23,6 +25,8 @@ function Signupform() {
     setSelectedType(value);
     setValue('type', value);
   };
+
+  const emailValue = watch('email', '');
 
   const addUser = async (formData: UserForm) => {
     const userData = new FormData();
@@ -52,9 +56,19 @@ function Signupform() {
   };
 
 
-  const handleEmailValidation = () => {
-    
-  }
+  const handleEmailValidationClick = async () => {
+    try {
+      const response = await fetchEmailValidation(emailValue);
+      if (response.ok === 1) {
+        alert('사용 가능한 이메일입니다.');
+      } else if(response.ok === 0) {
+        alert('이미 사용 중인 이메일입니다.');
+      }
+    } catch (error) {
+      console.error('Error during email validation:', error)
+      alert('이메일 확인 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
     <form
@@ -115,7 +129,7 @@ function Signupform() {
             이메일
           </label>
           <div className="flex align-bottom mb-2">
-            <Button size="sm" radius="lg">
+            <Button size="sm" radius="lg" onClick={handleEmailValidationClick}>
               중복확인
             </Button>
           </div>

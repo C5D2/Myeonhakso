@@ -3,8 +3,7 @@
 import { ApiResWithValidation, FileRes, MultiItem, SingleItem, UserData, UserForm } from '@/types';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
-
-console.log("SERVER", SERVER)
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
 export async function signup(formData: FormData): Promise<ApiResWithValidation<SingleItem<UserData>, UserForm>> {
 
@@ -15,19 +14,20 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
     password: formData.get('password'),
     profileImage: '',
   }
-    console.log("userData", userData)
 
 	  // 이미지 먼저 업로드
 		const attach = formData.get('attach') as File;
+    if (attach && attach.size > 0) {
+      const fileFormData = new FormData();
+      fileFormData.append('attach', attach);
 
-   if (attach && attach.size > 0) {
     // 프로필 이미지를 추가한 경우
     const fileRes = await fetch(`${SERVER}/files`, {
       method: 'POST',
       headers: {
-        'client-id': '07-myeonhakso',
+        'client-id':  `${CLIENT_ID}`,
       },
-      body: attach,
+      body: fileFormData,
     });
 
     if(!fileRes.ok){
@@ -36,6 +36,7 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
       throw new Error(`파일 업로드 실패: ${errorMsg}`);
     }
     const fileData: MultiItem<FileRes> = await fileRes.json();
+    
     // 서버로부터 응답받은 이미지 이름을 회원 정보에 포함
     userData.profileImage = fileData.item[0].path;
   } 
@@ -44,7 +45,7 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-			'client-id': '07-myeonhakso'
+			'client-id': `${CLIENT_ID}`
     },
     body: JSON.stringify(userData)
   });

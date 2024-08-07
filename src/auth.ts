@@ -5,6 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import KakaoProvider from "next-auth/providers/kakao"
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -14,6 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'client-id': `${CLIENT_ID}`,
           },
           body: JSON.stringify(credentials),
         });
