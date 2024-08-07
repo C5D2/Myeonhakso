@@ -15,28 +15,28 @@ export default async function Header() {
         <img src="/logo.svg" className="h-full min-w-full" />
       </Link>
       <Categories />
-    <div className='flex justify-end items-center'>
-      {session?.user ? (
-        <>
-        <LoginInfo name={session.user.name!} image={session.user.image}  />
-        <SessionHandler session={session} />
-        </>
-      ) : (
-        <div className="flex justify-end">
-          <Link
-            href="/login"
-            className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white"
-          >
-            로그인
-          </Link>
-          <Link
-            href="/signup"
-            className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white"
-          >
-            회원가입
-          </Link>
-        </div>
-      )}
+      <div className="flex justify-end items-center ml-auto">
+        {session?.user ? (
+          <>
+            <LoginInfo name={session.user.name!} image={session.user.image} />
+            <SessionHandler session={session} />
+          </>
+        ) : (
+          <div className="flex justify-end">
+            <Link
+              href="/login"
+              className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white"
+            >
+              로그인
+            </Link>
+            <Link
+              href="/signup"
+              className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white"
+            >
+              회원가입
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
