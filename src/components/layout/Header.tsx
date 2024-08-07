@@ -1,6 +1,8 @@
 import { auth } from '@/auth';
 import Link from 'next/link';
 import LoginInfo from './LoginInfo';
+import SessionHandler from './SessionHandler';
+import { Session } from 'next-auth';
 import Categories from './Categories';
 import { Session } from 'next-auth';
 import SessionHandler from './SessionHandler';
@@ -14,7 +16,6 @@ export default async function Header() {
         <img src="/logo.svg" className="h-full min-w-full" />
       </Link>
       <Categories />
-
       <div className="flex justify-end items-center ml-auto">
         {session?.user ? (
           <>

@@ -54,3 +54,4 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
   console.log('data', data);
   return data;
 }
+

@@ -23,6 +23,7 @@ const config: Config = {
         'light-green': '#F4FBE8',
         'light-yellow': '#FBF9E8',
         'light-orange': '#FFF6EF',
+
         'gray-90': '#666666',
         'gray-30': '#D9D9D9',
         'gray-10': '#FAFAFA',

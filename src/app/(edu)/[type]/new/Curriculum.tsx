@@ -1,19 +1,26 @@
-import { useFieldArray, useForm } from 'react-hook-form';
+import Button from '@/components/Button';
+import { ILectureRegister } from '@/types/lecture';
+import {
+  Control,
+  FieldErrors,
+  useFieldArray,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
 
-export default function Curriculum() {
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      extra: {
-        curriculum: [{ content: '' }],
-      },
-    },
-  });
+interface ICurriculum {
+  control: Control<ILectureRegister>;
+  register: UseFormRegister<ILectureRegister>;
+  setValue: UseFormSetValue<ILectureRegister>;
+  errors: FieldErrors<ILectureRegister>;
+}
 
+export default function Curriculum({
+  control,
+  register,
+  setValue,
+  errors,
+}: ICurriculum) {
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'extra.curriculum',
@@ -21,20 +28,17 @@ export default function Curriculum() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => append({ content: '' })}
-        className="mb-2 px-2 py-1 bg-green-400 text-white rounded-full"
-      >
+      <Button type="button" onClick={() => append({ content: '' })}>
         커리큘럼 추가
-      </button>
+      </Button>
       {fields.map((field, index) => (
-        <div key={field.id} className="mb-2 flex">
-          <span className=" text-gray-600 mr-2 mb-2">커리큘럼 {index + 1}</span>
+        <div key={field.id} className="m-2 flex items-baseline">
+          <span className="text-gray-600 mr-2 mb-2 flex-shrink-0">
+            커리큘럼 {index + 1}
+          </span>
           <input
             type="text"
-            id="curriculum"
-            placeholder="일정별 커리큘럼을 입력하세요"
+            placeholder="일정별 커리큘럼을 입력해주세요."
             className="w-full p-2 border rounded-lg focus:outline-none focus:border-green-400"
             {...register(`extra.curriculum.${index}.content`, {
               required: '일정별 커리큘럼을 1개 이상 입력해주시기 바랍니다.',

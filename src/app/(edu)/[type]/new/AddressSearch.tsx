@@ -6,13 +6,13 @@ import { ILectureRegister } from '@/types/lecture';
 interface IAddressProps {
   setValue: UseFormSetValue<ILectureRegister>;
   register: UseFormRegister<ILectureRegister>;
-  errors: FieldErrors<ILectureRegister>;
+  // errors: FieldErrors<ILectureRegister>;
   setAddress: (address: string) => void;
 }
 
 export default function AddressSearch({
   register,
-  errors,
+  // errors,
   setValue,
   setAddress,
 }: IAddressProps) {
@@ -46,7 +46,7 @@ export default function AddressSearch({
         <div className="mt-2">
           <div className="grid grid-cols-3 md:grid-cols-5 gap-6">
             <input
-              placeholder="주소를 검색해주세요"
+              placeholder="주소를 검색해주세요."
               {...register('extra.address')}
               className="col-span-5 block rounded-lg border py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-green-400"
               onClick={() => setIsOpen(val => !val)}

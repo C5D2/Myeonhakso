@@ -16,7 +16,7 @@ export default function TeacherCard({ item }: ICardProp) {
   return (
     <Link
       href={`/${item?.extra?.type}/${item?._id}`}
-      className={`bg-gray-10 flex rounded-xl items-center w-[80%] min-w-[150px] h-full border border-gray-10`}
+      className={`bg-gray-10 flex rounded-xl items-center w-[80%] min-w-[150px] h-[90%] border border-gray-10`}
     >
       <div className={`p-5`}>
         <div className="w-28 h-36 rounded-xl">
