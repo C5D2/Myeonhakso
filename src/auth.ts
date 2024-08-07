@@ -15,7 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'client-id': `${CLIENT_ID}`
+            'client-id': `${CLIENT_ID}`,
           },
           body: JSON.stringify(credentials),
         });

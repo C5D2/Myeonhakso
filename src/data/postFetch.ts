@@ -54,3 +54,4 @@ export const fetchEmailValidation = async (email: string) => {
     throw error;
   }
 };
+

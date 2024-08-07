@@ -129,7 +129,7 @@ function Signupform() {
           >
             이메일
           </label>
-          <div className="flex align-bottom mb-2" >
+          <div className="flex align-bottom mb-2">
             <Button size="sm" radius="lg" onClick={handleEmailValidationClick}>
               중복확인
             </Button>

@@ -5,7 +5,6 @@ import Submit from "../Submit"
 import Image from "next/image";
 import useUserStore from "@/zustand/userStore";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 function LoginInfo({
   name,
