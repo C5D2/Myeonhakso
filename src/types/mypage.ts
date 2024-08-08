@@ -9,6 +9,7 @@ export interface IOrderSaleList {
   createdAt: string;
   updatedAt: string;
   cost: ICost;
+  user?: Iseller;
 }
 
 export interface Iaddress {
