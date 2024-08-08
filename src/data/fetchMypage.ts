@@ -26,13 +26,19 @@ export async function fetchOrderlist(): Promise<IOrderSaleList[]> {
   return resJson.item;
 }
 
-export async function fetchSalelist(): Promise<IOrderSaleList[]> {
+export async function fetchSalelist(
+  page?: string,
+): Promise<MultiItem<IOrderSaleList>> {
+  const params = new URLSearchParams();
+  page && params.set('page', page);
+  params.set('limit', '4');
   const session = await getSession();
   const accesstoken = session?.accessToken;
   // path: string,
   // sort?: object,
   // limit?: string,
-  const url = `${SERVER}/seller/orders`;
+
+  const url = `${SERVER}/seller/orders?${params.toString()}`;
   const res = await fetch(url, {
     headers: {
       'client-id': `${CLIENT_ID}`,
@@ -43,7 +49,7 @@ export async function fetchSalelist(): Promise<IOrderSaleList[]> {
   if (!resJson.ok) {
     throw new Error('판매 목록 조회 실패');
   }
-  return resJson.item;
+  return resJson;
 }
 
 export async function fetchOrderitem(id: number): Promise<IOrderSaleList> {

@@ -13,8 +13,8 @@ export interface Ilecture {
   mainImages: IlectureImage[];
   createdAt: string;
   updatedAt: string;
-  extra: any;
   seller: Iseller;
+  extra: Iextra;
   replies: number;
   bookmarks: number;
   options: number;
@@ -29,6 +29,21 @@ export interface Iseller {
   address: string;
   image: string;
   extra: any;
+}
+
+export interface Iextra {
+  type: string;
+  level: string;
+  schedule: string[];
+  preview: string;
+  options: {
+    days: string[];
+    startTime: Date | null | undefined;
+    endTime: Date | null | undefined;
+  }[];
+  curriculum: { content: string }[];
+  address?: string;
+  url?: string;
 }
 
 export interface IlectureImage {

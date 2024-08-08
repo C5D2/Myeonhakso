@@ -19,10 +19,11 @@ export default function TeacherCard({ item }: ICardProp) {
       className={`bg-gray-10 flex rounded-xl items-center w-[80%] min-w-[150px] h-[90%] border border-gray-10`}
     >
       <div className={`p-5`}>
-        <div className="w-28 h-36 rounded-xl">
+        <div className="w-34 h-36 rounded-xl">
           <img
             src={`${SERVER}/${item?.seller?.image}`}
             className="w-full h-full object-cover"
+            onError={e => e.target.setAttribute('src', '/lecture-default.jpg')}
           />
         </div>
       </div>

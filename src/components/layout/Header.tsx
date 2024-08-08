@@ -7,7 +7,7 @@ import Categories from './Categories';
 
 export default async function Header() {
   const session: Session | null = await auth();
-  console.log("session", session)
+  console.log('session', session);
 
   return (
     <div className="box-border px-10 py-3 border-b-[3px] h-[85px] flex-shrink-0 flex items-center">
@@ -18,8 +18,8 @@ export default async function Header() {
       <div className="flex justify-end items-center ml-auto">
         {session?.user ? (
           <>
-              <LoginInfo name={session.user.name!} image={session.user.image} />
-              <SessionHandler session={session} />
+            <LoginInfo name={session.user.name!} image={session.user.image} />
+            <SessionHandler session={session} />
           </>
         ) : (
           <div className="flex justify-end">

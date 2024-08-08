@@ -81,12 +81,10 @@ function Layout({ children }: { children: React.ReactNode }) {
   }
   // const user = 'seller';
   return (
-    <div className="flex h-full">
+    <div className="flex">
       <div className="basis-1/5 flex justify-center">{sideBar}</div>
-      <div className="border border-black basis-3/5">
-        <div className="mt-10 border border-black flex flex-col">
-          {children}
-        </div>
+      <div className="basis-3/5">
+        <div className="mt-10 flex flex-col">{children}</div>
       </div>
     </div>
   );
