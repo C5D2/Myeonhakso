@@ -6,23 +6,27 @@ interface ITypeProps {
 }
 
 //TODO: tech, language, hobby
-export const CATEGORY = ['IT', '어학', '취미'];
+export const CATEGORY = [
+  { label: 'IT', value: 'tech' },
+  { label: '어학', value: 'language' },
+  { label: '취미', value: 'hobby' },
+];
 
 export default function Category({ register }: ITypeProps) {
   return (
     <>
-      {CATEGORY.map((item: string, index: number) => (
+      {CATEGORY.map((item, index) => (
         <li key={index}>
           <label>
             <input
               className="mr-1"
               type="radio"
-              value={item}
+              value={item.value}
               {...register('extra.type', {
                 required: '강의 카테고리를 선택해주시기 바랍니다.',
               })}
             />
-            {item}
+            {item.label}
           </label>
         </li>
       ))}

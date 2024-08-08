@@ -1,11 +1,11 @@
 'use client';
 
-import AddressSearch from '@/app/(edu)/[type]/new/AddressSearch';
-import Category from '@/app/(edu)/[type]/new/Category';
-import Curriculum from '@/app/(edu)/[type]/new/Curriculum';
-import Level from '@/app/(edu)/[type]/new/Level';
-import Option from '@/app/(edu)/[type]/new/Option';
-import Quantity from '@/app/(edu)/[type]/new/Quantity';
+import AddressSearch from '@/app/(edu)/new/AddressSearch';
+import Category from '@/app/(edu)/new/Category';
+import Curriculum from '@/app/(edu)/new/Curriculum';
+import Level from '@/app/(edu)/new/Level';
+import Option from '@/app/(edu)/new/Option';
+import Quantity from '@/app/(edu)/new/Quantity';
 import Button from '@/components/Button';
 import InputError from '@/components/InputError';
 import KakaoMap from '@/components/KakaoMap';
@@ -20,7 +20,8 @@ import { Controller, useForm } from 'react-hook-form';
 
 // TODO: validation 확인, extra.type 보내야 함;;;
 // 등록할 때 type 체크해서 그 페이지...로?
-export default function RegisterForm() {
+// date 보낼 때 문자열로 보내기, 받을 때 변환하지 말고. 그러면 string으로 다 될 듯~낼 한번 시도해보자!!
+export default function RegisterForm({ params }: { params: { type: string } }) {
   const router = useRouter();
   const {
     register,
@@ -42,14 +43,22 @@ export default function RegisterForm() {
   const [address, setAddress] = useState<string>('');
   const [tab, setTab] = useState(0);
 
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
-  const onChange = (dates: [Date | undefined, Date | undefined]) => {
+  const onRangeChange = (dates: [Date | undefined, Date | undefined]) => {
     const [start, end] = dates;
-    setStartDate(start);
+    setStartDate(start || new Date());
     setEndDate(end);
   };
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(null);
+
+  // const onRangeChange = dates => {
+  //   const [start, end] = dates;
+  //   setStartDate(start);
+  //   setEndDate(end);
+  // };
 
   const handleFormSubmit = async (data: ILectureRegister) => {
     if (!data.extra?.address && !data.extra?.url) {
@@ -62,7 +71,8 @@ export default function RegisterForm() {
 
     const resData = await postForm(data);
     if (resData.ok) {
-      // router.push(`/${params.type}`);
+      const id = resData._id;
+      router.push(`/${params.type}/${id}`);
     } else {
       if ('errors' in resData) {
         resData.errors.forEach(error =>
@@ -193,7 +203,7 @@ export default function RegisterForm() {
                 selected={startDate}
                 onChange={dates => {
                   onChange(dates);
-                  onChange(dates);
+                  onRangeChange(dates);
                 }}
                 startDate={startDate}
                 endDate={endDate}
@@ -214,6 +224,9 @@ export default function RegisterForm() {
             register={register}
             setValue={setValue}
             watch={watch}
+            days={[]}
+            startTime={null}
+            endTime={null}
           />
           <InputError target={errors.extra?.options} />
         </div>
