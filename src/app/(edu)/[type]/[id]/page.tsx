@@ -1,67 +1,81 @@
 import Button from '@/components/Button';
 import Card from '@/components/Card';
 import KakaoMap from '@/components/KakaoMap';
+import { fetchLectureDetail } from '@/data/fetchLecture';
+import { format, parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale';
+
+function formatDate(date: any) {
+  return format(parseISO(date), 'yyyy.MM.dd', { locale: ko });
+}
+
+function formatTime(date: any) {
+  return format(parseISO(date), 'HH:mm', { locale: ko });
+}
 
 // TODO: 강의 소개, 강의 일정, 화상강의, 대면강의, 커리큘럼, 선생님의 다른 강의, 많이 듣는 토픽(카드)
-function DetailPage() {
+async function DetailPage({ params }: { params: { id: string } }) {
+  const item = await fetchLectureDetail(params.id);
+
   return (
     <div>
       <div className="h-[640px] bg-gradient-to-r from-bg-light-green to-white ">
         <div className="mx-[170px] my-[100px] md:mx-[30px] md:my-[20px] pt-28 mt-auto mb-12">
           <div className="flex gap-5">
             <div className="rounded-lg bg-gray-10 h-[300px] px-20 py-10 box-border flex flex-col justify-evenly">
-              <h2 className="text-2xl font-extrabold">강의 이름</h2>
-              <p>
-                강의 소개 강의 소개 강의 소개 강의 소개 강의 소개 강의 소개 강의
-                소개 강의 소개 강의 소개 강의 소개 강의 소개 강의 소개 강의 소개
-                강의 소개 강의 소개 강의 소개 강의 소개 강의 소개 강의 소개 강의
-                소개 강의 소개
-              </p>
+              <h2 className="text-2xl font-extrabold">{item?.name}</h2>
+              <p>{item?.content}</p>
               <div className="flex gap-3">
                 <img src="/heart.svg" alt="찜" />
                 <img src="/share.svg" alt="공유하기" />
               </div>
             </div>
             <div className="rounded-lg bg-gray-10 w-[410px] h-[300px] px-10 py-10 box-border flex flex-col justify-evenly">
-              <h2 className="text-2xl font-extrabold">48000원</h2>
+              <h2 className="text-2xl font-extrabold">{item?.price}원</h2>
               <p>수강 옵션을 선택해주세요.</p>
               <select name="" id="">
-                월, 목
+                {item?.extra?.options.map((option, index) => (
+                  <option key={index} value={index}>
+                    {option.days.join(', ')} {formatTime(option.startTime)} ~{' '}
+                    {formatTime(option.endTime)}
+                  </option>
+                ))}
               </select>
               <Button>수강 신청</Button>
             </div>
           </div>
 
           <div className="rounded-lg bg-gray-10 h-[170px] mt-[50px] px-20 py-10 border-box flex place-content-evenly items-center">
+            <img src="/lesson.svg" alt="레슨수" />
             <div>
               <p>레슨 수</p>
-              <p>71개</p>
+              <p>{item?.extra.curriculum.length}개</p>
             </div>
+            <img src="/level-low.svg" alt="난이도" />
             <div>
               <p>난이도</p>
-              <p>중급</p>
+              <p>{item?.extra.level}</p>
             </div>
+            <img src="/calendar.svg" alt="일정" />
             <div>
               <p>수강 일정</p>
-              <p>24.08.01~ 24.08.30</p>
+              <p>{item?.extra.level}</p>
             </div>
+            <img src="/category.svg" alt="카테고리" />
             <div>
               <p>카테고리</p>
-              <p>데이터분석</p>
+              <p>{item?.extra.type}</p>
             </div>
           </div>
 
-          <div className="rounded-lg bg-gray-10 h-[170px] mt-[50px] px-8 py-10 border-box flex place-content-evenly gap-3">
-            <img src="/teacher_detail.svg" alt="" />
+          <div className="rounded-lg bg-gray-10 h-[170px] mt-[50px] px-8 py-10 border-box flex place-content-evenly items-center gap-3">
+            <img src="/teacher_detail.svg" width="80px" alt="선생님 사진" />
             <div>
-              <h2>오하요 선생님</h2>
-              <p>
-                선생님을 소개합니다 블라블라라라라라라라 선생님을 소개합니다
-                블라라라라라라라라라블~
-              </p>
+              <h2>{item?.seller.name}</h2>
+              <p>짱짱걸데스</p>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex">
+              <div className="flex items-start justify-evenly">
                 <img src="/star.svg" alt="만족도" />
                 <p className="inline">수강생 만족도 4.8</p>
               </div>
@@ -74,16 +88,23 @@ function DetailPage() {
             <div className="rounded-lg bg-gray-10 h-[170px] px-8 py-10 border-box flex place-content-evenly items-center">
               <div className="flex gap-4 items-center">
                 <img src="/calendar.svg" width="50px" alt="일정" />
-                <p>2024.07.01-2024.07.31</p>
+                <p>
+                  {formatDate(item?.extra?.schedule[0])} -
+                  {formatDate(item?.extra?.schedule[1])}
+                </p>
               </div>
 
-              <div className="flex gap-4">
-                <img src="/time.svg" width="50px" alt="시간" />
-                <div>
-                  <p>월, 수, 금 16:00~18:00</p>
-                  <p>화, 목 16:00~18:00</p>
+              {item?.extra?.options.map((option, index) => (
+                <div key={index} className="flex gap-4 items-center">
+                  <img src="/time.svg" width="50px" alt="시간" />
+                  <div>
+                    <p>
+                      {option.days.join(', ')} {formatTime(option.startTime)} ~{' '}
+                      {formatTime(option.endTime)}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -97,8 +118,14 @@ function DetailPage() {
           <div className="mt-[50px]">
             <h3 className="font-bold">대면 강의</h3>
             <div className="rounded-lg bg-gray-10 pb-5">
-              <KakaoMap address="서울 중구 퇴계로 324 (광희동2가, 성우빌딩)" />
-              <p>서울 중구 광희동</p>
+              {item?.extra?.address === '' ? (
+                <p>화상으로 진행되는 강의입니다.</p>
+              ) : (
+                <>
+                  <KakaoMap address={item?.extra?.address!} />
+                  <p>{item?.extra.address}</p>
+                </>
+              )}
             </div>
           </div>
 
