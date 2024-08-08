@@ -1,5 +1,5 @@
-import { ApiRes, MultiItem } from '@/types';
-import { Ilecture } from '@/types/lecture';
+import { ApiRes, MultiItem, SingleItem } from '@/types';
+import { Ilecture, ILectureDetail } from '@/types/lecture';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const LIMIT = process.env.NEXT_PUBLIC_CARD_LIMIT;
@@ -46,6 +46,20 @@ export async function fetchCategory(
   const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
   if (!resJson.ok) {
     throw new Error('카테고리 게시물 목록 조회 실패');
+  }
+  return resJson.item;
+}
+
+export async function fetchLectureDetail(_id: string) {
+  const url = `${SERVER}/products/${_id}`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+    },
+  });
+  const resJson: ApiRes<SingleItem<ILectureDetail>> = await res.json();
+  if (!resJson.ok) {
+    return null;
   }
   return resJson.item;
 }

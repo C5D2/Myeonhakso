@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { setHours, setMinutes } from 'date-fns';
+import { setHours, setMinutes, format, parseISO, formatISO } from 'date-fns';
 import {
   Control,
   UseFormRegister,
@@ -20,6 +19,9 @@ interface IOption {
   register: UseFormRegister<ILectureRegister>;
   setValue: UseFormSetValue<ILectureRegister>;
   watch: UseFormWatch<ILectureRegister>;
+  days: string[];
+  startTime: string | null;
+  endTime: string | null;
 }
 
 export default function Option({
@@ -28,7 +30,10 @@ export default function Option({
   setValue,
   watch,
 }: IOption) {
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray<
+    ILectureRegister,
+    'extra.options'
+  >({
     control,
     name: 'extra.options',
   });

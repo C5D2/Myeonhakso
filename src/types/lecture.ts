@@ -42,7 +42,7 @@ export interface ILectureRegister extends Omit<Ilecture, 'extra'> {
   extra: {
     type: string;
     level: string;
-    schedule: Date | null;
+    schedule: string[];
     preview: string;
     options: {
       days: string[];
@@ -52,5 +52,14 @@ export interface ILectureRegister extends Omit<Ilecture, 'extra'> {
     curriculum: { content: string }[];
     address?: string;
     url?: string;
+  };
+}
+
+export interface ILectureDetail extends Omit<ILectureRegister, 'seller'> {
+  seller: {
+    _id: string;
+    name: string;
+    email: string;
+    profileImage: string | null | undefined;
   };
 }
