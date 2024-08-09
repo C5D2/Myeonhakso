@@ -27,7 +27,7 @@ function LoginInfo({
 
 	return (
 		<form onSubmit={handleSignOut}>
-		<p className="flex items-center">
+		<p className="flex items-center text-sm mx-3">
 			{image && (
 				<Image
 					className="w-8 rounded-full mr-2"
@@ -38,7 +38,7 @@ function LoginInfo({
 				/>
 			)}
 			{name}님 :)
-			<Submit className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white">
+			<Submit className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white ml-1 ">
 				로그아웃
 			</Submit>
 		</p>

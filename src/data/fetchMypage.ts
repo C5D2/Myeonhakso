@@ -55,9 +55,6 @@ export async function fetchSalelist(
 export async function fetchOrderitem(id: number): Promise<IOrderSaleList> {
   const session = await getSession();
   const accesstoken = session?.accessToken;
-  // path: string,
-  // sort?: object,
-  // limit?: string,
   const url = `${SERVER}/orders/${id}`;
   const res = await fetch(url, {
     headers: {
@@ -75,9 +72,6 @@ export async function fetchOrderitem(id: number): Promise<IOrderSaleList> {
 export async function fetchSaleitem(id: number): Promise<IOrderSaleList> {
   const session = await getSession();
   const accesstoken = session?.accessToken;
-  // path: string,
-  // sort?: object,
-  // limit?: string,
   const url = `${SERVER}/seller/orders/${id}`;
   const res = await fetch(url, {
     headers: {
@@ -91,5 +85,3 @@ export async function fetchSaleitem(id: number): Promise<IOrderSaleList> {
   }
   return resJson.item;
 }
-
-//{{url}}/seller/orders/4

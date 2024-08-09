@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   description: '면학소 강의 구매 목록 페이지입니다.',
 };
 
-export default async function Page() {
-  const data = await fetchOrderlist();
+export default async function Page({searchParams}: {searchParams: {page: string}}) {
+  const data = await fetchOrderlist(searchParams.page);
 
   const list = data?.item?.map((item, index) => (
     <OrderSaleList key={index} item={item} />
