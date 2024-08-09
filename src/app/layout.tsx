@@ -2,6 +2,7 @@ import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import './globals.css';
 import { Metadata } from 'next';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: '면학소 Home',
@@ -18,6 +19,8 @@ export default function RootLayout({
       <body>
         <div className="flex flex-col h-lvh">
           <Header />
+          <Script src="https://cdn.portone.io/v2/browser-sdk.js" />
+
           {children}
           <Footer />
         </div>
