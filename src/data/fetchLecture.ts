@@ -29,10 +29,12 @@ export async function fetchLecture(
 export async function fetchCategory(
   path: string,
   type?: object,
-): Promise<Ilecture[]> {
+  page?: string,
+): Promise<MultiItem<Ilecture>> {
   const params = new URLSearchParams();
   type && params.set('custom', JSON.stringify(type));
-
+  page && params.set('page', page)
+  params.set('limit', '4');
   const url = `${SERVER}/${path}?${params.toString()}`;
   console.log('url', url);
 
@@ -47,7 +49,7 @@ export async function fetchCategory(
   if (!resJson.ok) {
     throw new Error('카테고리 게시물 목록 조회 실패');
   }
-  return resJson.item;
+  return resJson;
 }
 
 export async function fetchLectureDetail(_id: string) {

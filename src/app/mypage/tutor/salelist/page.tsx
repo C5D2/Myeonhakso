@@ -8,11 +8,8 @@ export const metadata: Metadata = {
   description: '면학소 강의 판매 목록 페이지입니다.',
 };
 
-async function Page() {
-  // const data = await fetchSalelist();
-  const data = await fetchSalelist();
-
-  console.log('data=============>', data);
+async function Page({ searchParams }: { searchParams: { page: string } }) {
+  const data = await fetchSalelist(searchParams.page);
 
   const list = data?.item?.map((item, index) => (
     <OrderSaleList key={index} item={item} />

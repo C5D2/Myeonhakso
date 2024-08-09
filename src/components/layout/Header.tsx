@@ -4,9 +4,16 @@ import LoginInfo from './LoginInfo';
 import SessionHandler from './SessionHandler';
 import { Session } from 'next-auth';
 import Categories from './Categories';
+import Button from '../Button';
 
 export default async function Header() {
   const session: Session | null = await auth();
+  let type;
+  if(session?.user?.type === 'seller'){
+    type = 'tutor';
+  }else if(session?.user?.type === 'user'){
+    type = 'tutee';
+  }
   console.log('session', session);
 
   return (
@@ -18,6 +25,7 @@ export default async function Header() {
       <div className="flex justify-end items-center ml-auto">
         {session?.user ? (
           <>
+            <Button><Link href= {`/mypage/${type}/dashboard`}> 내 강의실 </Link></Button>
             <LoginInfo name={session.user.name!} image={session.user.image} />
             <SessionHandler session={session} />
           </>
