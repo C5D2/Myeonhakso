@@ -1,5 +1,6 @@
 import { getSession } from '@/auth';
 import OrderSaleList from '@/components/OrderSaleList';
+import Pagination from '@/components/Pagination';
 import { fetchOrderlist } from '@/data/fetchMypage';
 import { Metadata } from 'next';
 
@@ -11,13 +12,17 @@ export const metadata: Metadata = {
 export default async function Page() {
   const data = await fetchOrderlist();
 
-  const list = data.map((item, index) => (
+  const list = data?.item?.map((item, index) => (
     <OrderSaleList key={index} item={item} />
   ));
   return (
     <div className="">
       <h2 className="font-extrabold text-[30px] mb-10">구매 내역</h2>
       {list}
+      <Pagination
+        page={data?.pagination?.page}
+        totalPages={data?.pagination?.totalPages}
+      />
     </div>
   );
 }

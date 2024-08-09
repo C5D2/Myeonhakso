@@ -24,7 +24,7 @@ export default function Pagination({ page, totalPages }: PaginationProps) {
     const search = newSearchParams.toString();
 
     pageList.push(
-      <li key={i} className={page === i ? 'font-bold text-blue-700' : ''}>
+      <li key={i} className={page === i ? 'font-bold text-main-green' : ''}>
         <Link href={`/mypage/${type}/${path}?${search}`}>{i}</Link>
       </li>,
     );
