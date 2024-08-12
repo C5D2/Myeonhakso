@@ -28,3 +28,21 @@ export interface IDiscount {
   products: number;
   shippingFees: number;
 }
+
+export interface IReviewRegister {
+  orderId: number;
+  productId: number;
+  rating: number;
+  content: string;
+}
+
+export interface IReview {
+  order_id: number;
+  product_id: number;
+  rating: 3;
+  content: string;
+  user_id: number;
+  user: Pick<Iseller, 'name' | '_id'>;
+  _id: number;
+  creaedAt: string;
+}

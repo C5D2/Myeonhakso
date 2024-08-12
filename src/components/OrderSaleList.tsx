@@ -5,6 +5,8 @@ import { IOrderSaleList } from '@/types/mypage';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Pagination from './Pagination';
+import ReviewButton from '@/app/mypage/tutee/orderlist/ReviewButton';
+import { useState } from 'react';
 
 type itemParam = {
   item: IOrderSaleList;
@@ -15,6 +17,11 @@ export default function OrderList({ item }: itemParam) {
   const p = path.split('/');
   const type = p[2];
   const listName = p[3];
+  const [buttonState, setButtonState] = useState<boolean>(false);
+
+  const setReviewState = () => {
+    setButtonState(!buttonState);
+  };
 
   return (
     <>
@@ -29,7 +36,7 @@ export default function OrderList({ item }: itemParam) {
             <img src="/right-arrow.svg" className="w-6 h-6" />
           </Link>
         </div>
-        <div className="flex border border-black rounded-xl p-10">
+        <div className="flex border border-gray-50 rounded-xl p-10">
           <div className="결제완료">
             <div className="flex gap-10 items-center text-gray-90 mb-5 text-sm">
               <p className="bg-main-green w-fit px-2 py-1 rounded-md font-bold text-white">
@@ -54,24 +61,54 @@ export default function OrderList({ item }: itemParam) {
               </h4>
             )}
           </div>
-          <div className="ml-auto mt-auto">
-            {item?.products.map((item, index) => (
-              <p className="text-right text-gray-50" key={index}>
-                ₩
-                {item?.price
+          {type === 'tutee' && (
+            <>
+              <div className="ml-auto">
+                <p className="font-bold text-lg mb-3">
+                  {' '}
+                  합계 ₩
+                  {item?.cost?.total
+                    .toString()
+                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                </p>
+                <button
+                  onClick={setReviewState}
+                  className="px-2 py-1 border border-gray-50 rounded-md hover:bg-main-light-green"
+                >
+                  수강평 남기기
+                </button>
+              </div>
+            </>
+          )}
+
+          {type === 'tutor' && (
+            <div className="ml-auto mt-auto">
+              {item?.products.map((item, index) => (
+                <p className="text-right text-gray-50" key={index}>
+                  ₩
+                  {item?.price
+                    .toString()
+                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                </p>
+              ))}
+              <p className="border-t border-gray-30 font-bold">
+                {' '}
+                합계 ₩
+                {item?.cost?.total
                   .toString()
                   .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
               </p>
-            ))}
-            <p className="border-t border-gray-30 font-bold">
-              {' '}
-              합계 ₩
-              {item?.cost?.total
-                .toString()
-                .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
-            </p>
-          </div>
+            </div>
+          )}
         </div>
+        {buttonState && (
+          <ReviewButton
+            buttonState={buttonState}
+            setButtonState={setButtonState}
+            orderId={item?._id}
+            productId={item?.products[0]?._id}
+          />
+        )}
       </div>
     </>
   );

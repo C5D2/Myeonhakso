@@ -14,7 +14,7 @@ export interface Ilecture {
   createdAt: string;
   updatedAt: string;
   seller: Iseller;
-  extra: Pick<ILectureRegister, 'extra'>;
+  extra: Iextra;
   replies: number;
   bookmarks: number;
   options: number;
@@ -30,7 +30,6 @@ export interface Iseller {
   image: string;
   extra: any;
 }
-
 
 export interface Iextra {
   type: string;

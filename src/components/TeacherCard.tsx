@@ -27,7 +27,7 @@ export default function TeacherCard({ item }: ICardProp) {
           />
         </div>
       </div>
-      <h4 className="m-auto font-bold">{item?.seller?.name} 선생님</h4>
+      <h4 className="m-auto font-semibold text-sm w-[40%]">{item?.seller?.name}<p className='font-light'>선생님</p></h4>
     </Link>
   );
 }
