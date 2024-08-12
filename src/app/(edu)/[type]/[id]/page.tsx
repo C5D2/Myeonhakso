@@ -1,9 +1,10 @@
 import DetailButton from '@/app/(edu)/[type]/[id]/DetailButton';
 import DetailCurriculum from '@/app/(edu)/[type]/[id]/DetailCurriculum';
+import { getSession } from '@/auth';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
 import KakaoMap from '@/components/KakaoMap';
-import { fetchLectureDetail } from '@/data/fetchLecture';
+import { fetchLectureDetail, fetchOtherLectures } from '@/data/fetchLecture';
 import Image from 'next/image';
 
 function formatDate(dateString: string) {
@@ -25,9 +26,24 @@ function formatTime(dateString: string) {
   return `${hours}:${minutes}`;
 }
 
-// TODO: 강의 소개, 강의 일정, 화상강의, 대면강의, 커리큘럼, 선생님의 다른 강의, 많이 듣는 토픽(카드)
+// 이미 구매한 강의는 구매 버튼을 disabled로
 async function DetailPage({ params }: { params: { id: string } }) {
+  const session = await getSession();
+  const user = session?.user;
   const item = await fetchLectureDetail(params.id);
+  const seller_id = item?.seller._id;
+  const data = await fetchOtherLectures(seller_id!, '3');
+
+  // 지금 강의는 다른 강의에서 빼야됨,,,
+  // 목록(type) 카드 사이즈 맞추기
+  const list = data?.map((item, index) => (
+    <div
+      className="max-w-[300px] h-[320px] rounded-xl flex flex-grow justify-between"
+      key={index}
+    >
+      <Card key={index} item={item} />
+    </div>
+  ));
 
   return (
     <div>
@@ -38,22 +54,33 @@ async function DetailPage({ params }: { params: { id: string } }) {
               <h2 className="text-2xl font-extrabold">{item?.name}</h2>
               <p>{item?.content}</p>
               <div className="flex gap-3">
-                <Image src="/heart.svg" width={30} height={40} alt="찜" />
-                <Image src="/share.svg" width={25} height={20} alt="공유하기" />
+                <Image src="/heart.svg" width={40} height={40} alt="찜" />
+                <Image src="/share.svg" width={30} height={20} alt="공유하기" />
               </div>
             </div>
             <div className="rounded-lg bg-gray-10 w-[400px] max-h-[300px] px-10 py-10 box-border flex flex-col justify-evenly">
               <h2 className="text-2xl font-extrabold">{item?.price}원</h2>
-              <p>수강 옵션을 선택해주세요.</p>
-              <select name="" id="">
-                {item?.extra?.options.map((option, index) => (
-                  <option key={index} value={index}>
-                    {option.days.join(', ')} {formatTime(option.startTime)} ~{' '}
-                    {formatTime(option.endTime)}
-                  </option>
-                ))}
-              </select>
-              <DetailButton params={params} />
+              {item?.quantity === item?.buyQuantity ? (
+                <p>이미 구매한 강의입니다.</p>
+              ) : (
+                <>
+                  <p>수강 옵션을 선택해주세요.</p>
+                  <select name="" id="">
+                    {item?.extra?.options.map((option, index) => (
+                      <option key={index} value={index}>
+                        {option.days.join(', ')} {formatTime(option.startTime)}{' '}
+                        ~ {formatTime(option.endTime)}
+                      </option>
+                    ))}
+                  </select>
+                  <DetailButton
+                    params={params}
+                    item={item}
+                    user={user}
+                    id={params.id}
+                  />
+                </>
+              )}
             </div>
           </div>
 
@@ -108,7 +135,7 @@ async function DetailPage({ params }: { params: { id: string } }) {
             <h3 className="font-bold">강의 일정</h3>
             <div className="rounded-lg bg-gray-10 h-[170px] px-8 py-10 border-box flex place-content-evenly items-center">
               <div className="flex gap-4 items-center">
-                <Image src="/calendar.svg" width={50} height={50} alt="일정" />
+                <Image src="/calendar.svg" width={40} height={40} alt="일정" />
                 <p>
                   {formatDate(item?.extra?.schedule[0])} -
                   {formatDate(item?.extra?.schedule[1])}
@@ -116,7 +143,7 @@ async function DetailPage({ params }: { params: { id: string } }) {
               </div>
 
               <div className="flex gap-4 items-center">
-                <Image src="/time.svg" width={50} height={50} alt="시간" />
+                <Image src="/time.svg" width={40} height={40} alt="시간" />
                 <div className="flex flex-col">
                   {item?.extra?.options.map((option, index) => (
                     <div key={index}>
@@ -172,6 +199,9 @@ async function DetailPage({ params }: { params: { id: string } }) {
 
           <div className="mt-[50px]">
             <h3 className="font-bold">오하요 선생님의 다른 강의</h3>
+            <div className="flex flex-wrap content-start max-w-[1400px]">
+              {list}
+            </div>
           </div>
 
           <div className="mt-[50px]">

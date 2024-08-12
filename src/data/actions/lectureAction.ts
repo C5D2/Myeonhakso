@@ -2,7 +2,12 @@
 
 import { getSession } from '@/auth';
 import { ApiResWithValidation, SingleItem } from '@/types';
-import { Ilecture, ILectureOrder, ILectureRegister } from '@/types/lecture';
+import {
+  Ilecture,
+  ILectureOrder,
+  ILectureOrderResponse,
+  ILectureRegister,
+} from '@/types/lecture';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -29,7 +34,9 @@ export async function postForm(
 
 export async function orderLecture(
   data: ILectureOrder,
-): Promise<ApiResWithValidation<SingleItem<ILectureOrder>, ILectureOrder>> {
+): Promise<
+  ApiResWithValidation<SingleItem<ILectureOrderResponse>, ILectureOrder>
+> {
   const session = await getSession();
 
   const res = await fetch(`${SERVER}/orders`, {

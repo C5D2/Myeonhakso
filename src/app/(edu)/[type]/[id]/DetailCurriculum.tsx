@@ -4,7 +4,11 @@ import { ILectureDetail } from '@/types/lecture';
 import Image from 'next/image';
 import { useState } from 'react';
 
-export default function DetailCurriculum({ item }: { item: ILectureDetail }) {
+interface IDetailCurriculumProps {
+  item: ILectureDetail | null;
+}
+
+export default function DetailCurriculum({ item }: IDetailCurriculumProps) {
   const [showAllCurriculum, setShowAllCurriculum] = useState(false);
 
   const curriculumItems = item?.extra?.curriculum || [];

@@ -1,5 +1,12 @@
+import { getSession } from '@/auth';
 import { ApiRes, MultiItem, SingleItem } from '@/types';
-import { Ilecture, ILectureDetail } from '@/types/lecture';
+import {
+  Ilecture,
+  ILectureDetail,
+  ILectureOrder,
+  ILectureOrderDetail,
+  ILectureOrderResponse,
+} from '@/types/lecture';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const LIMIT = process.env.NEXT_PUBLIC_CARD_LIMIT;
@@ -33,7 +40,7 @@ export async function fetchCategory(
 ): Promise<MultiItem<Ilecture>> {
   const params = new URLSearchParams();
   type && params.set('custom', JSON.stringify(type));
-  page && params.set('page', page)
+  page && params.set('page', page);
   params.set('limit', '4');
   const url = `${SERVER}/${path}?${params.toString()}`;
   console.log('url', url);
@@ -65,3 +72,34 @@ export async function fetchLectureDetail(_id: string) {
   }
   return resJson.item;
 }
+
+export async function fetchOtherLectures(_id: string, limit: string) {
+  const url = `${SERVER}/products?seller_id=${_id}&limit=${limit}`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+    },
+  });
+  const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
+  if (!resJson.ok) {
+    return null;
+  }
+  return resJson.item;
+}
+
+// export async function fetchOrderDetail(_id: string) {
+//   const session = await getSession();
+//   const accessToken = session?.accessToken;
+//   const url = `${SERVER}/orders/${_id}`;
+//   const res = await fetch(url, {
+//     headers: {
+//       'client-id': `${CLIENT_ID}`,
+//       Authorization: `${accessToken}`,
+//     },
+//   });
+//   const resJson: ApiRes<SingleItem<ILectureOrderDetail>> = await res.json();
+//   if (!resJson.ok) {
+//     return null;
+//   }
+//   return resJson.item;
+// }
