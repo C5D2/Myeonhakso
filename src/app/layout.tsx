@@ -19,7 +19,7 @@ export default function RootLayout({
       <body>
         <div className="flex flex-col h-lvh">
           <Header />
-          <Script src="https://cdn.portone.io/v2/browser-sdk.js" />
+          <Script src="https://cdn.iamport.kr/v1/iamport.js" />
 
           {children}
           <Footer />
