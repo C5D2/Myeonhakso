@@ -15,9 +15,6 @@ export default function Pagination({ page, totalPages }: PaginationProps) {
   const type = pathName.split('/')[2];
   const path = pathName.split('/')[3];
 
-  console.log('마이페이지?',pageName, page, totalPages);
-  console.log(type, path);
-
   const pageList = [];
   const searchParams = useSearchParams();
 
@@ -47,7 +44,7 @@ export default function Pagination({ page, totalPages }: PaginationProps) {
   
   }
   return (
-    <div>
+    <div className=''>
       <ul className="flex justify-center gap-3 m-4">{pageList}</ul>
     </div>
   );
