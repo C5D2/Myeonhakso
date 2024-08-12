@@ -54,20 +54,7 @@ export interface IlectureImage {
 
 export interface ILectureRegister extends Omit<Ilecture, 'extra'> {
   content: string;
-  extra: {
-    type: string;
-    level: string;
-    schedule: string[];
-    preview: string;
-    options: {
-      days: string[];
-      startTime: Date | null | undefined;
-      endTime: Date | null | undefined;
-    }[];
-    curriculum: { content: string }[];
-    address?: string;
-    url?: string;
-  };
+  extra: Iextra;
 }
 
 export interface ILectureDetail extends Omit<ILectureRegister, 'seller'> {
@@ -77,4 +64,41 @@ export interface ILectureDetail extends Omit<ILectureRegister, 'seller'> {
     email: string;
     profileImage: string | null | undefined;
   };
+}
+
+export interface ILectureProducts {
+  _id: number;
+  quantity: number;
+  seller_id: number;
+  name: string;
+  image: string;
+  price: number;
+  extra: Iextra;
+}
+
+export interface ILectureOrder {
+  products: {
+    _id: number;
+    quantity: number;
+  }[];
+}
+
+export interface ILectureOrderResponse extends ILectureOrder {
+  state: string;
+  user_id: number;
+  _id: number;
+  createdAt: string;
+  updatedAt: string;
+  cost: {
+    products: number;
+    shippingFees: number;
+    discount: number;
+    total: number;
+  };
+}
+
+export interface ILectureOrderDetail
+  extends Omit<ILectureOrderResponse, 'products'> {
+  _id: number;
+  products: ILectureProducts;
 }
