@@ -20,7 +20,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 // TODO: validation 확인, extra.type 보내야 함;;;
 // 등록할 때 type 체크해서 그 페이지...로?
-// date 보낼 때 문자열로 보내기, 받을 때 변환하지 말고. 그러면 string으로 다 될 듯~낼 한번 시도해보자!!
+// 강의 가격 최소 금액 100원
 export default function RegisterForm({ params }: { params: { type: string } }) {
   const router = useRouter();
   const {
@@ -46,10 +46,26 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
-  const onRangeChange = (dates: [Date | undefined, Date | undefined]) => {
+  const convertToUTC = (date: Date) => {
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  };
+
+  const onRangeChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
-    setStartDate(start || new Date());
+    setStartDate(start);
     setEndDate(end);
+
+    if (start) {
+      setValue('extra.schedule.0', convertToUTC(start).toISOString());
+    } else {
+      setValue('extra.schedule.0', null);
+    }
+
+    if (end) {
+      setValue('extra.schedule.1', convertToUTC(end).toISOString());
+    } else {
+      setValue('extra.schedule.1', null);
+    }
   };
   // const [startDate, setStartDate] = useState(new Date());
   // const [endDate, setEndDate] = useState(null);
@@ -69,9 +85,30 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
       });
     }
 
-    const resData = await postForm(data);
+    const newData = {
+      ...data,
+      extra: {
+        ...data.extra,
+        options: data.extra.options.map(option => ({
+          ...option,
+          startTime: option.startTime
+            ? convertToUTC(new Date(option.startTime)).toISOString()
+            : null,
+          endTime: option.endTime
+            ? convertToUTC(new Date(option.endTime)).toISOString()
+            : null,
+        })),
+        schedule: data.extra.schedule.map(date =>
+          date ? convertToUTC(new Date(date)).toISOString() : null,
+        ),
+      },
+    };
+
+    const resData = await postForm(newData);
+    console.log('Server response:', resData);
+
     if (resData.ok) {
-      const id = resData._id;
+      const id = resData.item._id;
       router.push(`/${params.type}/${id}`);
     } else {
       if ('errors' in resData) {
@@ -83,9 +120,6 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
       }
     }
     console.log(data);
-    console.log(data.extra);
-    console.log(data.extra.options);
-    console.log(data.extra.curriculum);
   };
 
   return (
@@ -201,8 +235,7 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
             render={({ field: { onChange, value } }) => (
               <DatePicker
                 selected={startDate}
-                onChange={dates => {
-                  onChange(dates);
+                onChange={(dates: [Date | null, Date | null]) => {
                   onRangeChange(dates);
                 }}
                 startDate={startDate}
