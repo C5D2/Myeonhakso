@@ -14,7 +14,7 @@ import { ILectureRegister } from '@/types/lecture';
 
 export const DAY_OPTION = ['월', '화', '수', '목', '금', '토', '일'];
 
-interface IOption {
+interface IOptionProps {
   control: Control<ILectureRegister>;
   register: UseFormRegister<ILectureRegister>;
   setValue: UseFormSetValue<ILectureRegister>;
@@ -29,7 +29,7 @@ export default function Option({
   register,
   setValue,
   watch,
-}: IOption) {
+}: IOptionProps) {
   const { fields, append, remove } = useFieldArray<
     ILectureRegister,
     'extra.options'
