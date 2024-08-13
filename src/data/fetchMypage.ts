@@ -1,5 +1,6 @@
 import { getSession } from '@/auth';
 import { ApiRes, MultiItem, SingleItem } from '@/types';
+import { Ilecture } from '@/types/lecture';
 import { IOrderSaleList } from '@/types/mypage';
 // import useUserStore from '@/zustand/userStore';
 
@@ -84,4 +85,29 @@ export async function fetchSaleitem(id: number): Promise<IOrderSaleList> {
     throw new Error('판매 상세 정보 조회 실패');
   }
   return resJson.item;
+}
+
+//{{url}}/seller/products
+
+export async function fetchProductlist(
+  page?: string,
+): Promise<MultiItem<Ilecture>> {
+  const params = new URLSearchParams();
+  page && params.set('page', page);
+  params.set('limit', '6');
+  const session = await getSession();
+  const accesstoken = session?.accessToken;
+
+  const url = `${SERVER}/seller/products?${params.toString()}`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${accesstoken}`,
+    },
+  });
+  const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
+  if (!resJson.ok) {
+    throw new Error('판매 상품 조회 실패');
+  }
+  return resJson;
 }
