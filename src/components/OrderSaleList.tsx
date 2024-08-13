@@ -26,7 +26,7 @@ export default function OrderList({ item }: itemParam) {
   return (
     <>
       <div className="p-5">
-        <div className="flex items-center p-2">
+        <div className="flex items-center px-2 py-1">
           <p>주문 날짜 {item?.createdAt}</p>
           <Link
             href={`/mypage/${type}/${listName}/${item?._id}`}

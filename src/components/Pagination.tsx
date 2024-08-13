@@ -23,28 +23,37 @@ export default function Pagination({ page, totalPages }: PaginationProps) {
     newSearchParams.set('page', String(i));
     const search = newSearchParams.toString();
 
-    if(pageName === 'mypage'){ // 마이페이지인 경우
-      console.log('마이페이지에 해당합니다.');
+    if (pageName === 'mypage') {
+      // 마이페이지인 경우
       pageList.push(
-        
         // <li key={i} className={classNames('', {'font-bold text-main-dark-green':(page === i)})}>
         //   <Link href={`/mypage/${type}/${path}?${search}`}>{i}</Link>
         // </li>,
-         <li key={i} className={page === i ? 'font-bold text-main-dark-green' : 'text-gray-90'}>
-         <Link href={`/mypage/${type}/${path}?${search}`}>{i}</Link>
-       </li>,
+        <li
+          key={i}
+          className={
+            page === i ? 'font-bold text-main-dark-green' : 'text-gray-90'
+          }
+        >
+          <Link href={`/mypage/${type}/${path}?${search}`}>{i}</Link>
+        </li>,
       );
-    }else{ // 강의 목록인 경우
+    } else {
+      // 강의 목록인 경우
       pageList.push(
-        <li key={i} className={page === i ? 'font-bold text-main-dark-green' : 'text-gray-90'}>
+        <li
+          key={i}
+          className={
+            page === i ? 'font-bold text-main-dark-green' : 'text-gray-90'
+          }
+        >
           <Link href={`/${pageName}?${search}`}>{i}</Link>
         </li>,
       );
     }
-  
   }
   return (
-    <div className=''>
+    <div className="">
       <ul className="flex justify-center gap-3 m-4">{pageList}</ul>
     </div>
   );

@@ -10,15 +10,30 @@ function Categories() {
 
   return (
     <>
-      <ul className="flex gap-20 ">
-      {/* hover:bg-main-green rounded hover:text-white */}
-        <li className={classNames('hover:bg-main-green rounded hover:text-white px-2 py-1', {'font-bold' : isActive('/tech')})}>
+      <ul className="flex gap-20 sm:gap-2 ">
+        {/* hover:bg-main-green rounded hover:text-white */}
+        <li
+          className={classNames(
+            'hover:bg-main-green rounded hover:text-white px-2 py-1',
+            { 'font-bold': isActive('/tech') },
+          )}
+        >
           <Link href="/tech">IT</Link>
         </li>
-        <li className={classNames('hover:bg-main-green rounded hover:text-white px-2 py-1', {'font-bold' : isActive('/language')})}>
+        <li
+          className={classNames(
+            'hover:bg-main-green rounded hover:text-white px-2 py-1',
+            { 'font-bold': isActive('/language') },
+          )}
+        >
           <Link href="/language">어학</Link>
         </li>
-        <li className={classNames('hover:bg-main-green rounded hover:text-white px-2 py-1', {'font-bold' : isActive('/hobby')})}>
+        <li
+          className={classNames(
+            'hover:bg-main-green rounded hover:text-white px-2 py-1',
+            { 'font-bold': isActive('/hobby') },
+          )}
+        >
           <Link href="/hobby">취미</Link>
         </li>
       </ul>
