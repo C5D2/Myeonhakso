@@ -1,11 +1,11 @@
 'use client';
 
-import AddressSearch from '@/app/(edu)/[type]/new/AddressSearch';
-import Category from '@/app/(edu)/[type]/new/Category';
-import Curriculum from '@/app/(edu)/[type]/new/Curriculum';
-import Level from '@/app/(edu)/[type]/new/Level';
-import Option from '@/app/(edu)/[type]/new/Option';
-import Quantity from '@/app/(edu)/[type]/new/Quantity';
+import AddressSearch from '@/app/(edu)/new/AddressSearch';
+import Category from '@/app/(edu)/new/Category';
+import Curriculum from '@/app/(edu)/new/Curriculum';
+import Level from '@/app/(edu)/new/Level';
+import Option from '@/app/(edu)/new/Option';
+import Quantity from '@/app/(edu)/new/Quantity';
 import Button from '@/components/Button';
 import InputError from '@/components/InputError';
 import KakaoMap from '@/components/KakaoMap';
@@ -20,7 +20,8 @@ import { Controller, useForm } from 'react-hook-form';
 
 // TODO: validation 확인, extra.type 보내야 함;;;
 // 등록할 때 type 체크해서 그 페이지...로?
-export default function RegisterForm() {
+// 강의 가격 최소 금액 100원
+export default function RegisterForm({ params }: { params: { type: string } }) {
   const router = useRouter();
   const {
     register,
@@ -42,14 +43,38 @@ export default function RegisterForm() {
   const [address, setAddress] = useState<string>('');
   const [tab, setTab] = useState(0);
 
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
-  const onChange = (dates: [Date | undefined, Date | undefined]) => {
+  const convertToUTC = (date: Date) => {
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  };
+
+  const onRangeChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
+
+    if (start) {
+      setValue('extra.schedule.0', convertToUTC(start).toISOString());
+    } else {
+      setValue('extra.schedule.0', null);
+    }
+
+    if (end) {
+      setValue('extra.schedule.1', convertToUTC(end).toISOString());
+    } else {
+      setValue('extra.schedule.1', null);
+    }
   };
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(null);
+
+  // const onRangeChange = dates => {
+  //   const [start, end] = dates;
+  //   setStartDate(start);
+  //   setEndDate(end);
+  // };
 
   const handleFormSubmit = async (data: ILectureRegister) => {
     if (!data.extra?.address && !data.extra?.url) {
@@ -60,9 +85,31 @@ export default function RegisterForm() {
       });
     }
 
-    const resData = await postForm(data);
+    const newData = {
+      ...data,
+      extra: {
+        ...data.extra,
+        options: data.extra.options.map(option => ({
+          ...option,
+          startTime: option.startTime
+            ? convertToUTC(new Date(option.startTime)).toISOString()
+            : null,
+          endTime: option.endTime
+            ? convertToUTC(new Date(option.endTime)).toISOString()
+            : null,
+        })),
+        schedule: data.extra.schedule.map(date =>
+          date ? convertToUTC(new Date(date)).toISOString() : null,
+        ),
+      },
+    };
+
+    const resData = await postForm(newData);
+    console.log('Server response:', resData);
+
     if (resData.ok) {
-      // router.push(`/${params.type}`);
+      const id = resData.item._id;
+      router.push(`/${params.type}/${id}`);
     } else {
       if ('errors' in resData) {
         resData.errors.forEach(error =>
@@ -73,9 +120,6 @@ export default function RegisterForm() {
       }
     }
     console.log(data);
-    console.log(data.extra);
-    console.log(data.extra.options);
-    console.log(data.extra.curriculum);
   };
 
   return (
@@ -191,9 +235,8 @@ export default function RegisterForm() {
             render={({ field: { onChange, value } }) => (
               <DatePicker
                 selected={startDate}
-                onChange={dates => {
-                  onChange(dates);
-                  onChange(dates);
+                onChange={(dates: [Date | null, Date | null]) => {
+                  onRangeChange(dates);
                 }}
                 startDate={startDate}
                 endDate={endDate}
@@ -214,6 +257,9 @@ export default function RegisterForm() {
             register={register}
             setValue={setValue}
             watch={watch}
+            days={[]}
+            startTime={null}
+            endTime={null}
           />
           <InputError target={errors.extra?.options} />
         </div>

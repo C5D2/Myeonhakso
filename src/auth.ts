@@ -143,7 +143,8 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
         token.image = SERVER + session.user.image
         token.name = session.user.name
       }
-     
+      // 토큰 만료 체크, refreshToken으로 accessToken 갱신
+
       // refreshToken도 만료되었을 경우 로그아웃 처리
       // if (user?.accessToken) {
       //   token.accessToken = user.accessToken;
@@ -162,7 +163,7 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
     // 클라이언트에서 세션 정보 요청시 호출
     // token 객체 정보로 session 객체 설정
     async session({ session, token }) {
-      console.log('Session Callback:', { session, token });
+      // console.log('Session Callback:', { session, token });
       session.user.id = token.id as string;
       session.user.name = token.name;
       session.user.email = token.email as string;
@@ -182,4 +183,6 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
 });
 
 
+
 export { auth as getSession, update as updateSession };
+

@@ -3,20 +3,33 @@ import Link from 'next/link';
 import LoginInfo from './LoginInfo';
 import SessionHandler from './SessionHandler';
 import Categories from './Categories';
+import Button from '../Button';
 import { Session } from 'next-auth';
+
 
 export default async function Header() {
   const session: Session | null = await auth();
+  let type;
+  if (session?.user?.type === 'seller') {
+    type = 'tutor';
+  } else if (session?.user?.type === 'user') {
+    type = 'tutee';
+  }
+
 
   return (
     <div className="box-border px-10 py-3 border-b-[3px] h-[85px] flex-shrink-0 flex items-center">
-      <Link href="/" className="w-14 h-14 mr-20">
+      <Link href="/" className="w-14 h-14 mr-20 sm:mr-0">
         <img src="/logo.svg" className="h-full min-w-full" />
       </Link>
       <Categories />
       <div className="flex justify-end items-center ml-auto">
         {session?.user ? (
           <>
+            <Button>
+              <Link href={`/mypage/${type}/dashboard`}> 내 강의실 </Link>
+            </Button>
+
             <LoginInfo name={session.user.name!} image={session.user.image} />
             <SessionHandler session={session} />
           </>

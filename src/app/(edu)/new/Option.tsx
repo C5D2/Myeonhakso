@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { setHours, setMinutes } from 'date-fns';
+import { setHours, setMinutes, format, parseISO, formatISO } from 'date-fns';
 import {
   Control,
   UseFormRegister,
@@ -15,11 +14,14 @@ import { ILectureRegister } from '@/types/lecture';
 
 export const DAY_OPTION = ['월', '화', '수', '목', '금', '토', '일'];
 
-interface IOption {
+interface IOptionProps {
   control: Control<ILectureRegister>;
   register: UseFormRegister<ILectureRegister>;
   setValue: UseFormSetValue<ILectureRegister>;
   watch: UseFormWatch<ILectureRegister>;
+  days: string[];
+  startTime: string | null;
+  endTime: string | null;
 }
 
 export default function Option({
@@ -27,8 +29,11 @@ export default function Option({
   register,
   setValue,
   watch,
-}: IOption) {
-  const { fields, append, remove } = useFieldArray({
+}: IOptionProps) {
+  const { fields, append, remove } = useFieldArray<
+    ILectureRegister,
+    'extra.options'
+  >({
     control,
     name: 'extra.options',
   });

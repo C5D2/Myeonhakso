@@ -3,6 +3,7 @@ import Header from '@/components/layout/Header';
 import './globals.css';
 import { Metadata } from 'next';
 import { NextAuthProvider } from './providers';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: '면학소 Home',
@@ -20,6 +21,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <div className="flex flex-col h-lvh">
             <Header />
+             <Script src="https://cdn.iamport.kr/v1/iamport.js" />
             {children}
             <Footer />
           </div>

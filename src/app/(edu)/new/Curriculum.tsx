@@ -8,7 +8,7 @@ import {
   UseFormSetValue,
 } from 'react-hook-form';
 
-interface ICurriculum {
+interface ICurriculumProps {
   control: Control<ILectureRegister>;
   register: UseFormRegister<ILectureRegister>;
   setValue: UseFormSetValue<ILectureRegister>;
@@ -20,7 +20,7 @@ export default function Curriculum({
   register,
   setValue,
   errors,
-}: ICurriculum) {
+}: ICurriculumProps) {
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'extra.curriculum',

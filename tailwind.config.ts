@@ -25,6 +25,7 @@ const config: Config = {
         'light-orange': '#FFF6EF',
 
         'gray-90': '#666666',
+        'gray-50': '#8C8282',
         'gray-30': '#D9D9D9',
         'gray-10': '#FAFAFA',
       },
