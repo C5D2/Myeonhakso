@@ -3,6 +3,8 @@ import { Ilecture } from '@/types/lecture';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const LIMIT = process.env.NEXT_PUBLIC_CARD_LIMIT;
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+
 
 export async function fetchLecture(
   path: string,
@@ -15,7 +17,7 @@ export async function fetchLecture(
   const url = `${SERVER}/${path}?${params.toString()}`;
   const res = await fetch(url, {
     headers: {
-      'client-id': '00-sample',
+      'client-id': `${CLIENT_ID}`,
     },
   });
   const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
@@ -37,7 +39,7 @@ export async function fetchCategory(
 
   const res = await fetch(url, {
     headers: {
-      'client-id': '00-sample',
+      'client-id': `${CLIENT_ID}`,
     },
 
     next: { revalidate: 10 },

@@ -3,7 +3,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import NaverProvider from 'next-auth/providers/naver';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import useUserStore from './zustand/userStore';
+import { JWT } from 'next-auth/jwt';
+
 import {
   ApiResWithValidation,
   SingleItem,
@@ -13,8 +14,42 @@ import {
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+const TOKEN_VALIDITY_PERIOD = 3600 * 1000; // 1시간(3600초) -> 밀리초로 변환
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+const refreshAccessToken = async (token: JWT) => {
+  try {
+    const res = await fetch(`${SERVER}/auth/refresh`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'client-id': `${CLIENT_ID}`,
+        'Authorization': `Bearer ${token.refreshToken}`,
+      },
+    });
+
+    const refreshedTokens = await res.json();
+
+    if (!res.ok || refreshedTokens.ok !== 1) {
+      throw refreshedTokens;
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.accessToken,
+      accessTokenExpires: Date.now() + TOKEN_VALIDITY_PERIOD,
+      refreshToken: token.refreshToken, // 기존 리프레시 토큰 사용
+    };
+  } catch (error) {
+    console.error('Error refreshing access token', error);
+
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+    };
+  }
+};
+
+export const { handlers, signIn, signOut, auth, unstable_update: update } = NextAuth({
   providers: [
     CredentialsProvider({
       credentials: {
@@ -35,6 +70,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           SingleItem<UserData>,
           UserLoginForm
         > = await res.json();
+        
         if (resJson.ok) {
           console.log('resJson', resJson.item);
           const user = resJson.item;
@@ -47,6 +83,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             type: user.type,
             accessToken: user.token?.accessToken!,
             refreshToken: user.token?.refreshToken!,
+            accessTokenExpires: Date.now() + TOKEN_VALIDITY_PERIOD,
           };
         } else {
           return null;
@@ -82,13 +119,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
 
       // user에 들어있는 사용자 정보를 이용해서 우리쪽 DB에 저장 (회원가입) 절차 필요
+
       // 가입된 회원의 경우 자동으로 로그인 처리
     },
 
     // 로그인 성공한 회원 정보로 token 객체 설정
+
     // 최초 로그인시 user 객체 전달,
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.name = user.name;
@@ -97,15 +136,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.type = user.type;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
+        token.accessTokenExpires = user.accessTokenExpires;
       }
-      // 토큰 만료 체크, refreshToken으로 accessToken 갱신
-      
+
+      if (trigger === 'update' && session) {
+        token.image = SERVER + session.user.image
+        token.name = session.user.name
+      }
+     
       // refreshToken도 만료되었을 경우 로그아웃 처리
       // if (user?.accessToken) {
       //   token.accessToken = user.accessToken;
       //   token.refreshToken = user.refreshToken;
       // }
-      return token;
+
+       // 토큰 만료 체크, refreshToken으로 accessToken 갱신
+      if (Date.now() < token.accessTokenExpires!) {
+        return token;
+      }
+
+      return refreshAccessToken(token);
+      // return token
     },
 
     // 클라이언트에서 세션 정보 요청시 호출
@@ -129,3 +180,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
 });
+
+
+export { auth as getSession, update as updateSession };

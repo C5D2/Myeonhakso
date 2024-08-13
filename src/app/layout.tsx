@@ -2,6 +2,7 @@ import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import './globals.css';
 import { Metadata } from 'next';
+import { NextAuthProvider } from './providers';
 
 export const metadata: Metadata = {
   title: '면학소 Home',
@@ -16,11 +17,13 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <div className="flex flex-col h-lvh">
-          <Header />
-          {children}
-          <Footer />
-        </div>
+        <NextAuthProvider>
+          <div className="flex flex-col h-lvh">
+            <Header />
+            {children}
+            <Footer />
+          </div>
+        </NextAuthProvider>
       </body>
     </html>
   );
