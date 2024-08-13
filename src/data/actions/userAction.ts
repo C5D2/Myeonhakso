@@ -1,6 +1,7 @@
-'use server';
 
 import { ApiResWithValidation, FileRes, MultiItem, SingleItem, UserData, UserForm } from '@/types';
+import { Session } from 'next-auth';
+
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -12,16 +13,14 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
-    profileImage: '',
+    image: '',
   }
 
-	  // 이미지 먼저 업로드
 		const attach = formData.get('attach') as File;
     if (attach && attach.size > 0) {
       const fileFormData = new FormData();
       fileFormData.append('attach', attach);
 
-    // 프로필 이미지를 추가한 경우
     const fileRes = await fetch(`${SERVER}/files`, {
       method: 'POST',
       headers: {
@@ -37,8 +36,7 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
     }
     const fileData: MultiItem<FileRes> = await fileRes.json();
     
-    // 서버로부터 응답받은 이미지 이름을 회원 정보에 포함
-    userData.profileImage = fileData.item[0].path;
+    userData.image = fileData.item[0].path;
   } 
 
   const res = await fetch(`${SERVER}/users`, {
@@ -51,9 +49,55 @@ export async function signup(formData: FormData): Promise<ApiResWithValidation<S
   });
 
   const data = await res.json();
-  console.log('data', data);
   return data;
 }
 
 
+export async function uploadUserImage(attach: File, accessToken: string): Promise<string> {
+  const fileFormData = new FormData();
+  fileFormData.append('attach', attach);
 
+  const fileRes = await fetch(`${SERVER}/files`, {
+    method: 'POST',
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      'Authorization': `Bearer ${accessToken}`,
+    },
+    body: fileFormData,
+  });
+
+  if (!fileRes.ok) {
+    const errorMsg = await fileRes.text();
+    console.error('File upload failed:', errorMsg);
+    throw new Error(`파일 업로드 실패: ${errorMsg}`);
+  }
+
+  const fileData: MultiItem<FileRes> = await fileRes.json();
+  return fileData.item[0].path; 
+}
+
+export async function editUserInfo(
+  formData: FormData,
+  session: Session
+): Promise<ApiResWithValidation<SingleItem<UserData>, UserForm>> {
+
+  const userData = {
+    type: formData.get('type') || 'user',
+    name: formData.get('name'),
+    email: formData.get('email'),
+    image: formData.get('image') || session?.user?.image || '',
+  };
+
+  const res = await fetch(`${SERVER}/users/${session?.user?.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+      'Authorization': `Bearer ${session?.accessToken}`,
+    },
+    body: JSON.stringify(userData),
+  });
+
+  const data = await res.json();
+  return data;
+}

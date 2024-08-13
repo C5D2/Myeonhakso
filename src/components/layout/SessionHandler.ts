@@ -20,18 +20,6 @@ function SessionHandler({ session }: { session: Session | null }) {
         refreshToken: session.refreshToken,
       });
     }
-    // if (session?.user) {
-    //   console.log("session", session)
-    //   setUser({
-    //     _id: session.user._id,
-    //     name: session.user.name,
-    //     email: session.user.email,
-    //     image: session.user.image,
-    //     type: session.user.type,
-    //     accessToken: session.accessToken,
-    //     refreshToken: session.refreshToken,
-    //   });
-    // }
     else {
       clearUser();
     }

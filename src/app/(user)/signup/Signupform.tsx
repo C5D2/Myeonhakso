@@ -5,11 +5,13 @@ import Submit from '@/components/Submit';
 import { signup } from '@/data/actions/userAction';
 import { fetchEmailValidation } from '@/data/postFetch';
 import { UserForm } from '@/types';
+import useUserStore from '@/zustand/userStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 function Signupform() {
+  const setUser = useUserStore(state => state.setUser);
   const router = useRouter();
   const {
     register,
