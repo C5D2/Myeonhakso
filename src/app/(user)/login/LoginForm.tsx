@@ -1,12 +1,14 @@
 import Submit from '@/components/Submit';
-import { signInWithCredentials, signInWithGoogle, signInWithKaKao, signInWithNaver } from '@/data/actions/authAction';
+import {
+  signInWithCredentials,
+  signInWithGoogle,
+  signInWithKaKao,
+  signInWithNaver,
+} from '@/data/actions/authAction';
 
 function LoginForm() {
   return (
-    <form
-      action={signInWithCredentials}
-      className="max-w-full mx-20 mt-14"
-    >
+    <form action={signInWithCredentials} className="max-w-full mx-20 mt-14 ">
       <div className="mb-8">
         <label
           className="block text-gray-500 mb-2 font-semibold"
@@ -18,7 +20,7 @@ function LoginForm() {
           id="email"
           type="email"
           placeholder="이메일을 입력하세요"
-          className="w-full px-3 py-2 border rounded-md"
+          className="w-full px-3 py-2 border rounded-md "
           name="email"
         />
         {/* <p className="ml-2 mt-1 text-sm text-red-500">이메일은 필수입니다.</p> */}
@@ -60,20 +62,22 @@ function LoginForm() {
             className="h-10 w-10 cursor-pointer"
           />
         </button>
-       
-        <button type='submit' formAction={signInWithKaKao}>
-          <img 
-          src="/images/kakao-talk.svg"
-          alt="KakaoTalk"
-          className="h-10 w-10 cursor-pointer"
-        />
+
+        <button type="submit" formAction={signInWithKaKao}>
+          <img
+            src="/images/kakao-talk.svg"
+            alt="KakaoTalk"
+            className="h-10 w-10 cursor-pointer"
+          />
         </button>
-        
-        <button type='submit' formAction={signInWithGoogle}><img
-          src="/images/google-login.svg"
-          alt="Google"
-          className="h-10 w-10 cursor-pointer"
-        /></button>
+
+        <button type="submit" formAction={signInWithGoogle}>
+          <img
+            src="/images/google-login.svg"
+            alt="Google"
+            className="h-10 w-10 cursor-pointer"
+          />
+        </button>
       </div>
     </form>
   );
