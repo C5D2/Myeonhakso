@@ -44,5 +44,5 @@ export interface IReview {
   user_id: number;
   user: Pick<Iseller, 'name' | '_id'>;
   _id: number;
-  creaedAt: string;
+  createdAt: string;
 }

@@ -20,9 +20,9 @@ export default function DetailCurriculum({ item }: IDetailCurriculumProps) {
 
   return (
     <>
-      <div className="mt-[50px]">
+      {/* <div className="">
         <h3 className="font-bold">커리큘럼</h3>
-      </div>
+      </div> */}
       {(showAllCurriculum
         ? curriculumItems
         : curriculumItems.slice(0, initialDisplayCount)
