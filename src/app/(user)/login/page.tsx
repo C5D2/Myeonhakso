@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 function Page() {
   return (
-    <main className="md:container mx-auto mt-14">
+    <main className="max-w-7xl mx-auto mt-14">
       <div className="mx-auto">
         <h2 className="mb-4 text-2xl text-gray-500 text-center font-semibold">로그인</h2>
       </div>

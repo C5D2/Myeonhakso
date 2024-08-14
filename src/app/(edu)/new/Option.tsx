@@ -50,12 +50,18 @@ export default function Option({
   };
 
   const onSelectStartTime = (time: Date | null, rowIndex: number) => {
-    setValue(`extra.options.${rowIndex}.startTime`, time);
+    setValue(
+      `extra.options.${rowIndex}.startTime`,
+      time ? formatISO(time) : null,
+    );
     setValue(`extra.options.${rowIndex}.endTime`, null);
   };
 
   const onSelectEndTime = (time: Date | null, rowIndex: number) => {
-    setValue(`extra.options.${rowIndex}.endTime`, time);
+    setValue(
+      `extra.options.${rowIndex}.endTime`,
+      time ? formatISO(time) : null,
+    );
   };
 
   return (
@@ -91,7 +97,11 @@ export default function Option({
               </li>
             ))}
             <DatePicker
-              selected={options[rowIndex]?.startTime}
+              selected={
+                options[rowIndex]?.startTime
+                  ? parseISO(options[rowIndex].startTime)
+                  : null
+              }
               onChange={(time: Date | null) =>
                 onSelectStartTime(time, rowIndex)
               }
@@ -105,21 +115,27 @@ export default function Option({
               dateFormat="h:mm aa"
               placeholderText="시작 시간"
             />
+
             <DatePicker
-              selected={options[rowIndex]?.endTime}
+              selected={
+                options[rowIndex]?.endTime
+                  ? parseISO(options[rowIndex].endTime)
+                  : null
+              }
               onChange={(time: Date | null) => onSelectEndTime(time, rowIndex)}
               locale={ko}
               showTimeSelect
               showTimeSelectOnly
               timeIntervals={30}
               minTime={
-                options[rowIndex]?.startTime ||
-                setHours(setMinutes(new Date(), 0), 9)
+                options[rowIndex]?.startTime
+                  ? parseISO(options[rowIndex].startTime)
+                  : setHours(setMinutes(new Date(), 0), 9)
               }
               maxTime={setHours(setMinutes(new Date(), 0), 21)}
               excludeTimes={
                 options[rowIndex]?.startTime
-                  ? [options[rowIndex].startTime]
+                  ? [parseISO(options[rowIndex].startTime)]
                   : []
               }
               timeCaption="Time"

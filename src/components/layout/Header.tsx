@@ -2,9 +2,10 @@ import { auth } from '@/auth';
 import Link from 'next/link';
 import LoginInfo from './LoginInfo';
 import SessionHandler from './SessionHandler';
-import { Session } from 'next-auth';
 import Categories from './Categories';
 import Button from '../Button';
+import { Session } from 'next-auth';
+
 
 export default async function Header() {
   const session: Session | null = await auth();
@@ -14,7 +15,7 @@ export default async function Header() {
   } else if (session?.user?.type === 'user') {
     type = 'tutee';
   }
-  console.log('session', session);
+
 
   return (
     <div className="box-border px-10 py-3 border-b-[3px] h-[85px] flex-shrink-0 flex items-center">
@@ -28,6 +29,7 @@ export default async function Header() {
             <Button>
               <Link href={`/mypage/${type}/dashboard`}> 내 강의실 </Link>
             </Button>
+
             <LoginInfo name={session.user.name!} image={session.user.image} />
             <SessionHandler session={session} />
           </>

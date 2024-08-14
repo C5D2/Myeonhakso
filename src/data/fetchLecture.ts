@@ -103,3 +103,20 @@ export async function fetchOtherLectures(_id: string, limit: string) {
 //   }
 //   return resJson.item;
 // }
+
+export async function getLectureBookmark() {
+  const session = await getSession();
+
+  const res = await fetch(`${SERVER}/bookmarks/product`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${session?.accessToken}`,
+    },
+  });
+
+  const resData = await res.json();
+  console.log('data', resData);
+  return resData;
+}

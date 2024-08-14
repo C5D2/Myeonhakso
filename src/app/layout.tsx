@@ -2,6 +2,7 @@ import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import './globals.css';
 import { Metadata } from 'next';
+import { NextAuthProvider } from './providers';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
@@ -17,13 +18,14 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <div className="flex flex-col h-lvh">
-          <Header />
-          <Script src="https://cdn.iamport.kr/v1/iamport.js" />
-
-          {children}
-          <Footer />
-        </div>
+        <NextAuthProvider>
+          <div className="flex flex-col h-lvh">
+            <Header />
+             <Script src="https://cdn.iamport.kr/v1/iamport.js" />
+            {children}
+            <Footer />
+          </div>
+        </NextAuthProvider>
       </body>
     </html>
   );

@@ -1,12 +1,14 @@
+export type UserRole = 'user' | 'seller' | 'admin';
+
 export interface UserData {
   _id: number,
   email: string,
   name: string,
   phone?: string,
   address?: string,
-  type: 'user' | 'seller' | 'admin',
+  type: UserRole,
   loginType?: 'email' | 'kakao',
-  image?: string,
+  image?: string | null,
   profile?: string,
   token?: {
     accessToken: string,
@@ -22,12 +24,12 @@ export type UserInToken = Required<Pick<UserData, '_id' | 'name'>> & Pick<UserDa
 };
 
 export type UserForm = {
-  type: 'user' | 'seller',
+  type: UserRole,
   name: string,
   email: string,
   password: string,
   attach?: string | string[],
-  profileImage?: string,
+  image?: string | null,
 };
 
 export type UserLoginForm = Pick<UserForm, 'email' | 'password' >

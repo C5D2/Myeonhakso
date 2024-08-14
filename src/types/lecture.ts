@@ -34,12 +34,12 @@ export interface Iseller {
 export interface Iextra {
   type: string;
   level: string;
-  schedule: string[];
+  schedule: (string | null)[];
   preview: string;
   options: {
     days: string[];
-    startTime: Date | null | undefined;
-    endTime: Date | null | undefined;
+    startTime: string | null;
+    endTime: string | null;
   }[];
   curriculum: { content: string }[];
   address?: string;
@@ -101,4 +101,19 @@ export interface ILectureOrderDetail
   extends Omit<ILectureOrderResponse, 'products'> {
   _id: number;
   products: ILectureProducts;
+}
+
+export interface ILectureBookmark {
+  _id: number;
+  user_id: number;
+  createdAt: string;
+  product: {
+    _id: number;
+    name: string;
+    price: string;
+    quantity: string;
+    buyQuantity: number;
+    image: string;
+    extra: Iextra;
+  };
 }
