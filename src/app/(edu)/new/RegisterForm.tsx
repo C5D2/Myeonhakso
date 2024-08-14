@@ -43,8 +43,8 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
   const [address, setAddress] = useState<string>('');
   const [tab, setTab] = useState(0);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null | undefined>(undefined);
 
   const convertToUTC = (date: Date) => {
     return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
@@ -57,14 +57,10 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
 
     if (start) {
       setValue('extra.schedule.0', convertToUTC(start).toISOString());
-    } else {
-      setValue('extra.schedule.0', null);
     }
 
     if (end) {
       setValue('extra.schedule.1', convertToUTC(end).toISOString());
-    } else {
-      setValue('extra.schedule.1', null);
     }
   };
   // const [startDate, setStartDate] = useState(new Date());
@@ -98,7 +94,7 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
             ? convertToUTC(new Date(option.endTime)).toISOString()
             : null,
         })),
-        schedule: data.extra.schedule.map(date =>
+        schedule: data.extra.schedule?.map(date =>
           date ? convertToUTC(new Date(date)).toISOString() : null,
         ),
       },
@@ -238,8 +234,8 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
                 onChange={(dates: [Date | null, Date | null]) => {
                   onRangeChange(dates);
                 }}
-                startDate={startDate}
-                endDate={endDate}
+                startDate={startDate || undefined}
+                endDate={endDate || undefined}
                 selectsRange
                 inline
               />
@@ -247,7 +243,6 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
           />
           <InputError target={errors.extra?.schedule} />
         </div>
-        {/* 강의 옵션 추가(옵션1, 라벨....) */}
         <div className="m-4">
           <label className="block text-gray-600 mb-2" htmlFor="option">
             강의 옵션
