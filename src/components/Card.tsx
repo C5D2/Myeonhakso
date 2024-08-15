@@ -1,18 +1,27 @@
 'use client';
 
-import { Ilecture } from '@/types/lecture';
+import { Ilecture, ILectureBookmark } from '@/types/lecture';
 import Link from 'next/link';
 
 interface ICardProp {
   index?: number;
-  item: Ilecture;
+  item: Ilecture | ILectureBookmark;
 }
 
 export default function Card({ item }: ICardProp) {
+  const isLectureBookmark = (
+    item: Ilecture | ILectureBookmark,
+  ): item is ILectureBookmark => {
+    return 'product' in item;
+  };
+
+  const productItem = isLectureBookmark(item) ? item.product : item;
+  const name = productItem.name;
+
   let bgColorClass;
   let iconClass;
 
-  switch (item?.extra?.type) {
+  switch (productItem.extra?.type) {
     case 'tech':
       bgColorClass = 'bg-light-green';
       iconClass = '/tech.svg';
@@ -30,21 +39,21 @@ export default function Card({ item }: ICardProp) {
   }
   return (
     <Link
-      href={`/${item?.extra?.type}/${item?._id}`}
+      href={`/${productItem.extra?.type}/${productItem?._id}`}
       className={`w-[80%] min-w-[150px] h-full`}
     >
       <div className={`border border-gray-10 rounded-xl ${bgColorClass} p-5`}>
         <div className="flex items-center mb-5">
           <p className="border border-black rounded-full px-2 mr-auto bg-white md:text-xs min-w-20 truncate">
-            웹 프로그래밍
+            {productItem.extra?.type}
           </p>
           <div className="min-w-10 h-10">
             <img src={`${iconClass}`} className="min-h-full" />
           </div>
         </div>
-        <h3 className="font-bold text-left mb-5 h-10 truncate">{item?.name}</h3>
+        <h3 className="font-bold text-left mb-5 h-10 truncate">{name}</h3>
         <p className="text-left mb-5 font-light text-gray-500 h-10 truncate">
-          상품 설명입니다.
+          {productItem.extra?.curriculum?.[0]?.content}
         </p>
 
         <div className="flex">
@@ -61,7 +70,7 @@ export default function Card({ item }: ICardProp) {
             <div className="w-5 h-5">
               <img src="/level-low.svg" alt="" />
             </div>
-            <p>입문</p>
+            <p>{productItem.extra?.level}</p>
           </div>
           <div className="flex gap-1">
             <div className="w-5 h-5">
