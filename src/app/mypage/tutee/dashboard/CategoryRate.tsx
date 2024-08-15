@@ -108,6 +108,11 @@ export function CategoryRate({ item }: ILectureProps) {
           </BarChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="leading-none text-muted-foreground">
+          현재까지 수강한 카테고리별 강의 수를 확인할 수 있습니다.
+        </div>
+      </CardFooter>
     </Card>
   );
 }

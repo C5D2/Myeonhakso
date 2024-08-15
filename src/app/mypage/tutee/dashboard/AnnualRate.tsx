@@ -1,7 +1,7 @@
 'use client';
 
 import { TrendingUp } from 'lucide-react';
-import { CartesianGrid, LabelList, Line, LineChart, XAxis } from 'recharts';
+import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
 
 import {
   Card,
@@ -19,43 +19,47 @@ import {
 } from '@/components/ui/chart';
 import { ILectureProps } from './CategoryRate';
 
-const chartData = [
-  { month: '1월', lecture: 186 },
-  { month: '2월', lecture: 305 },
-  { month: '3월', lecture: 237 },
-  { month: '4월', lecture: 73 },
-  { month: '5월', lecture: 209 },
-  { month: '6월', lecture: 214 },
-  { month: '7월', lecture: 214 },
-  { month: '8월', lecture: 214 },
-  { month: '9월', lecture: 214 },
-  { month: '10월', lecture: 214 },
-  { month: '11월', lecture: 214 },
-  { month: '12월', lecture: 214 },
-];
-
 const chartConfig = {
   lecture: {
     label: 'lecture',
     color: 'hsl(var(--chart-1))',
   },
-  // mobile: {
-  //   label: 'mobile',
-  //   color: 'hsl(var(--chart-2))',
-  // },
 } satisfies ChartConfig;
 
 export function AnnualRate({ item }: ILectureProps) {
+  let chartData = [
+    { month: '1월', lecture: 0 },
+    { month: '2월', lecture: 0 },
+    { month: '3월', lecture: 0 },
+    { month: '4월', lecture: 0 },
+    { month: '5월', lecture: 0 },
+    { month: '6월', lecture: 0 },
+    { month: '7월', lecture: 0 },
+    { month: '8월', lecture: 0 },
+    { month: '9월', lecture: 0 },
+    { month: '10월', lecture: 0 },
+    { month: '11월', lecture: 0 },
+    { month: '12월', lecture: 0 },
+  ];
   const nowYear = new Date().getFullYear(); // 현재 년도
 
   const products = item.flatMap(item => item.products);
-  // const type = products.map(item => item.extra.type);
-  // console.log(nowYear);
+  const lectureDate = products.map(item => item.extra.schedule[0]); //현재 년도와 맞는 년도만 추출
+
+  const nowYearLecture = lectureDate.filter(item => item?.includes('2024'));
+
+  const month = nowYearLecture.map(item => item?.substring(6, 7));
+
+  for (let i = 0; i < month.length; i++) {
+    let numMonth = Number(month[i]) - 1;
+    chartData[numMonth].lecture++;
+  }
+
   return (
     <Card>
       {/* <CardHeader>
-        <CardTitle>Line Chart - Label</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{nowYear} 년도 강의 수강 현황</CardTitle>
+        <CardDescription>{nowYear} 년도 강의 수강 현황</CardDescription>
       </CardHeader> */}
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -63,7 +67,7 @@ export function AnnualRate({ item }: ILectureProps) {
             accessibilityLayer
             data={chartData}
             margin={{
-              top: 20,
+              top: 10,
               left: 12,
               right: 12,
             }}
@@ -73,44 +77,31 @@ export function AnnualRate({ item }: ILectureProps) {
               dataKey="month"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
-              // tickFormatter={value => value.slice(0, 3)}
-              tickFormatter={value => value}
+              tickMargin={10}
+              tickFormatter={value => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
+              content={<ChartTooltipContent hideLabel />}
             />
             <Line
               dataKey="lecture"
-              type="natural"
+              type="linear"
               stroke="var(--color-lecture)"
               strokeWidth={3}
-              dot={{
-                fill: 'var(--color-lecture)',
-              }}
-              activeDot={{
-                r: 6,
-              }}
-            >
-              {/* <LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              /> */}
-            </Line>
+              dot={true}
+            />
           </LineChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
+      <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          {nowYear} 년도 강의 수강 현황
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          {nowYear} 년도에 수강한 강의 수를 확인할 수 있습니다.
         </div>
-      </CardFooter> */}
+      </CardFooter>
     </Card>
   );
 }
