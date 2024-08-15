@@ -22,12 +22,18 @@ export function generateMetadata({
   };
 }
 
-async function Page({ params, searchParams }: { params: { type: string }, searchParams: {page: string} }) {
+async function Page({
+  params,
+  searchParams,
+}: {
+  params: { type: string };
+  searchParams: { page: string };
+}) {
   console.log(params.type);
 
   const customParams = { extra: { type: params.type } };
 
-  const data = await fetchCategory('products', customParams, searchParams.page);
+  const data = await fetchCategory(customParams, searchParams.page);
   console.log('data', data);
 
   const list = data?.item?.map((item, index) => (
@@ -39,11 +45,14 @@ async function Page({ params, searchParams }: { params: { type: string }, search
   return (
     <div className="flex gap-x-10 gap-y-20 ">
       <Filter />
-      <div className='flex flex-col gap-10 w-full max-w-[1320px]'>
+      <div className="flex flex-col gap-10 w-full max-w-[1320px]">
         <div className="flex flex-wrap content-start gap-10 max-w-[1400px]">
           {list}
         </div>
-      <Pagination page={data?.pagination?.page} totalPages={data?.pagination?.totalPages}/>
+        <Pagination
+          page={data?.pagination?.page}
+          totalPages={data?.pagination?.totalPages}
+        />
       </div>
     </div>
   );
