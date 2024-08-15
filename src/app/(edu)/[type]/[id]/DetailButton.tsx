@@ -2,10 +2,9 @@
 
 import Button from '@/components/Button';
 import { orderLecture } from '@/data/actions/lectureAction';
-import { UserData } from '@/types';
 import { ILectureDetail } from '@/types/lecture';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 declare global {
   interface Window {
@@ -17,6 +16,7 @@ interface IDetailButtonProps {
   params: { id: string };
   item: ILectureDetail | null;
   user: { name: string | null; email: string | null };
+  id: string | Date | null | undefined;
 }
 
 export default function DetailButton({
