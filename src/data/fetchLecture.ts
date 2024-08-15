@@ -88,13 +88,13 @@ export async function fetchOtherLectures(_id: string, limit: string) {
   return resJson.item;
 }
 
-export async function fetchSearchLectures( keyword: string ) {
+export async function fetchSearchLectures(keyword: string) {
   const url = `${SERVER}/products?keyword=${keyword}`;
   const res = await fetch(url, {
     headers: {
       'client-id': `${CLIENT_ID}`,
     },
-  })
+  });
   const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
   if (!resJson.ok) {
     return null;
@@ -119,7 +119,7 @@ export async function fetchSearchLectures( keyword: string ) {
 //   return resJson.item;
 // }
 
-export async function getLectureBookmark() {
+export async function fetchLectureBookmark() {
   const session = await getSession();
 
   const res = await fetch(`${SERVER}/bookmarks/product`, {
@@ -132,9 +132,9 @@ export async function getLectureBookmark() {
   });
 
   const resData = await res.json();
+  console.log('data', resData);
   return resData;
 }
-
 
 // {{url}}/replies/products/36
 

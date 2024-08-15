@@ -108,15 +108,17 @@ export interface ILectureBookmark {
   _id: number;
   user_id: number;
   createdAt: string;
-  product: {
-    _id: number;
-    name: string;
-    price: string;
-    quantity: string;
-    buyQuantity: number;
-    image: string;
-    extra: Iextra;
-  };
+  product: ILectureBookmarkProduct;
+}
+
+export interface ILectureBookmarkProduct {
+  _id: number;
+  name: string;
+  price: string;
+  quantity: string;
+  buyQuantity: number;
+  image: string;
+  extra: Iextra;
 }
 
 export interface ILectureReview

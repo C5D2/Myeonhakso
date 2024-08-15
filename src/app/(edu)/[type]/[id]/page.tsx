@@ -1,5 +1,4 @@
 import DetailButton from '@/app/(edu)/[type]/[id]/DetailButton';
-import DetailCurriculum from '@/app/(edu)/[type]/[id]/DetailCurriculum';
 import { getSession } from '@/auth';
 import AddBookmarkLecture from '@/components/AddBookmarkLecture';
 import Button from '@/components/Button';
@@ -9,7 +8,7 @@ import KakaoMap from '@/components/KakaoMap';
 import {
   fetchLectureDetail,
   fetchOtherLectures,
-  getLectureBookmark,
+  fetchLectureBookmark,
 } from '@/data/fetchLecture';
 import { ILectureBookmark } from '@/types/lecture';
 import Image from 'next/image';
@@ -46,7 +45,7 @@ async function DetailPage({ params }: { params: { id: string } }) {
   let bookmarkId: number | null = null;
 
   if (user) {
-    const data = await getLectureBookmark();
+    const data = await fetchLectureBookmark();
     const product = data.item;
 
     const bookmarkedItem = product.find((item: ILectureBookmark) => {
