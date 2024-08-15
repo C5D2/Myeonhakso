@@ -1,4 +1,5 @@
 import { UserData } from '@/types/user';
+import { IReview } from './mypage';
 
 export interface Ilecture {
   _id: number;
@@ -115,5 +116,14 @@ export interface ILectureBookmark {
     buyQuantity: number;
     image: string;
     extra: Iextra;
+  };
+}
+
+export interface ILectureReview
+  extends Omit<IReview, 'order_id' | 'product_id' | 'user_id'> {
+  Product: {
+    _id: number;
+    image: string | null;
+    name: string;
   };
 }
