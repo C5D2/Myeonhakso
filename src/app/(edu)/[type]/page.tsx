@@ -45,8 +45,6 @@ async function Page({ params, searchParams }: { params: { type: string }, search
         </div>
       <Pagination page={data?.pagination?.page} totalPages={data?.pagination?.totalPages}/>
       </div>
-
-
     </div>
   );
 }
