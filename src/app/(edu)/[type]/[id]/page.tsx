@@ -13,6 +13,7 @@ import {
 } from '@/data/fetchLecture';
 import { ILectureBookmark } from '@/types/lecture';
 import Image from 'next/image';
+import Tab from './Tab';
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -243,8 +244,8 @@ async function DetailPage({ params }: { params: { id: string } }) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <DetailCurriculum item={item} />
+            <div className="mt-[50px] flex flex-col gap-3">
+              <Tab item={item} />
             </div>
 
             <div className="mt-[50px]">

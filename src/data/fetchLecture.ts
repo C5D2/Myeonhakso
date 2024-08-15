@@ -6,6 +6,7 @@ import {
   ILectureOrder,
   ILectureOrderDetail,
   ILectureOrderResponse,
+  ILectureReview,
 } from '@/types/lecture';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
@@ -34,22 +35,22 @@ export async function fetchLecture(
 }
 
 export async function fetchCategory(
-  path: string,
+  // path: string,
   type?: object,
   page?: string,
 ): Promise<MultiItem<Ilecture>> {
   const params = new URLSearchParams();
   type && params.set('custom', JSON.stringify(type));
   page && params.set('page', page);
-  params.set('limit', '4');
-  const url = `${SERVER}/${path}?${params.toString()}`;
+  params.set('limit', '8');
+  // const url = `${SERVER}/${path}?${params.toString()}`;
+  const url = `${SERVER}/products?${params.toString()}`;
   console.log('url', url);
 
   const res = await fetch(url, {
     headers: {
       'client-id': `${CLIENT_ID}`,
     },
-
     next: { revalidate: 10 },
   });
   const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
@@ -131,7 +132,22 @@ export async function getLectureBookmark() {
   });
 
   const resData = await res.json();
-  console.log('data', resData);
   return resData;
 }
 
+
+// {{url}}/replies/products/36
+
+export async function fetchReview(_id: number) {
+  const url = `${SERVER}/replies/products/${_id}`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+    },
+  });
+  const resJson: ApiRes<MultiItem<ILectureReview>> = await res.json();
+  if (!resJson.ok) {
+    return null;
+  }
+  return resJson.item;
+}
