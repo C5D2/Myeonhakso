@@ -27,7 +27,7 @@ import useSWR from 'swr';
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
-export function useBookmark(type = 'product') {
+export function useFetchBookmark(type = 'product') {
   const { accessToken } = GetAuthInfo();
 
   const fetcher = async (url: string) => {

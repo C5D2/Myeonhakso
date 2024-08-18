@@ -1,12 +1,37 @@
+'use client';
+
 import Button from '@/components/Button';
+import { useFetchLecture } from '@/hooks/useLectureActions';
 import { Ilecture } from '@/types/lecture';
-import { IOrderSaleList } from '@/types/mypage';
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface IProduct {
   item: Ilecture;
 }
 export default function ManagementItem({ item }: IProduct) {
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { deleteLecture } = useFetchLecture();
+
+  const handleLectureDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await deleteLecture(String(item._id));
+      setIsDeleted(true);
+      alert('강의가 삭제되었습니다.');
+    } catch (error) {
+      console.error('강의 삭제 실패:', error);
+      alert('강의 삭제에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  if (isDeleted) {
+    return null;
+  }
+
   return (
     // <div className="flex justify-center">
     //   <img
@@ -45,12 +70,19 @@ export default function ManagementItem({ item }: IProduct) {
         >
           강의 수정
         </Link>
-        <Link
+        {/* <Link
           href="/"
           className="lg:px-2 lg:text-xs xl:px-3 text-white bg-gray-90 w-fit rounded-md text-sm py-1 px-5 border border-black"
         >
           강의 삭제
-        </Link>
+        </Link> */}
+        <Button
+          className="lg:px-2 lg:text-xs xl:px-3 text-white bg-gray-90 w-fit rounded-md text-sm py-1 px-5 border border-black"
+          onClick={handleLectureDelete}
+          disabled={isDeleting}
+        >
+          강의 삭제
+        </Button>
       </div>
     </div>
   );
