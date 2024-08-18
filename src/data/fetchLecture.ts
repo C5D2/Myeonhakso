@@ -122,17 +122,54 @@ export async function fetchSearchLectures(keyword: string) {
 export async function fetchLectureBookmark() {
   const session = await getSession();
 
+  if (!session) {
+    console.error('세션 없음');
+    return { item: [] };
+  }
+
   const res = await fetch(`${SERVER}/bookmarks/product`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       'client-id': `${CLIENT_ID}`,
-      Authorization: `Bearer ${session?.accessToken}`,
+      Authorization: `Bearer ${session.accessToken}`,
     },
   });
 
+  if (!res.ok) {
+    console.error('API 호출 에러:', res.statusText);
+    throw new Error('API 호출 실패');
+  }
+
   const resData = await res.json();
-  console.log('data', resData);
+  console.log('API 응답:', resData);
+  return resData;
+}
+
+export async function fetchTeacherBookmark() {
+  const session = await getSession();
+
+  if (!session) {
+    console.error('세션 없음');
+    return { item: [] };
+  }
+
+  const res = await fetch(`${SERVER}/bookmarks/user`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${session.accessToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    console.error('API 호출 에러:', res.statusText);
+    throw new Error('API 호출 실패');
+  }
+
+  const resData = await res.json();
+  console.log('API 응답:', resData);
   return resData;
 }
 
