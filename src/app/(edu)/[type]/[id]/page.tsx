@@ -1,18 +1,19 @@
 import DetailButton from '@/app/(edu)/[type]/[id]/DetailButton';
 import { getSession } from '@/auth';
-import AddBookmarkLecture from '@/components/AddBookmarkLecture';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
-import DeleteBookmarkLecture from '@/components/DeleteBookmarkLecture';
 import KakaoMap from '@/components/KakaoMap';
 import {
   fetchLectureDetail,
   fetchOtherLectures,
   fetchLectureBookmark,
+  fetchTeacherBookmark,
 } from '@/data/fetchLecture';
-import { ILectureBookmark } from '@/types/lecture';
+import { IBookmark } from '@/types/lecture';
 import Image from 'next/image';
 import Tab from './Tab';
+import BookmarkLecture from '@/components/BookmarkLecture';
+import SubscribeButton from '@/app/(edu)/[type]/[id]/SubscribeButton';
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -33,7 +34,6 @@ function formatTime(dateString: string) {
   return `${hours}:${minutes}`;
 }
 
-// 이미 구매한 강의는 구매 버튼을 disabled로
 async function DetailPage({ params }: { params: { id: string } }) {
   const session = await getSession();
   const user = session?.user;
@@ -43,23 +43,38 @@ async function DetailPage({ params }: { params: { id: string } }) {
 
   let isBookmarked = false;
   let bookmarkId: number | null = null;
+  let isSubscribed = false;
+  let subscribeId: string | null = null;
 
   if (user) {
+    // 강의 북마크 데이터
     const data = await fetchLectureBookmark();
     const product = data.item;
 
-    const bookmarkedItem = product.find((item: ILectureBookmark) => {
+    const bookmarkedItem = product.find((item: IBookmark) => {
       return item.product && item.product._id === Number(params.id);
     });
     if (bookmarkedItem) {
       isBookmarked = true;
       bookmarkId = bookmarkedItem._id;
     }
-  }
-  console.log(bookmarkId);
 
-  // 지금 강의는 다른 강의에서 빼야됨,,,
-  // 목록(type) 카드 사이즈 맞추기
+    // 선생님 북마크 데이터
+    const teacherData = await fetchTeacherBookmark();
+    const user = teacherData.item;
+
+    const bookmarkedTeacher = user.find((item: IBookmark) => {
+      return item.user && item.user._id === Number(seller_id);
+    });
+    if (bookmarkedTeacher) {
+      isSubscribed = true;
+      subscribeId = bookmarkedTeacher._id;
+    }
+  }
+  console.log(subscribeId);
+
+  // TODO: 지금 강의는 다른 강의에서 빼야됨,,,
+  // 공유하기도 하기
   const list = data?.map((item, index) => (
     <div
       className="max-w-[300px] h-[320px] rounded-xl flex flex-grow justify-between"
@@ -79,11 +94,12 @@ async function DetailPage({ params }: { params: { id: string } }) {
                 <h2 className="text-2xl font-extrabold">{item?.name}</h2>
                 <p>{item?.content}</p>
                 <div className="flex gap-3">
-                  {isBookmarked && bookmarkId !== null ? (
-                    <DeleteBookmarkLecture bookmarkId={bookmarkId} />
-                  ) : (
-                    <AddBookmarkLecture params={params} />
-                  )}
+                  <BookmarkLecture
+                    params={params}
+                    initialIsBookmarked={isBookmarked}
+                    bookmarkId={bookmarkId}
+                  />
+
                   <Image
                     src="/share.svg"
                     width={30}
@@ -171,7 +187,11 @@ async function DetailPage({ params }: { params: { id: string } }) {
                   <Image src="/star.svg" width={20} height={20} alt="만족도" />
                   <p className="inline">수강생 만족도 4.8</p>
                 </div>
-                <Button>선생님 구독하기</Button>
+                <SubscribeButton
+                  initialIsSubscribed={isSubscribed}
+                  teacherId={seller_id}
+                  subscribeId={subscribeId}
+                />
               </div>
             </div>
 
@@ -248,7 +268,9 @@ async function DetailPage({ params }: { params: { id: string } }) {
             </div>
 
             <div className="mt-[50px]">
-              <h3 className="font-bold">오하요 선생님의 다른 강의</h3>
+              <h3 className="font-bold">
+                {item?.seller.name} 선생님의 다른 강의
+              </h3>
               <div className="flex flex-wrap content-start max-w-[1400px]">
                 {list}
               </div>
