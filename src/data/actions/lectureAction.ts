@@ -72,11 +72,28 @@ export async function postLectureBookmark(id: string) {
 }
 
 // 북마크 id
-export async function deleteLectureBookmark(id: string) {
+export async function deleteBookmark(id: string) {
   const session = await getSession();
 
   const res = await fetch(`${SERVER}/bookmarks/${id}`, {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${session?.accessToken}`,
+    },
+  });
+
+  const resData = await res.json();
+  console.log('data', resData);
+  return resData;
+}
+
+export async function postTeacherBookmark(id: string) {
+  const session = await getSession();
+
+  const res = await fetch(`${SERVER}/bookmarks/user/${id}`, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'client-id': `${CLIENT_ID}`,

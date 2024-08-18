@@ -104,11 +104,12 @@ export interface ILectureOrderDetail
   products: ILectureProducts;
 }
 
-export interface ILectureBookmark {
+export interface IBookmark {
   _id: number;
   user_id: number;
   createdAt: string;
-  product: ILectureBookmarkProduct;
+  product?: ILectureBookmarkProduct;
+  user?: ITeacherBookmark;
 }
 
 export interface ILectureBookmarkProduct {
@@ -119,6 +120,13 @@ export interface ILectureBookmarkProduct {
   buyQuantity: number;
   image: string;
   extra: Iextra;
+}
+
+export interface ITeacherBookmark {
+  _id: number;
+  name: string;
+  image: string;
+  type: string;
 }
 
 export interface ILectureReview
