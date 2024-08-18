@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useBookmark } from '@/hooks/useBookmark';
+import { useFetchBookmark } from '@/hooks/useBookmarkActions';
 import Bookmark from '@/components/Bookmark';
 import { GetAuthInfo } from '@/utils/authUtils';
 import {
@@ -19,7 +19,7 @@ export default function BookmarkLecture({
   initialIsBookmarked: boolean;
   bookmarkId: number | null;
 }) {
-  const { data, isLoading, mutate } = useBookmark();
+  const { data, isLoading, mutate } = useFetchBookmark();
   const { user } = GetAuthInfo();
   const id = Number(params.id);
 

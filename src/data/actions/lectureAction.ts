@@ -32,6 +32,44 @@ export async function postForm(
   return data;
 }
 
+export async function patchForm(
+  id: string,
+  formData: ILectureRegister,
+): Promise<ApiResWithValidation<SingleItem<Ilecture>, ILectureRegister>> {
+  const session = await getSession();
+
+  const res = await fetch(`${SERVER}/seller/products/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${session?.accessToken}`,
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const data = await res.json();
+  console.log('data', data);
+  return data;
+}
+
+export async function deleteForm(id: string) {
+  const session = await getSession();
+
+  const res = await fetch(`${SERVER}/seller/products/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${session?.accessToken}`,
+    },
+  });
+
+  const data = await res.json();
+  console.log('data', data);
+  return data;
+}
+
 export async function orderLecture(
   data: ILectureOrder,
 ): Promise<
