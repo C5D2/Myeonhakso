@@ -36,7 +36,10 @@ export default function TeacherCard({ item }: ICardProp) {
               ''
             }
             className="w-full h-full object-cover"
-            onError={e => e.target.setAttribute('src', '/lecture-default.jpg')}
+            onError={e => {
+              const target = e.target as HTMLImageElement;
+              target.src = '/lecture-default.jpg';
+            }}
           />
         </div>
       </div>

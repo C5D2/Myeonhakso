@@ -4,6 +4,7 @@ import { CategoryRate } from './CategoryRate';
 import { AnnualRate } from './AnnualRate';
 import RecentLecture from './RecentLecture';
 import LectureCalendar from './LectureCalendar';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: '면학소 대시보드 페이지',
@@ -20,10 +21,18 @@ export default async function Page() {
       <div className="">
         <h2 className="font-extrabold text-[30px] mb-10">대시보드</h2>
       </div>
-      <div className="grid grid-flow-col grid-cols-12 grid-rows-9 border gap-5 border-red-500 p-5 place-items-center">
+      <div className="grid grid-flow-col grid-cols-12 grid-rows-9 gap-5 p-5 place-items-center">
         <div className="col-span-6 border border-gray-30 p-5 rounded-2xl w-full h-full">
-          <h3 className="font-semibold">최근 수강 강의</h3>
-          <RecentLecture />
+          <div className="flex items-center">
+            <h3 className="font-semibold mr-auto">최근 수강 강의</h3>
+            <Link
+              href="/mypage/tutee/orderlist"
+              className="text-sm text-gray-50"
+            >
+              강의 목록 {'>'}
+            </Link>
+          </div>
+          <RecentLecture item={item[0]} />
         </div>
         <div className="col-span-6 row-span-2 border border-gray-30 p-5 rounded-2xl w-full h-full ">
           <h3 className="font-semibold">카테고리별 학습 현황</h3>
@@ -40,7 +49,7 @@ export default async function Page() {
         </div>
         <div className="col-span-6 row-span-3 border border-gray-30 p-5 rounded-2xl w-full h-full">
           <h3 className="font-semibold">학습 일정</h3>
-          <LectureCalendar />
+          <LectureCalendar item={item} />
         </div>
       </div>
     </>

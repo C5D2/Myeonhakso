@@ -52,7 +52,11 @@ export default function ManagementItem({ item }: IProduct) {
         <img
           src="/lecture-default.jpg"
           alt="강의 대표 이미지"
-          // onError={e => e.target.setAttribute('src', '/lecture-default.jpg')}
+          onError={e => {
+            const target = e.target as HTMLImageElement;
+            // target.setAttribute('src', '/lecture-default.jpg')
+            target.src = '/lecture-default.jpg';
+          }}
         />
       </div>
       <p className="basis-3/12 px-2 keep-all">{item?.name}</p>

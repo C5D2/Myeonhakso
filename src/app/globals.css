@@ -3,8 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-family: 'SpoqaHanSansNeo-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff')
+      format('woff');
+  }
   html {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'SpoqaHanSansNeo-Regular';
+    /* font-family: 'Noto Sans KR', sans-serif; */
   }
   * {
     @apply border-border;
