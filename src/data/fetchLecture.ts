@@ -38,10 +38,16 @@ export async function fetchCategory(
   // path: string,
   type?: object,
   page?: string,
+  sort?: object,
+  keyword?: string,
 ): Promise<MultiItem<Ilecture>> {
+  console.log('type, page, sort', type, page, sort);
   const params = new URLSearchParams();
   type && params.set('custom', JSON.stringify(type));
   page && params.set('page', page);
+  sort && params.set('sort', JSON.stringify(sort));
+  keyword && params.set('keyword', keyword);
+  console.log('keyword', JSON.stringify(keyword));
   params.set('limit', '8');
   // const url = `${SERVER}/${path}?${params.toString()}`;
   const url = `${SERVER}/products?${params.toString()}`;
