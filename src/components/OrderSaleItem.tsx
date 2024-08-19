@@ -38,9 +38,11 @@ function OrderSaleItem({ item }: ParamType) {
                   <img
                     className="w-36 h-24 mr-5"
                     src={`${SERVER}/${item?.image?.path}`}
-                    onError={e =>
-                      e.target.setAttribute('src', '/lecture-default.jpg')
-                    }
+                    onError={e => {
+                      const target = e.target as HTMLImageElement;
+                      // target.setAttribute('src', '/lecture-default.jpg')
+                      target.src = '/lecture-default.jpg';
+                    }}
                   />
                   <p className="truncate">한 입 크기로 잘라먹는 타입스크립트</p>
                   <p className="ml-auto text-gray-50">
@@ -65,13 +67,13 @@ function OrderSaleItem({ item }: ParamType) {
                     <div className="flex">
                       <p className="text-gray-50">수강 시작 일자</p>
                       <p className="text-left ml-[75px]">
-                        {item?.extra?.schedule[0].slice(0, 10)}
+                        {item?.extra?.schedule[0]?.slice(0, 10)}
                       </p>
                     </div>
                     <div className="flex">
                       <p className=" text-gray-50">수강 종료 일자</p>
                       <p className="text-left ml-[75px]">
-                        {item?.extra?.schedule[1].slice(0, 10)}
+                        {item?.extra?.schedule[1]?.slice(0, 10)}
                       </p>
                     </div>
                     <div className="flex ">
