@@ -1,13 +1,11 @@
 import DetailButton from '@/app/(edu)/[type]/[id]/DetailButton';
 import { getSession } from '@/auth';
-import Button from '@/components/Button';
 import Card from '@/components/Card';
 import KakaoMap from '@/components/KakaoMap';
 import {
+  fetchBookmark,
   fetchLectureDetail,
   fetchOtherLectures,
-  fetchLectureBookmark,
-  fetchTeacherBookmark,
 } from '@/data/fetchLecture';
 import { IBookmark } from '@/types/lecture';
 import Image from 'next/image';
@@ -48,7 +46,7 @@ async function DetailPage({ params }: { params: { id: string } }) {
 
   if (user) {
     // 강의 북마크 데이터
-    const data = await fetchLectureBookmark();
+    const data = await fetchBookmark();
     const product = data.item;
 
     const bookmarkedItem = product.find((item: IBookmark) => {
@@ -60,7 +58,7 @@ async function DetailPage({ params }: { params: { id: string } }) {
     }
 
     // 선생님 북마크 데이터
-    const teacherData = await fetchTeacherBookmark();
+    const teacherData = await fetchBookmark('user');
     const user = teacherData.item;
 
     const bookmarkedTeacher = user.find((item: IBookmark) => {

@@ -125,7 +125,7 @@ export async function fetchSearchLectures(keyword: string) {
 //   return resJson.item;
 // }
 
-export async function fetchLectureBookmark() {
+export async function fetchBookmark(type = 'product') {
   const session = await getSession();
 
   if (!session) {
@@ -133,7 +133,7 @@ export async function fetchLectureBookmark() {
     return { item: [] };
   }
 
-  const res = await fetch(`${SERVER}/bookmarks/product`, {
+  const res = await fetch(`${SERVER}/bookmarks/${type}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -152,32 +152,32 @@ export async function fetchLectureBookmark() {
   return resData;
 }
 
-export async function fetchTeacherBookmark() {
-  const session = await getSession();
+// export async function fetchTeacherBookmark() {
+//   const session = await getSession();
 
-  if (!session) {
-    console.error('세션 없음');
-    return { item: [] };
-  }
+//   if (!session) {
+//     console.error('세션 없음');
+//     return { item: [] };
+//   }
 
-  const res = await fetch(`${SERVER}/bookmarks/user`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'client-id': `${CLIENT_ID}`,
-      Authorization: `Bearer ${session.accessToken}`,
-    },
-  });
+//   const res = await fetch(`${SERVER}/bookmarks/user`, {
+//     method: 'GET',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'client-id': `${CLIENT_ID}`,
+//       Authorization: `Bearer ${session.accessToken}`,
+//     },
+//   });
 
-  if (!res.ok) {
-    console.error('API 호출 에러:', res.statusText);
-    throw new Error('API 호출 실패');
-  }
+//   if (!res.ok) {
+//     console.error('API 호출 에러:', res.statusText);
+//     throw new Error('API 호출 실패');
+//   }
 
-  const resData = await res.json();
-  console.log('API 응답:', resData);
-  return resData;
-}
+//   const resData = await res.json();
+//   console.log('API 응답:', resData);
+//   return resData;
+// }
 
 // {{url}}/replies/products/36
 
