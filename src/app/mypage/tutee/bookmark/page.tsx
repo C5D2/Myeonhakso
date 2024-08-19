@@ -1,10 +1,12 @@
-import BookmarkPagination from '@/app/mypage/tutee/bookmark/BookmarkPagination';
-import { fetchLectureBookmark } from '@/data/fetchLecture';
+import Tab from '@/app/mypage/tutee/bookmark/Tab';
+import { fetchBookmark } from '@/data/fetchLecture';
 import { IBookmark } from '@/types/lecture';
 
 async function Page() {
-  const data = await fetchLectureBookmark();
-  const items = data.item as IBookmark[];
+  const lectureData = await fetchBookmark();
+  const teacherData = await fetchBookmark('user');
+  const lectureItems = lectureData.item as IBookmark[];
+  const teacherItems = teacherData.item as IBookmark[];
 
   //   <div className="grid grid-cols-4 flex-wrap gap-4 mx-5">
   //   {items?.map((item, index) => (
@@ -16,14 +18,19 @@ async function Page() {
   //     </div>
   //   ))}
   // </div>
-  console.log(items);
+
+  console.log(lectureData);
+  console.log(teacherData);
 
   return (
     <>
       <div className="">
-        <h2 className="font-extrabold text-[30px] mb-10">북마크</h2>
+        <h2 className="font-extrabold text-[30px] mb-3">북마크</h2>
       </div>
-      <BookmarkPagination items={items} />
+      <div className="mb-2">
+        <Tab lectureItems={lectureItems} teacherItems={teacherItems} />
+      </div>
+      {/* <BookmarkPagination items={items} /> */}
     </>
   );
 }
