@@ -1,6 +1,7 @@
 'use client';
 
 import Card from '@/components/Card';
+import TeacherCard from '@/components/TeacherCard';
 import { IBookmark } from '@/types/lecture';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -26,11 +27,19 @@ export default function BookmarkPagination({ items }: BookmarkPaginationProps) {
     setCurrentPage(prevPage => Math.max(prevPage - 1, 0));
   };
 
+  const isLectureItem = (item: IBookmark): boolean => {
+    return 'product' in item;
+  };
+
   return (
     <div className="grid grid-cols-4 grid-rows-2 gap-4 relative mx-5">
       {currentPageItems.map((item, index) => (
         <div className="max-w-[300px] h-[320px] rounded-xl" key={index}>
-          <Card key={index} item={item} />
+          {isLectureItem(item) ? (
+            <Card key={index} item={item} />
+          ) : (
+            <TeacherCard key={index} item={item} />
+          )}
         </div>
       ))}
       {currentPage > 0 && (

@@ -5,7 +5,7 @@ import {
   deleteBookmark,
   postTeacherBookmark,
 } from '@/data/actions/lectureAction';
-import { useBookmark } from '@/hooks/useBookmark';
+import { useFetchBookmark } from '@/hooks/useBookmarkActions';
 import { IBookmark } from '@/types/lecture';
 import { GetAuthInfo } from '@/utils/authUtils';
 import { useEffect, useState } from 'react';
@@ -21,7 +21,7 @@ export default function SubscribeButton({
   teacherId,
   subscribeId: initialSubscribeId,
 }: SubscribeButtonProps) {
-  const { data, isLoading, mutate } = useBookmark('user');
+  const { data, isLoading, mutate } = useFetchBookmark('user');
   const { user } = GetAuthInfo();
 
   const [isSubscribed, setIsSubscribed] = useState(initialIsSubscribed);
@@ -54,38 +54,30 @@ export default function SubscribeButton({
       return;
     }
 
-    const updatedData = isSubscribed
-      ? data.filter((bookmark: any) => bookmark.user?._id !== teacherId) // 북마크 삭제
-      : [
-          ...(data || []),
-          { user: { _id: teacherId }, isSubscribed: true }, // 북마크 추가
-        ];
+    const newSubscribedState = !isSubscribed;
+    setIsSubscribed(newSubscribedState);
 
-    // 로컬 상태 업데이트하여 UI에서 즉시 반영
-    setIsSubscribed(!isSubscribed);
-    mutate(updatedData, false);
+    const updatedData = newSubscribedState
+      ? [...(data || []), { user: { _id: teacherId }, isSubscribed: true }] // 북마크 추가
+      : data.filter((bookmark: any) => bookmark.user?._id !== teacherId); // 북마크 삭제
+
+    mutate(updatedData, false); // 클라이언트 상태 업데이트
 
     try {
-      if (isSubscribed) {
+      if (newSubscribedState) {
+        await postTeacherBookmark(teacherId); // 구독 추가
+      } else {
         if (subscribeId) {
-          await deleteBookmark(subscribeId);
+          await deleteBookmark(subscribeId); // 구독 해지
         } else {
           throw new Error('구독 id를 찾을 수 없습니다.');
-        }
-      } else {
-        await postTeacherBookmark(teacherId);
-        const newTeacherBookmark = updatedData.find(
-          (bookmark: any) => bookmark.user?._id === teacherId,
-        );
-        if (newTeacherBookmark) {
-          setSubscribeId(newTeacherBookmark._Id);
         }
       }
 
       mutate();
     } catch (error) {
       console.error('구독 처리 실패:', error);
-      setIsSubscribed(isSubscribed);
+      setIsSubscribed(!newSubscribedState); // 이전 상태로 복원
       alert('일시적인 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
