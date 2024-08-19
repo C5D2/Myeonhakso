@@ -92,14 +92,16 @@ export default function Filter() {
       <div className="border border-gray-30 rounded-xl mx-[50px] sm:mx-0 sm:text-sm ">
         <div className="flex ">
           <h3 className="p-5 font-bold mr-auto">필터</h3>
-          <button className="p-5" type="button" onClick={handleReset}>
-            리셋
-          </button>
+          <button
+            className="p-5 bg-[url('/img/hero-pattern.svg')]"
+            type="button"
+            onClick={handleReset}
+          ></button>
         </div>
 
         <hr />
 
-        <div className="w-full p-10 flex flex-col text-xs sm:p-3">
+        <div className="w-full p-10 flex flex-col sm:p-3 sm:text-xs">
           <select
             onChange={handleChangeSelectbox}
             name="sortName"

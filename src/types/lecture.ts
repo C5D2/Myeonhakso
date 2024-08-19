@@ -19,6 +19,7 @@ export interface Ilecture {
   replies: number;
   bookmarks: number;
   options: number;
+  schedule: string[];
   image?: IlectureImage;
 }
 

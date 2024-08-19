@@ -7,12 +7,13 @@ import { IOrderSaleList } from '@/types/mypage';
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
-
 export async function fetchOrderlist(
   page?: string,
+  sort?: string,
 ): Promise<MultiItem<IOrderSaleList>> {
   const params = new URLSearchParams();
   page && params.set('page', page);
+  sort && params.set('sort', sort);
   params.set('limit', '4');
   const session = await getSession();
   const accesstoken = session?.accessToken;
