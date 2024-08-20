@@ -1,12 +1,10 @@
 'use client';
 
 import { postReview } from '@/data/actions/mypageAction';
-import React, { useState } from 'react';
+import { IReviewRegister } from '@/types/mypage';
+import React, { MouseEventHandler, useState } from 'react';
 import { useForm, UseFormRegister } from 'react-hook-form';
 
-interface IReview {
-  content: string;
-}
 interface DOMEvent<T extends EventTarget> extends Event {
   readonly target: T;
 }
@@ -22,11 +20,12 @@ export default function ReviewButton({
   orderId: number;
   productId: number;
 }) {
-  const { register, handleSubmit, watch } = useForm<IReview>();
+  const { register, handleSubmit, watch } = useForm<IReviewRegister>();
   const [starArray, setStarArray] = useState([0, 0, 0, 0, 0]);
 
-  const handleStarClick = (e: DOMEvent<HTMLImageElement>) => {
-    const rate = Number(e.target.getAttribute('data-rate'));
+  const handleStarClick: React.MouseEventHandler<HTMLImageElement> = e => {
+    const target = e.target as HTMLImageElement;
+    const rate = Number(target.getAttribute('data-rate'));
     let newStarArray = [];
     for (let i = 1; i <= rate; i++) {
       newStarArray.push(1);
@@ -37,7 +36,7 @@ export default function ReviewButton({
     setStarArray(newStarArray);
   };
 
-  const handleReview = async formData => {
+  const handleReview = async (formData: IReviewRegister) => {
     const rate = starArray.filter(i => i === 1).length;
     formData.order_id = orderId;
     formData.product_id = productId;
