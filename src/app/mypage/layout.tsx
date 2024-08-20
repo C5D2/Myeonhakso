@@ -76,6 +76,13 @@ function Layout({ children }: { children: React.ReactNode }) {
         >
           계정 정보
         </Link>
+        <Link
+          // className="md:text-sm w-fit px-3 hover:bg-main-light-green hover:rounded-md font-bold text-lg text-left mr-auto"
+          className="md:text-sm w-fit text-white bg-main-green/50 w-fit rounded-md font-bold text-lg py-1 px-5 border main-green"
+          href="/new"
+        >
+          새 강의 만들기
+        </Link>
       </div>
     );
   }
