@@ -1,6 +1,6 @@
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { setHours, setMinutes, format, parseISO, formatISO } from 'date-fns';
+import { setHours, setMinutes, parseISO, formatISO } from 'date-fns';
 import {
   Control,
   UseFormRegister,
@@ -11,6 +11,7 @@ import {
 import { ko } from 'date-fns/locale';
 import classNames from 'classnames';
 import { ILectureRegister } from '@/types/lecture';
+import moment from 'moment';
 
 export const DAY_OPTION = ['월', '화', '수', '목', '금', '토', '일'];
 
@@ -55,6 +56,7 @@ export default function Option({
       time ? formatISO(time) : null,
     );
     setValue(`extra.options.${rowIndex}.endTime`, null);
+    console.log(moment(time).format('HH-mm-ss'));
   };
 
   const onSelectEndTime = (time: Date | null, rowIndex: number) => {
@@ -97,11 +99,7 @@ export default function Option({
               </li>
             ))}
             <DatePicker
-              selected={
-                options[rowIndex]?.startTime
-                  ? parseISO(options[rowIndex].startTime)
-                  : null
-              }
+              selected={moment(options[rowIndex]?.startTime, 'HH:mm').toDate()}
               onChange={(time: Date | null) =>
                 onSelectStartTime(time, rowIndex)
               }
@@ -117,11 +115,7 @@ export default function Option({
             />
 
             <DatePicker
-              selected={
-                options[rowIndex]?.endTime
-                  ? parseISO(options[rowIndex].endTime)
-                  : null
-              }
+              selected={moment(options[rowIndex]?.endTime, 'HH:mm').toDate()}
               onChange={(time: Date | null) => onSelectEndTime(time, rowIndex)}
               locale={ko}
               showTimeSelect
