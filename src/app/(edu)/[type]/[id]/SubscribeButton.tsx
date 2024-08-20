@@ -30,12 +30,12 @@ export default function SubscribeButton({
   useEffect(() => {
     if (!isLoading && data) {
       const isAlreadySubscribed = data.some(
-        (data: IBookmark) => data.user?._id === teacherId,
+        (data: IBookmark) => data.user?._id === Number(teacherId),
       );
       setIsSubscribed(isAlreadySubscribed);
       if (isAlreadySubscribed) {
         const subscribe = data.find(
-          (data: IBookmark) => data.user?._id === teacherId,
+          (data: IBookmark) => data.user?._id === Number(teacherId),
         );
         if (subscribe) {
           setSubscribeId(subscribe._id);

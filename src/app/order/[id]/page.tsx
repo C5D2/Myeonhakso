@@ -23,7 +23,7 @@ async function OrderDetailPage({ params }: { params: { id: string } }) {
   // const session = await getSession();
   // const user = session?.user;
   const seller_id = item?.seller._id;
-  const data = await fetchOtherLectures(seller_id!, '3');
+  const data = await fetchOtherLectures(String(seller_id!), '3');
 
   let isBookmarked = false;
   let bookmarkId: number | null = null;
