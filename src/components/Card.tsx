@@ -50,9 +50,11 @@ export default function Card({ item }: ICardProp) {
   return (
     <Link
       href={`/${productItem.extra?.type}/${productItem?._id}`}
-      className={`w-[80%] min-w-[150px] h-full`}
+      className={`w-[80%] min-w-[150px] h-full `}
     >
-      <div className={`border border-gray-10 rounded-xl ${bgColorClass} p-5`}>
+      <div
+        className={`border border-gray-10 rounded-xl ${bgColorClass} p-5 hover:shadow-lg`}
+      >
         <div className="flex items-center mb-5">
           <p
             className={`${textColorClass} border ${borderColorClass} text-center rounded-full px-2 mr-auto bg-white md:text-xs min-w-20 truncate`}

@@ -22,33 +22,43 @@ export default async function Page() {
         <h2 className="font-extrabold text-[30px] mb-10">대시보드</h2>
       </div>
       <div className="grid grid-flow-col grid-cols-12 grid-rows-9 gap-5 p-5 place-items-center">
-        <div className="col-span-6 border border-gray-30 p-5 rounded-2xl w-full h-full">
-          <div className="flex items-center">
+        <div className="col-span-6 border border-gray-30 rounded-2xl w-full h-full">
+          <div className="flex items-center border-b border-gray-30 p-5">
             <h3 className="font-semibold mr-auto">최근 수강 강의</h3>
             <Link
               href="/mypage/tutee/orderlist"
-              className="text-sm text-gray-50"
+              className="text-sm text-gray-50 "
             >
               강의 목록 {'>'}
             </Link>
           </div>
-          <RecentLecture item={item[0]} />
+          <div className="h-full">
+            <RecentLecture item={item[0]} />
+          </div>
         </div>
-        <div className="col-span-6 row-span-2 border border-gray-30 p-5 rounded-2xl w-full h-full ">
-          <h3 className="font-semibold">카테고리별 학습 현황</h3>
+        <div className="col-span-6 row-span-2 border border-gray-30 rounded-2xl w-full h-full ">
+          <h3 className="font-semibold border-b border-gray-30  p-5 ">
+            카테고리별 학습 현황
+          </h3>
           <div className="flex flex-col justify-center h-full">
             <CategoryRate item={item} />
           </div>
         </div>
-        <div className="col-span-12 row-span-3 border border-gray-30 p-5 rounded-2xl w-full h-full">
-          <h3 className="font-semibold">연간 학습 진행 현황</h3>
+        <div className="col-span-12 row-span-3 border border-gray-30 rounded-2xl w-full h-full">
+          <h3 className="font-semibold p-5 border-b border-gray-30">
+            연간 학습 진행 현황
+          </h3>
           <AnnualRate item={item} />
         </div>
-        <div className="col-span-6 row-span-3  border border-gray-30 p-5 rounded-2xl w-full h-full">
-          <h3 className="font-semibold">최근 1:1 질의응답</h3>
+        <div className="col-span-6 row-span-3  border border-gray-30 rounded-2xl w-full h-full">
+          <h3 className="font-semibold p-5 border-b border-gray-30">
+            최근 1:1 질의응답
+          </h3>
         </div>
-        <div className="col-span-6 row-span-3 border border-gray-30 p-5 rounded-2xl w-full h-full">
-          <h3 className="font-semibold">학습 일정</h3>
+        <div className="col-span-6 row-span-3 border border-gray-30 rounded-2xl w-full h-full">
+          <h3 className="font-semibold p-5 border-b border-gray-30">
+            학습 일정
+          </h3>
           <LectureCalendar item={item} />
         </div>
       </div>

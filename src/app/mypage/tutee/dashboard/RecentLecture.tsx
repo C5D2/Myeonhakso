@@ -9,14 +9,14 @@ export default function RecentLecture({ item }: { item: IOrderSaleList }) {
 
   console.log(type);
   return (
-    <div className="h-full flex flex-col ">
+    <div className="flex flex-col">
       <Link
         href={`/orders/${item._id}`}
-        className="flex gap-5 p-5 my-auto items-center bg-light-green rounded-lg"
+        className="sm:h-10 sm:my-1 mx-10 mt-[10%] flex gap-5 p-5 items-center bg-main-light-green rounded-lg h-[50px]"
       >
-        <img src={`/${type}.svg`} />
+        <img src={`/${type}.svg`} className="sm:hidden" />
 
-        <p>{item.products[0].name}</p>
+        <p className="sm:text-xs">{item.products[0].name}</p>
       </Link>
     </div>
   );
