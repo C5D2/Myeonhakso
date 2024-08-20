@@ -136,3 +136,25 @@ export async function fetchRecentProduct(
   }
   return resJson;
 }
+
+//{{url}}/posts/users?type=qna
+// auth 넘겨야함
+export async function fetchQnaList(): Promise<MultiItem<Ilecture>> {
+  const params = new URLSearchParams();
+  params.set('type', 'qna');
+  const session = await getSession();
+  const accesstoken = session?.accessToken;
+
+  const url = `${SERVER}/posts/users?${params.toString()}`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${accesstoken}`,
+    },
+  });
+  const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
+  if (!resJson.ok) {
+    throw new Error('판매 상품 조회 실패');
+  }
+  return resJson;
+}

@@ -30,8 +30,8 @@ export interface IDiscount {
 }
 
 export interface IReviewRegister {
-  orderId: number;
-  productId: number;
+  order_id: number;
+  product_id: number;
   rating: number;
   content: string;
 }

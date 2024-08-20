@@ -10,7 +10,7 @@ export default function LectureCalendar({ item }: ILectureProps) {
   let eventArray: object[] = [];
   let rangeColor = [
     '#91d7cf',
-    '#fff6ef',
+    // '#fff6ef',
     '#cab8e2',
     '#ffe3cd',
     '#ffccb7',
@@ -26,8 +26,6 @@ export default function LectureCalendar({ item }: ILectureProps) {
       url: `/orders/${item._id}`,
     });
   });
-
-  console.log('eventArray', eventArray);
 
   return (
     <FullCalendar
