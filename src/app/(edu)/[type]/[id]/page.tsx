@@ -23,21 +23,12 @@ function formatDate(dateString: string) {
   return `${year}.${month}.${day}`;
 }
 
-function formatTime(dateString: string) {
-  const date = new Date(dateString);
-
-  const hours = date.getUTCHours().toString().padStart(2, '0');
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-
-  return `${hours}:${minutes}`;
-}
-
 async function DetailPage({ params }: { params: { id: string } }) {
   const session = await getSession();
   const user = session?.user;
   const item = await fetchLectureDetail(params.id);
   const seller_id = item?.seller._id;
-  const data = await fetchOtherLectures(seller_id!, '3');
+  const data = await fetchOtherLectures(String(seller_id!), '3');
 
   let isBookmarked = false;
   let bookmarkId: number | null = null;
@@ -116,9 +107,8 @@ async function DetailPage({ params }: { params: { id: string } }) {
                     <select name="" id="">
                       {item?.extra?.options.map((option, index) => (
                         <option key={index} value={index}>
-                          {option.days.join(', ')}{' '}
-                          {formatTime(option.startTime ?? '')} ~{' '}
-                          {formatTime(option.endTime ?? '')}
+                          {option.days.join(', ')} {option.startTime ?? ''} ~{' '}
+                          {option.endTime ?? ''}
                         </option>
                       ))}
                     </select>
@@ -187,7 +177,7 @@ async function DetailPage({ params }: { params: { id: string } }) {
                 </div>
                 <SubscribeButton
                   initialIsSubscribed={isSubscribed}
-                  teacherId={seller_id}
+                  teacherId={String(seller_id)}
                   subscribeId={subscribeId}
                 />
               </div>
@@ -215,9 +205,8 @@ async function DetailPage({ params }: { params: { id: string } }) {
                     {item?.extra?.options.map((option, index) => (
                       <div key={index}>
                         <p>
-                          {option.days.join(', ')}{' '}
-                          {formatTime(option.startTime ?? '')} ~{' '}
-                          {formatTime(option.endTime ?? '')}
+                          {option.days.join(', ')} {option.startTime ?? ''} ~{' '}
+                          {option.endTime ?? ''}
                         </p>
                       </div>
                     ))}

@@ -10,18 +10,34 @@ import Button from '@/components/Button';
 import InputError from '@/components/InputError';
 import KakaoMap from '@/components/KakaoMap';
 import Submit from '@/components/Submit';
-import { postForm } from '@/data/actions/lectureAction';
-import { ILectureRegister } from '@/types/lecture';
+import { patchForm, postForm } from '@/data/actions/lectureAction';
+import { ILectureDetail, ILectureRegister } from '@/types/lecture';
 import classNames from 'classnames';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
+import { produce } from 'immer';
+import moment from 'moment';
+
+interface IRegisterFormProps {
+  params: {
+    id?: string;
+    type: string;
+  };
+  mode: 'register' | 'edit';
+  lectureDetailData: ILectureRegister | ILectureDetail | null;
+}
 
 // TODO: validation 확인, extra.type 보내야 함;;;
 // 등록할 때 type 체크해서 그 페이지...로?
 // 강의 가격 최소 금액 100원
-export default function RegisterForm({ params }: { params: { type: string } }) {
+export default function RegisterForm({
+  params,
+  mode,
+  lectureDetailData,
+}: IRegisterFormProps) {
   const router = useRouter();
   const {
     register,
@@ -32,7 +48,7 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
     formState: { errors },
     setError,
   } = useForm<ILectureRegister>({
-    defaultValues: {
+    defaultValues: lectureDetailData || {
       extra: {
         options: [{ days: [], startTime: null, endTime: null }],
         curriculum: [{ content: '' }],
@@ -46,31 +62,31 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null | undefined>(undefined);
 
-  const convertToUTC = (date: Date) => {
-    return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-  };
+  useEffect(() => {
+    if (mode === 'edit' && lectureDetailData?.extra?.schedule) {
+      const [start, end] = lectureDetailData.extra.schedule;
+      if (start) setStartDate(new Date(start));
+      if (end) setEndDate(new Date(end));
+    }
+  }, [mode, lectureDetailData]);
+
+  console.log(lectureDetailData);
+
+  // const convertToUTC = (date: Date) => {
+  //   return moment(date).utc().format();
+  // };
 
   const onRangeChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
-
     if (start) {
-      setValue('extra.schedule.0', convertToUTC(start).toISOString());
+      setValue('extra.schedule.0', moment(start).format('YYYY-MM-DD'));
     }
-
     if (end) {
-      setValue('extra.schedule.1', convertToUTC(end).toISOString());
+      setValue('extra.schedule.1', moment(end).format('YYYY-MM-DD'));
     }
   };
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [endDate, setEndDate] = useState(null);
-
-  // const onRangeChange = dates => {
-  //   const [start, end] = dates;
-  //   setStartDate(start);
-  //   setEndDate(end);
-  // };
 
   const handleFormSubmit = async (data: ILectureRegister) => {
     if (!data.extra?.address && !data.extra?.url) {
@@ -81,31 +97,53 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
       });
     }
 
-    const newData = {
-      ...data,
-      extra: {
-        ...data.extra,
-        options: data.extra.options.map(option => ({
+    // const newData = {
+    //   ...data,
+    //   extra: {
+    //     ...data.extra,
+    //     options: data.extra.options.map(option => ({
+    //       ...option,
+    //       startTime: option.startTime
+    //         ? convertToUTC(new Date(option.startTime)).toISOString()
+    //         : null,
+    //       endTime: option.endTime
+    //         ? convertToUTC(new Date(option.endTime)).toISOString()
+    //         : null,
+    //     })),
+    //     schedule: data.extra.schedule?.map(date =>
+    //       date ? convertToUTC(new Date(date)).toISOString() : null,
+    //     ),
+    //   },
+    // };
+
+    const newData = produce(data, draft => {
+      if (draft.extra) {
+        draft.extra.options = draft.extra.options.map(option => ({
           ...option,
           startTime: option.startTime
-            ? convertToUTC(new Date(option.startTime)).toISOString()
+            ? moment(option.startTime, 'HH:mm').format('HH:mm')
             : null,
           endTime: option.endTime
-            ? convertToUTC(new Date(option.endTime)).toISOString()
+            ? moment(option.endTime, 'HH:mm').format('HH:mm')
             : null,
-        })),
-        schedule: data.extra.schedule?.map(date =>
-          date ? convertToUTC(new Date(date)).toISOString() : null,
-        ),
-      },
-    };
+        }));
 
-    const resData = await postForm(newData);
-    console.log('Server response:', resData);
+        draft.extra.schedule = draft.extra.schedule?.map(date =>
+          date ? moment(date).format('YYYY-MM-DD') : null,
+        );
+      }
+    });
 
+    let resData;
+    if (mode === 'edit') {
+      resData = await patchForm(params.id!, newData);
+    } else {
+      resData = await postForm(newData);
+    }
+    console.log(resData);
     if (resData.ok) {
-      const id = resData.item._id;
-      router.push(`/${params.type}/${id}`);
+      const id = mode === 'edit' ? params.id : resData.item._id;
+      router.push(`/${newData.extra.type}/${id}`);
     } else {
       if ('errors' in resData) {
         resData.errors.forEach(error =>
@@ -115,7 +153,6 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
         alert(resData.message);
       }
     }
-    console.log(data);
   };
 
   return (
@@ -160,7 +197,7 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
           <ul className="flex gap-3">
             <Category register={register} />
           </ul>
-          <InputError target={errors.extra?.type} />
+          {/* <InputError target={errors.extra?.type} /> */}
         </div>
         <div className="m-4">
           <label className="block text-gray-600 mb-2" htmlFor="level">
@@ -230,9 +267,11 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
             control={control}
             render={({ field: { onChange, value } }) => (
               <DatePicker
+                dateFormat="YYYY-MM-DD"
                 selected={startDate}
                 onChange={(dates: [Date | null, Date | null]) => {
                   onRangeChange(dates);
+                  onChange(dates);
                 }}
                 startDate={startDate || undefined}
                 endDate={endDate || undefined}
@@ -241,7 +280,7 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
               />
             )}
           />
-          <InputError target={errors.extra?.schedule} />
+          {/* <InputError target={errors.extra?.schedule} /> */}
         </div>
         <div className="m-4">
           <label className="block text-gray-600 mb-2" htmlFor="option">
@@ -256,7 +295,7 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
             startTime={null}
             endTime={null}
           />
-          <InputError target={errors.extra?.options} />
+          {/* <InputError target={errors.extra?.options} /> */}
         </div>
         <div className="m-4">
           <label className="block text-gray-600 mb-2" htmlFor="curriculum">
@@ -268,7 +307,7 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
             setValue={setValue}
             errors={errors}
           />
-          <InputError target={errors.extra?.curriculum} />
+          {/* <InputError target={errors.extra?.curriculum} /> */}
         </div>
         {/* TODO: 탭 선택 시 표시 */}
         <div className="flex m-4 gap-3">
@@ -329,8 +368,16 @@ export default function RegisterForm({ params }: { params: { type: string } }) {
           <InputError target={errors.extra?.address} />
         )}
         <div className="m-4 flex justify-center items-center">
-          <Submit>등록</Submit>
-          <Button>취소</Button>
+          <Submit>{mode === 'edit' ? '수정' : '등록'}</Submit>
+          {mode === 'edit' ? (
+            <Link href={'/mypage/tutor/management'}>
+              <Button>취소</Button>
+            </Link>
+          ) : (
+            <Link href={'/'}>
+              <Button>취소</Button>
+            </Link>
+          )}
         </div>
       </div>
     </form>

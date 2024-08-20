@@ -61,7 +61,7 @@ export interface ILectureRegister extends Omit<Ilecture, 'extra'> {
 
 export interface ILectureDetail extends Omit<ILectureRegister, 'seller'> {
   seller: {
-    _id: string;
+    _id: number;
     name: string;
     email: string;
     profileImage: string | null | undefined;

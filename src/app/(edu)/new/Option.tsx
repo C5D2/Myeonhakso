@@ -1,6 +1,6 @@
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { setHours, setMinutes, format, parseISO, formatISO } from 'date-fns';
+import { setHours, setMinutes, parseISO, formatISO } from 'date-fns';
 import {
   Control,
   UseFormRegister,
@@ -11,6 +11,7 @@ import {
 import { ko } from 'date-fns/locale';
 import classNames from 'classnames';
 import { ILectureRegister } from '@/types/lecture';
+import moment from 'moment';
 
 export const DAY_OPTION = ['월', '화', '수', '목', '금', '토', '일'];
 
@@ -50,20 +51,32 @@ export default function Option({
   };
 
   const onSelectStartTime = (time: Date | null, rowIndex: number) => {
-    setValue(
-      `extra.options.${rowIndex}.startTime`,
-      time ? formatISO(time) : null,
-    );
-    setValue(`extra.options.${rowIndex}.endTime`, null);
+    console.log(time);
+
+    if (time) {
+      setValue(
+        `extra.options.${rowIndex}.startTime`,
+        moment(time).format('HH:mm'),
+      );
+
+      // 종료 시간을 초기화
+      setValue(`extra.options.${rowIndex}.endTime`, null);
+    } else {
+      setValue(`extra.options.${rowIndex}.startTime`, null);
+    }
   };
 
   const onSelectEndTime = (time: Date | null, rowIndex: number) => {
-    setValue(
-      `extra.options.${rowIndex}.endTime`,
-      time ? formatISO(time) : null,
-    );
+    console.log(time);
+    if (time) {
+      setValue(
+        `extra.options.${rowIndex}.endTime`,
+        moment(time).format('HH:mm'),
+      );
+    }
   };
 
+  console.log(options);
   return (
     <>
       <button
@@ -99,7 +112,7 @@ export default function Option({
             <DatePicker
               selected={
                 options[rowIndex]?.startTime
-                  ? parseISO(options[rowIndex].startTime)
+                  ? moment(options[rowIndex].startTime, 'HH:mm').toDate()
                   : null
               }
               onChange={(time: Date | null) =>
@@ -119,7 +132,7 @@ export default function Option({
             <DatePicker
               selected={
                 options[rowIndex]?.endTime
-                  ? parseISO(options[rowIndex].endTime)
+                  ? moment(options[rowIndex].endTime, 'HH:mm').toDate()
                   : null
               }
               onChange={(time: Date | null) => onSelectEndTime(time, rowIndex)}
@@ -129,13 +142,13 @@ export default function Option({
               timeIntervals={30}
               minTime={
                 options[rowIndex]?.startTime
-                  ? parseISO(options[rowIndex].startTime)
+                  ? moment(options[rowIndex].startTime, 'HH:mm').toDate()
                   : setHours(setMinutes(new Date(), 0), 9)
               }
               maxTime={setHours(setMinutes(new Date(), 0), 21)}
               excludeTimes={
                 options[rowIndex]?.startTime
-                  ? [parseISO(options[rowIndex].startTime)]
+                  ? [moment(options[rowIndex].startTime, 'HH:mm').toDate()]
                   : []
               }
               timeCaption="Time"
