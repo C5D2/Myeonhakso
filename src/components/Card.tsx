@@ -1,29 +1,27 @@
 'use client';
 
-import { Ilecture, ILectureBookmark } from '@/types/lecture';
+import { IBookmark, Ilecture } from '@/types/lecture';
 import Link from 'next/link';
 
 interface ICardProp {
   index?: number;
-  item: Ilecture | ILectureBookmark;
+  item: Ilecture | IBookmark;
 }
 
 export default function Card({ item }: ICardProp) {
-  const isLectureBookmark = (
-    item: Ilecture | ILectureBookmark,
-  ): item is ILectureBookmark => {
+  const isLectureBookmark = (item: Ilecture | IBookmark): item is IBookmark => {
     return 'product' in item;
   };
 
   const productItem = isLectureBookmark(item) ? item.product : item;
-  const name = productItem.name;
+  const name = productItem?.name;
 
   let bgColorClass;
   let iconClass;
   let textColorClass;
   let borderColorClass;
 
-  switch (productItem.extra?.type) {
+  switch (productItem?.extra?.type) {
     case 'tech':
       bgColorClass = 'bg-light-green';
       textColorClass = 'text-main-green';
@@ -49,7 +47,7 @@ export default function Card({ item }: ICardProp) {
   }
   return (
     <Link
-      href={`/${productItem.extra?.type}/${productItem?._id}`}
+      href={`/${productItem?.extra?.type}/${productItem?._id}`}
       className={`w-[80%] min-w-[150px] h-full `}
     >
       <div
@@ -59,7 +57,7 @@ export default function Card({ item }: ICardProp) {
           <p
             className={`${textColorClass} border ${borderColorClass} text-center rounded-full px-2 mr-auto bg-white md:text-xs min-w-20 truncate`}
           >
-            {productItem.extra?.type}
+            {productItem?.extra?.type}
           </p>
           <div className="min-w-10 h-10">
             <img src={`${iconClass}`} className="min-h-full" />
@@ -69,7 +67,7 @@ export default function Card({ item }: ICardProp) {
           {name}
         </h3>
         <p className="text-left mb-5 font-light text-gray-500 h-10 truncate text-sm">
-          {productItem.extra?.curriculum?.[0]?.content}
+          {productItem?.extra?.curriculum?.[0]?.content}
         </p>
 
         <div className="flex">
@@ -78,7 +76,7 @@ export default function Card({ item }: ICardProp) {
           </div> */}
           <p className="text-green-800 font-semibold">
             ₩
-            {productItem.price
+            {productItem?.price
               .toString()
               .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}{' '}
             원
@@ -92,7 +90,7 @@ export default function Card({ item }: ICardProp) {
             <div className="w-5 h-5">
               <img src="/level-low.svg" alt="" />
             </div>
-            <p>{productItem.extra?.level}</p>
+            <p>{productItem?.extra?.level}</p>
           </div>
           <div className="flex gap-1">
             <div className="w-5 h-5">
