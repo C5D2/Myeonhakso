@@ -23,7 +23,7 @@ export function generateMetadata({
   };
 }
 
-async function Page({
+export default async function Page({
   params,
   searchParams,
 }: {
@@ -32,7 +32,6 @@ async function Page({
 }) {
   let customParams;
   let sortParams;
-  let keywordParmas;
 
   customParams = { 'extra.type': params.type };
   if (searchParams.custom) {
@@ -77,5 +76,3 @@ async function Page({
     </>
   );
 }
-
-export default Page;

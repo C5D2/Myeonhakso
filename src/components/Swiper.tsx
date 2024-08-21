@@ -17,7 +17,7 @@ export default function SwiperBanner() {
         modules={[Autoplay]}
       >
         <SwiperSlide>
-          <img src="/banner1.png" />
+          <img src="/banner3.png" />
         </SwiperSlide>
         <SwiperSlide>
           <img src="/banner2.png" />
@@ -26,7 +26,13 @@ export default function SwiperBanner() {
           <img src="/banner1.png" />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="/banner2.png" />
+          <img src="/banner4.png" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="/banner5.png" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src="/banner6.png" />
         </SwiperSlide>
       </Swiper>
     </>
