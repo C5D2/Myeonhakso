@@ -36,11 +36,9 @@ export default async function Page({
   customParams = { 'extra.type': params.type };
   if (searchParams.custom) {
     customParams = JSON.parse(searchParams.custom);
-    console.log('searchParams==2==>', JSON.parse(searchParams.custom));
   }
   if (searchParams.sort) {
     sortParams = JSON.parse(searchParams.sort);
-    console.log('searchParams==3==>', JSON.parse(searchParams.sort));
   }
 
   const data = await fetchCategory(

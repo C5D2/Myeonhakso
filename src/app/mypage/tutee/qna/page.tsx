@@ -1,8 +1,8 @@
 import { fetchQnaList } from '@/data/fetchMypage';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import QnaList from '../../../../components/QnaList';
 import Pagination from '@/components/Pagination';
+import QnaList from '@/components/QnaList';
 
 export const metadata: Metadata = {
   title: '면학소 1:1 질의응답 페이지',
@@ -19,11 +19,7 @@ export default async function page() {
   return (
     <>
       <div className="flex flex-col">
-        <h2
-          className={`font-extrabold text-[30px] mb-10 ${session?.user?.type === 'seller' ? 'hidden' : ''}`}
-        >
-          1:1 질의응답
-        </h2>
+        <h2 className="font-extrabold text-[30px] mb-10">1:1 질의응답</h2>
 
         <Link
           href="/mypage/tutee/qna/new"

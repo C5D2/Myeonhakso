@@ -6,7 +6,6 @@ import React from 'react';
 async function QnaList({ item }: { item: IPost }) {
   const session = await auth();
   const typeLayout = session?.user?.type === 'seller' ? 'mr-auto' : 'ml-auto';
-  console.log('typeLayout=======>', typeLayout);
 
   return (
     <div className="px-5 mb-1">
