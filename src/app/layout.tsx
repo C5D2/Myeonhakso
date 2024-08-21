@@ -5,7 +5,6 @@ import { Metadata } from 'next';
 import { NextAuthProvider } from './providers';
 import Script from 'next/script';
 import Loading from './loading';
-import { lazy, Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: '면학소 Home',
@@ -23,10 +22,8 @@ export default function RootLayout({
         <NextAuthProvider>
           <div className="flex flex-col h-lvh">
             <Header />
-            <Suspense fallback={<Loading />}>
-              <Script src="https://cdn.iamport.kr/v1/iamport.js" />
-              {children}
-            </Suspense>
+            <Script src="https://cdn.iamport.kr/v1/iamport.js" />
+            {children}
             <Footer />
           </div>
         </NextAuthProvider>

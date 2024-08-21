@@ -93,7 +93,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         {sideBar}
       </div>
       <div className="basis-full max-w-[1300px]">
-        <div className="mt-10 flex flex-col">{children}</div>
+        <div className="mt-10 flex flex-col px-3">{children}</div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { getSession } from '@/auth';
-import { ApiRes, MultiItem, SingleItem } from '@/types';
+import { ApiRes, IPost, MultiItem, SingleItem } from '@/types';
 import { Ilecture } from '@/types/lecture';
 import { IOrderSaleList } from '@/types/mypage';
 // import useUserStore from '@/zustand/userStore';
@@ -139,22 +139,41 @@ export async function fetchRecentProduct(
 
 //{{url}}/posts/users?type=qna
 // auth 넘겨야함
-export async function fetchQnaList(): Promise<MultiItem<Ilecture>> {
+export async function fetchQnaList(): Promise<MultiItem<IPost>> {
   const params = new URLSearchParams();
   params.set('type', 'qna');
   const session = await getSession();
   const accesstoken = session?.accessToken;
 
-  const url = `${SERVER}/posts/users?${params.toString()}`;
+  const url = `${SERVER}/posts?${params.toString()}`;
   const res = await fetch(url, {
     headers: {
       'client-id': `${CLIENT_ID}`,
       Authorization: `Bearer ${accesstoken}`,
     },
   });
-  const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
+  const resJson: ApiRes<MultiItem<IPost>> = await res.json();
   if (!resJson.ok) {
-    throw new Error('판매 상품 조회 실패');
+    throw new Error('질의응답 목록 조회 실패');
   }
   return resJson;
+}
+
+export async function fetchQnaItem(id: number): Promise<IPost> {
+  //{{url}}/posts/4 상세조회
+  const session = await getSession();
+  const accesstoken = session?.accessToken;
+
+  const url = `${SERVER}/posts/${id}`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${accesstoken}`,
+    },
+  });
+  const resJson: ApiRes<SingleItem<IPost>> = await res.json();
+  if (!resJson.ok) {
+    throw new Error('질의응답 상세 정보 조회 실패');
+  }
+  return resJson.item;
 }
