@@ -20,8 +20,6 @@ export default function TeacherCard({ item }: ICardProp) {
   let bgColorClass;
   let iconClass;
 
-  console.log(item);
-
   return (
     <Link
       href={`/${item?.extra?.type}/${item?._id}`}

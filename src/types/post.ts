@@ -1,6 +1,6 @@
 import { UserData } from './user';
 
-export interface PostComment {
+export interface IPostComment {
   _id: number;
   user_id: number;
   user: UserData;
@@ -10,15 +10,15 @@ export interface PostComment {
   updatedAt: string;
 }
 
-export interface Post {
+export interface IPost {
   _id: number;
   type?: string;
   title: string;
   content: string;
-  user: Pick<UserData, '_id' | 'name' | 'profile'>;
+  user: Pick<UserData, '_id' | 'name' | 'image'>;
   views: number;
   repliesCount: number;
-  replies?: PostComment[];
+  replies?: IPostComment[];
   createdAt: string;
   updatedAt: string;
 }
