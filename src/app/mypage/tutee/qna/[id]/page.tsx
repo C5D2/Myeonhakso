@@ -1,6 +1,6 @@
 import { fetchQnaItem } from '@/data/fetchMypage';
-import CommentNew from '../../../../../components/Comment';
 import { auth } from '@/auth';
+import CommentNew from '@/components/Comment';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 
@@ -10,7 +10,6 @@ export default async function page({ params }: { params: { id: number } }) {
   const questionLayout =
     session?.user?.type === 'seller' ? 'mr-auto' : 'ml-auto';
   const answerLayout = session?.user?.type === 'seller' ? 'ml-auto' : 'mr-auto';
-  console.log('typeLayout=======>', questionLayout, answerLayout);
 
   const resItem = await fetchQnaItem(params.id);
 

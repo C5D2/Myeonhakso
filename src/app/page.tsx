@@ -3,14 +3,13 @@ import SwiperBanner from '../components/Swiper';
 import Search from '@/components/Search';
 
 export default function RootPage() {
-  
   return (
     <>
-      <div className="grow-1 h-100">
+      <div className="">
         <SwiperBanner />
       </div>
-      <div className='mt-10 mx-auto max-w-[650px] w-full'>
-      <Search  />
+      <div className="mt-10 mx-auto max-w-[650px] w-full">
+        <Search />
       </div>
       <div className="max-w-[1500px] mx-auto px-10 w-full mt-10">
         <div className="flex items-center gap-2">

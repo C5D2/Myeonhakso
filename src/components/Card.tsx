@@ -1,6 +1,7 @@
 'use client';
 
 import { IBookmark, Ilecture } from '@/types/lecture';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface ICardProp {
@@ -12,8 +13,8 @@ export default function Card({ item }: ICardProp) {
   const isLectureBookmark = (item: Ilecture | IBookmark): item is IBookmark => {
     return 'product' in item;
   };
-
   const productItem = isLectureBookmark(item) ? item.product : item;
+  const rating = productItem?.rating;
   const name = productItem?.name;
 
   let bgColorClass;
@@ -59,8 +60,14 @@ export default function Card({ item }: ICardProp) {
           >
             {productItem?.extra?.type}
           </p>
-          <div className="min-w-10 h-10">
-            <img src={`${iconClass}`} className="min-h-full" />
+          <div className="">
+            <Image
+              src={`${iconClass}`}
+              alt="강의 카테고리 아이콘"
+              width={34}
+              height={34}
+              className="sm:w-6 sm:h-6"
+            />
           </div>
         </div>
         <h3 className="text-lg font-bold text-left mb-5 h-10 truncate">
@@ -88,15 +95,15 @@ export default function Card({ item }: ICardProp) {
         <div className="flex">
           <div className="flex gap-1 mr-auto">
             <div className="w-5 h-5">
-              <img src="/level-low.svg" alt="" />
+              <Image src="/level-low.svg" alt="레벨" width={20} height={20} />
             </div>
             <p>{productItem?.extra?.level}</p>
           </div>
           <div className="flex gap-1">
-            <div className="w-5 h-5">
-              <img src="/star.svg" alt="" />
+            <div>
+              <Image src="/star.svg" alt="별점" width={20} height={20} />
             </div>
-            <p>4.5</p>
+            <p>{rating ? rating.toFixed(1) : '_'}</p>
           </div>
         </div>
       </div>

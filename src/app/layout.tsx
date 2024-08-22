@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <NextAuthProvider>
-          <div className="flex flex-col h-lvh">
+          <div className="flex flex-col">
             <Header />
             <Script src="https://cdn.iamport.kr/v1/iamport.js" />
             {children}

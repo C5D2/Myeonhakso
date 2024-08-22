@@ -1,13 +1,10 @@
 'use client';
 import { IOrderSaleList } from '@/types/mypage';
-import { useLogStore } from '@/zustand/logStore';
 import Link from 'next/link';
 
 export default function RecentLecture({ item }: { item: IOrderSaleList }) {
-  const lecture = useLogStore(state => state.lecture);
   const type = item.products[0].extra.type;
 
-  console.log(type);
   return (
     <div className="flex flex-col">
       <Link
