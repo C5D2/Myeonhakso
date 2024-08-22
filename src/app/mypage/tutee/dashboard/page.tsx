@@ -1,4 +1,4 @@
-import { fetchOrderlist } from '@/data/fetchMypage';
+import { fetchOrderProduct } from '@/data/fetchMypage';
 import { Metadata } from 'next';
 import { CategoryRate } from './CategoryRate';
 import { AnnualRate } from './AnnualRate';
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   //fetchOrderlist
-  const { item } = await fetchOrderlist();
+  const { item } = await fetchOrderProduct();
   // item?.products.map(item => console.log(item));
 
   return (
