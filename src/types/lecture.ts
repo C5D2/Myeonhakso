@@ -110,6 +110,7 @@ export interface IBookmark {
   _id: number;
   user_id: number;
   createdAt: string;
+  extra?: { type: string };
   product?: ILectureBookmarkProduct;
   user?: ITeacherBookmark;
 }
@@ -121,7 +122,7 @@ export interface ILectureBookmarkProduct {
   quantity: string;
   buyQuantity: number;
   image: string;
-  extra: Iextra;
+  extra?: Iextra;
   rating: number;
 }
 

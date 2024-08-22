@@ -2,22 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import { useFetchBookmark } from '@/hooks/useBookmarkActions';
-import Bookmark from '@/components/Bookmark';
 import { GetAuthInfo } from '@/utils/authUtils';
 import {
   deleteBookmark,
   postLectureBookmark,
 } from '@/data/actions/lectureAction';
 import { IBookmark } from '@/types/lecture';
+import Bookmark from '@/components/icons/Bookmark';
 
 export default function BookmarkLecture({
   params,
   initialIsBookmarked,
   bookmarkId: initialBookmarkId,
+  type,
 }: {
   params: { id: string };
   initialIsBookmarked: boolean;
   bookmarkId: number | null;
+  type: string | undefined;
 }) {
   const { data, isLoading, mutate } = useFetchBookmark();
   const { user } = GetAuthInfo();
@@ -48,6 +50,12 @@ export default function BookmarkLecture({
     }
   }, [data, isLoading, id]);
 
+  const bookmarkData = {
+    extra: {
+      type,
+    },
+  };
+
   const handleBookmarkToggle = async () => {
     if (!user) {
       return;
@@ -69,7 +77,7 @@ export default function BookmarkLecture({
       if (isBookmarked) {
         await deleteBookmark(String(bookmarkId));
       } else {
-        await postLectureBookmark(String(id));
+        await postLectureBookmark(String(id), bookmarkData);
         // 새로 갱신된 북마크 ID 업데이트
         const newBookmark = updatedData.find(
           (bookmark: any) => bookmark.product?._id === id,
