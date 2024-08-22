@@ -22,7 +22,7 @@ export default function Card({ item }: ICardProp) {
   let textColorClass;
   let borderColorClass;
 
-  switch (productItem?.extra?.type) {
+  switch (item?.extra?.type) {
     case 'tech':
       bgColorClass = 'bg-light-green';
       textColorClass = 'text-main-green';
@@ -46,9 +46,11 @@ export default function Card({ item }: ICardProp) {
       iconClass = '/hobby.svg';
       break;
   }
+
+  console.log(productItem);
   return (
     <Link
-      href={`/${productItem?.extra?.type}/${productItem?._id}`}
+      href={`/${item?.extra?.type}/${productItem?._id}`}
       className={`w-[80%] min-w-[150px] h-full `}
     >
       <div
@@ -58,7 +60,7 @@ export default function Card({ item }: ICardProp) {
           <p
             className={`${textColorClass} border ${borderColorClass} text-center rounded-full px-2 mr-auto bg-white md:text-xs min-w-20 truncate`}
           >
-            {productItem?.extra?.type}
+            {item?.extra?.type}
           </p>
           <div className="">
             <Image
