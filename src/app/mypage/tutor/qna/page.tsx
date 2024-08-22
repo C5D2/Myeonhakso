@@ -3,7 +3,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Pagination from '@/components/Pagination';
 import QnaList from '../../../../components/QnaList';
-import { auth } from '@/auth';
 
 export const metadata: Metadata = {
   title: '면학소 1:1 질의응답 페이지',

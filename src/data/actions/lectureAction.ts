@@ -28,7 +28,6 @@ export async function postForm(
   });
 
   const data = await res.json();
-  console.log('data', data);
   return data;
 }
 
@@ -49,7 +48,6 @@ export async function patchForm(
   });
 
   const data = await res.json();
-  console.log('data', data);
   return data;
 }
 
@@ -66,7 +64,6 @@ export async function deleteForm(id: string) {
   });
 
   const data = await res.json();
-  console.log('data', data);
   return data;
 }
 
@@ -88,7 +85,6 @@ export async function orderLecture(
   });
 
   const resData = await res.json();
-  console.log('data', resData);
   return resData;
 }
 
@@ -106,7 +102,6 @@ export async function postLectureBookmark(id: string, data: object) {
   });
 
   const resData = await res.json();
-  console.log('data', resData);
   return resData;
 }
 
@@ -124,7 +119,6 @@ export async function deleteBookmark(id: string) {
   });
 
   const resData = await res.json();
-  console.log('data', resData);
   return resData;
 }
 
@@ -141,6 +135,5 @@ export async function postTeacherBookmark(id: string) {
   });
 
   const resData = await res.json();
-  console.log('data', resData);
   return resData;
 }

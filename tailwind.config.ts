@@ -99,6 +99,7 @@ const config: Config = {
       lg: { max: '1024px' },
       xl: { max: '1280px' }, //태블릿
       xxl: { max: '1536px' },
+      dsm: { min: '641px' },
     },
   },
   plugins: [require('tailwindcss-animate')],

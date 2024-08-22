@@ -12,18 +12,18 @@ export type CommentData = {
 export default function CommentNew() {
   const { id } = useParams();
   const router = useRouter();
-  console.log(id);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CommentData>();
 
   const handleComment = async (formData: CommentData) => {
     const resData = await postComment(Number(id), formData);
-    console.log(resData);
     router.refresh();
+    reset();
   };
   return (
     <div className="mx-auto w-[70%] sm:w-full mb-3">

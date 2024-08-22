@@ -21,6 +21,7 @@ export interface Ilecture {
   options: number;
   schedule: string[];
   image?: IlectureImage;
+  rating: number;
 }
 
 export interface Iseller {
@@ -122,6 +123,7 @@ export interface ILectureBookmarkProduct {
   buyQuantity: number;
   image: string;
   extra?: Iextra;
+  rating: number;
 }
 
 export interface ITeacherBookmark {
