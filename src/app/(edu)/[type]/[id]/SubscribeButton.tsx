@@ -83,8 +83,10 @@ export default function SubscribeButton({
   };
 
   return (
-    <Button onClick={handleSubscribeToggle}>
-      {isSubscribed ? '구독 해지하기' : '선생님 구독하기'}
+    <Button size="lg" radius="md" onClick={handleSubscribeToggle}>
+      <span className="text-2xl font-black">
+        {isSubscribed ? '구독 해지하기' : '선생님 구독하기'}
+      </span>
     </Button>
   );
 }
