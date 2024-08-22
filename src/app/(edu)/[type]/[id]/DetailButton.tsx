@@ -91,7 +91,9 @@ export default function DetailButton({
 
   return (
     <>
-      <Button onClick={paymentHandler}>수강 신청</Button>
+      <Button size="lg" radius="lg" onClick={paymentHandler}>
+        <span className="text-2xl font-extrabold">수강 신청</span>
+      </Button>
     </>
   );
 }
