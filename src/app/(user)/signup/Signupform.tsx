@@ -2,8 +2,10 @@
 
 import Button from '@/components/Button';
 import Submit from '@/components/Submit';
+import Toast from '@/components/Toast';
 import { signup } from '@/data/actions/userAction';
 import { fetchEmailValidation } from '@/data/postFetch';
+import useToast from '@/hooks/useToast';
 import { UserForm } from '@/types';
 import useUserStore from '@/zustand/userStore';
 import { useRouter } from 'next/navigation';
@@ -22,6 +24,7 @@ function Signupform() {
     setError,
   } = useForm<UserForm>();
 
+  const { toast, message, showToast } = useToast();
   const [selectedType, setSelectedType] = useState('user');
   const handleTypeClick = (value: 'user' | 'seller') => {
     setSelectedType(value);
@@ -34,61 +37,64 @@ function Signupform() {
     const userData = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       console.log('Key:', key, 'Value:', value);
-      if(key !== 'attach'){
+      if (key !== 'attach') {
         userData.append(key, value as string);
       }
     });
-    if(formData.attach){
+    if (formData.attach) {
       userData.append('attach', formData.attach[0]);
       console.log('Attach:', formData.attach[0]);
     }
 
     const resData = await signup(userData);
     console.log('Response Data:', resData);
-    if(resData.ok){
-      alert(`${resData.item.name}님 회원가입을 환영합니다.`);
+    if (resData.ok) {
+      showToast(`${resData.item.name}님 회원가입을 환영합니다.`);
       router.push('/');
-    }else{ // API 서버의 에러 메시지 처리
-      if('errors' in resData){
-        resData.errors.forEach(error => setError(error.path, { message: error.msg }));
-      }else if(resData.message){
-        alert(resData.message);
+    } else {
+      // API 서버의 에러 메시지 처리
+      if ('errors' in resData) {
+        resData.errors.forEach(error =>
+          setError(error.path, { message: error.msg }),
+        );
+      } else if (resData.message) {
+        showToast(resData.message);
       }
     }
   };
-
 
   const handleEmailValidationClick = async () => {
     try {
       const response = await fetchEmailValidation(emailValue);
       if (response.ok === 1) {
-        alert('사용 가능한 이메일입니다.');
-      } else if(response.ok === 0) {
-        alert('이미 사용 중인 이메일입니다.');
+        showToast('사용 가능한 이메일입니다.');
+      } else if (response.ok === 0) {
+        showToast('이미 사용 중인 이메일입니다.');
       }
     } catch (error) {
-      console.error('Error during email validation:', error)
-      alert('이메일 확인 중 오류가 발생했습니다.');
+      console.error('Error during email validation:', error);
+      showToast('이메일 확인 중 오류가 발생했습니다.');
     }
   };
 
-  
   return (
     <form
       action="/"
       onSubmit={handleSubmit(addUser)}
       className="max-w-screen-md mx-auto mt-14"
     >
+      {toast && <Toast text={message} />}
+
       <div className="mb-12 flex justify-center gap-14" id="type">
-          <button
-						 className={`px-8 py-4 ${selectedType === 'user' ? 'bg-main-green' : 'bg-main-gray'} hover:bg-main-yellow text-white font-semibold rounded-md cursor-pointer`}
-            value="user"
-            onClick={() => handleTypeClick('user')}
-          >
-            일반회원
-          </button>
         <button
-					 className={`px-8 py-4 ${selectedType === 'seller' ? 'bg-main-yellow' : 'bg-main-gray'} hover:bg-main-yellow text-white font-semibold rounded-md cursor-pointer`}
+          className={`px-8 py-4 ${selectedType === 'user' ? 'bg-main-green' : 'bg-main-gray'} hover:bg-main-yellow text-white font-semibold rounded-md cursor-pointer`}
+          value="user"
+          onClick={() => handleTypeClick('user')}
+        >
+          일반회원
+        </button>
+        <button
+          className={`px-8 py-4 ${selectedType === 'seller' ? 'bg-main-yellow' : 'bg-main-gray'} hover:bg-main-yellow text-white font-semibold rounded-md cursor-pointer`}
           value="seller"
           onClick={() => handleTypeClick('seller')}
         >
@@ -183,7 +189,7 @@ function Signupform() {
             accept="image/*"
             placeholder="이미지를 선택하세요"
             className="w-full px-3 py-2 border rounded-lg"
-            { ...register('attach') }
+            {...register('attach')}
           />
         </div>
 
