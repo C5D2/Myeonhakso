@@ -29,7 +29,6 @@ export default function RootLayout({
             <Header />
             <Script src="https://cdn.iamport.kr/v1/iamport.js" />
             <div className="sm:pt-[50px] sm:pb-[60px]">{children}</div>
-            {children}
             <KakaoScript />
             <Footer />
           </div>
