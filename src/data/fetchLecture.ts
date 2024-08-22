@@ -13,6 +13,10 @@ const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const LIMIT = process.env.NEXT_PUBLIC_CARD_LIMIT;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
+// function delay(ms: any) {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// }
+
 export async function fetchLecture(
   path: string,
   sort?: object,
@@ -27,6 +31,7 @@ export async function fetchLecture(
       'client-id': `${CLIENT_ID}`,
     },
   });
+
   const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
   if (!resJson.ok) {
     throw new Error('게시물 목록 조회 실패');

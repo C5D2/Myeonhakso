@@ -19,7 +19,8 @@ export default async function Header() {
 
   return (
     <>
-      <div className="mb-auto w-full h-[50px] dsm:hidden flex justify-between relative px-5 py-3">
+      {/* 모바일헤더 */}
+      <div className="bg-white z-30 fixed top-0 left-0 mb-auto w-full h-[50px] dsm:hidden flex justify-between px-5 py-3">
         <Back />
         <Link
           href="/"
@@ -27,13 +28,30 @@ export default async function Header() {
         >
           <Image src="/logo.svg" alt="면학소 로고" width={35} height={35} />
         </Link>
-        <Link href="/" className="">
-          <Image src="/alarm.svg" alt="알림" width={20} height={20} />
-        </Link>
+        {session?.user ? (
+          <Link href="/" className="ml-auto">
+            <Image src="/alarm.svg" alt="알림" width={20} height={20} />
+          </Link>
+        ) : (
+          <Link
+            href="/login"
+            className="ml-auto py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white"
+          >
+            로그인
+          </Link>
+        )}
       </div>
+      {/* 데스크탑 헤더  */}
       <div className="sm:hidden box-border px-10 py-3 border-b-[3px] h-[85px] flex-shrink-0 flex items-center">
-        <Link href="/" className="w-14 h-14 mr-20 sm:mr-0">
-          <img src="/logo.svg" className="h-full min-w-full" />
+        <Link href="/" className="w-14 h-14 mr-20 sm:mr-0 relative">
+          <Image
+            src="/logo.svg"
+            alt="면학소 로고"
+            // height={100}
+            // width={100}
+            layout="fill"
+            objectFit="contain"
+          />
         </Link>
         <Categories />
         <div className="flex justify-end items-center ml-auto">

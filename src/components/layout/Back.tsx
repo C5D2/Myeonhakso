@@ -20,11 +20,11 @@ export default function Back() {
       ) : (
         <Image
           onClick={() => router.back()}
-          src="/left-arrow.svg"
+          src="/right-arrow.svg"
           alt="뒤로가기"
           width={20}
           height={20}
-          className=""
+          className="rotate-180"
         />
       )}
     </>
