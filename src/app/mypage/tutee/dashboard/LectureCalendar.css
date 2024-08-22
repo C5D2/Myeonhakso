@@ -36,6 +36,21 @@
 }
 
 @media screen and (max-width: 640px) {
+  .fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
+    padding-bottom: 30px;
+  }
+  .fc-toolbar-title {
+    font-size: 8px;
+  }
+  .fc-header-toolbar.fc-toolbar {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+  .fc-button-group {
+    margin: 0;
+  }
   /* .fc-toolbar-chunk {
     display: flex;
     gap: 2px;

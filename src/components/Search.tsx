@@ -39,7 +39,7 @@ function Search() {
   };
 
   return (
-    <div className="relative w-full max-w-xl mx-auto">
+    <div className="relative w-full max-w-xl mx-auto sm:px-2">
       <input
         className="w-full pl-4 pr-10 py-2 rounded-full drop-shadow-md focus:outline-none focus:ring-2 focus:ring-main-green focus:border-transparent"
         type="text"
