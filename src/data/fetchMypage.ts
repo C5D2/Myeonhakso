@@ -177,3 +177,40 @@ export async function fetchQnaItem(id: number): Promise<IPost> {
   }
   return resJson.item;
 }
+
+export async function fetchOrderProduct(): Promise<MultiItem<IOrderSaleList>> {
+  const session = await getSession();
+  const accesstoken = session?.accessToken;
+
+  const url = `${SERVER}/orders`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${accesstoken}`,
+    },
+  });
+  const resJson: ApiRes<MultiItem<IOrderSaleList>> = await res.json();
+  if (!resJson.ok) {
+    throw new Error('구매 목록 조회 실패');
+  }
+  return resJson;
+}
+
+//{{url}}/seller/products
+export async function fetchsaleProduct(): Promise<MultiItem<Ilecture>> {
+  const session = await getSession();
+  const accesstoken = session?.accessToken;
+
+  const url = `${SERVER}/seller/products`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${accesstoken}`,
+    },
+  });
+  const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
+  if (!resJson.ok) {
+    throw new Error('대시보드 판매 상품 조회 실패');
+  }
+  return resJson;
+}
