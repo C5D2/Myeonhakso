@@ -28,7 +28,7 @@ export default function Curriculum({
 
   return (
     <>
-      <Button type="button" onClick={() => append({ content: '' })}>
+      <Button radius="lg" onClick={() => append({ content: '' })}>
         커리큘럼 추가
       </Button>
       {fields.map((field, index) => (

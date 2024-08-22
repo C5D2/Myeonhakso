@@ -12,6 +12,7 @@ import { ko } from 'date-fns/locale';
 import classNames from 'classnames';
 import { ILectureRegister } from '@/types/lecture';
 import moment from 'moment';
+import Button from '@/components/Button';
 
 export const DAY_OPTION = ['월', '화', '수', '목', '금', '토', '일'];
 
@@ -79,13 +80,12 @@ export default function Option({
   console.log(options);
   return (
     <>
-      <button
-        className="mt-1 px-2 py-1 text-white bg-green-400 rounded-full"
-        type="button"
+      <Button
+        radius="lg"
         onClick={() => append({ days: [], startTime: null, endTime: null })}
       >
         옵션 추가
-      </button>
+      </Button>
       {fields.map((field, rowIndex) => (
         <div key={field.id}>
           <ul className="flex items-baseline gap-2 m-2">

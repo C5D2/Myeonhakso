@@ -31,7 +31,7 @@ export default function Tab({ item }: IDetailCurriculumProps) {
           )}
           onClick={() => toggleTab(1)}
         >
-          <h3>커리큘럼</h3>
+          <h3 className="text-xl">커리큘럼</h3>
         </li>
         <li
           className={classNames(
@@ -40,7 +40,7 @@ export default function Tab({ item }: IDetailCurriculumProps) {
           )}
           onClick={() => toggleTab(2)}
         >
-          <h3>후기</h3>
+          <h3 className="text-xl">후기</h3>
         </li>
       </ul>
       <hr />
