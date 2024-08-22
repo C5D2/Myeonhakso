@@ -1,7 +1,9 @@
 'use client';
 
 import Button from '@/components/Button';
+import Toast from '@/components/Toast';
 import { orderLecture } from '@/data/actions/lectureAction';
+import useToast from '@/hooks/useToast';
 import { ILectureDetail } from '@/types/lecture';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -28,6 +30,7 @@ export default function DetailButton({
   const price = item?.price;
   const userName = user.name;
   const userEmail = user.email;
+  const { toast, message, showToast } = useToast();
 
   useEffect(() => {
     const { IMP } = window;
@@ -80,12 +83,12 @@ export default function DetailButton({
       const resData = await orderLecture(orderData);
       if (resData.ok) {
         router.push(`/order/${params.id}`);
-        alert('강의 결제가 완료되었습니다.');
+        showToast('강의 결제가 완료되었습니다.');
       } else if (resData.message) {
-        alert(resData.message);
+        showToast(resData.message);
       }
     } else {
-      alert(`결제 실패: ${error_msg}`);
+      showToast(`결제 실패: ${error_msg}`);
     }
   }
 
@@ -94,6 +97,7 @@ export default function DetailButton({
       <Button size="lg" radius="lg" onClick={paymentHandler}>
         <span className="text-2xl font-extrabold">수강 신청</span>
       </Button>
+      {toast && <Toast text={message} />}
     </>
   );
 }
