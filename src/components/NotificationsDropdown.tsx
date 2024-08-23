@@ -1,57 +1,56 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { getSession } from 'next-auth/react';
-import { INotification, INotificationResponse } from '@/types/lecture';
+import { NotiMessageType } from '@/types/notification';
 import moment from 'moment';
 
-const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
-const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+export default function NotificationsDropdown({
+  notifications,
+}: {
+  notifications: NotiMessageType[];
+}) {
+  // const [notifications, setNotifications] = useState<INotification[]>([]);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
 
-export default function NotificationsDropdown() {
-  const [notifications, setNotifications] = useState<INotification[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // useEffect(() => {
+  //   const fetchNotifications = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const session = await getSession();
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        setIsLoading(true);
-        const session = await getSession();
+  //       if (!session?.accessToken) {
+  //         throw new Error('인증 토큰이 없습니다.');
+  //       }
 
-        if (!session?.accessToken) {
-          throw new Error('인증 토큰이 없습니다.');
-        }
+  //       const response = await fetch(`${SERVER}/notifications`, {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'client-id': `${CLIENT_ID}`,
+  //           Authorization: `Bearer ${session.accessToken}`,
+  //         },
+  //       });
 
-        const response = await fetch(`${SERVER}/notifications`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'client-id': `${CLIENT_ID}`,
-            Authorization: `Bearer ${session.accessToken}`,
-          },
-        });
+  //       if (!response.ok) {
+  //         throw new Error(`API 호출 실패: ${response.status}`);
+  //       }
 
-        if (!response.ok) {
-          throw new Error(`API 호출 실패: ${response.status}`);
-        }
+  //       const data: INotificationResponse = await response.json();
+  //       setNotifications(data.item);
+  //     } catch (err) {
+  //       console.error('알림 가져오기 오류:', err);
+  //       setError(
+  //         err instanceof Error
+  //           ? err.message
+  //           : '알림을 불러오는 데 실패했습니다.',
+  //       );
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-        const data: INotificationResponse = await response.json();
-        setNotifications(data.item);
-      } catch (err) {
-        console.error('알림 가져오기 오류:', err);
-        setError(
-          err instanceof Error
-            ? err.message
-            : '알림을 불러오는 데 실패했습니다.',
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchNotifications();
-  }, []);
+  //   fetchNotifications();
+  // }, []);
 
   // if (isLoading) return console.log('알림을 불러오는 중...');
 

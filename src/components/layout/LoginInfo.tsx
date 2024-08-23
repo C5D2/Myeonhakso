@@ -5,15 +5,18 @@ import Submit from '../Submit';
 import Image from 'next/image';
 import useUserStore from '@/zustand/userStore';
 import Notifications from '@/components/Notifications';
+import NotiBell from '@/components/NotiBell';
 
 function LoginInfo({
+  userId,
   name,
   image,
-  notifications,
+  // notifications,
 }: {
+  userId:string;
   name: string;
   image?: string | null;
-  notifications: number;
+  // notifications: number;
 }) {
   const clearUser = useUserStore(state => state.clearUser);
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -41,7 +44,8 @@ function LoginInfo({
           />
         )}
         {name}님 :)
-        <Notifications notifications={notifications} />
+        {/* <Notifications notifications={notifications} /> */}
+        <NotiBell userId={userId} />
         <Submit className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white ml-1 ">
           로그아웃
         </Submit>

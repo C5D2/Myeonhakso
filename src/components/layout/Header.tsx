@@ -8,6 +8,7 @@ import { Session } from 'next-auth';
 import Image from 'next/image';
 import Back from './Back';
 import Notifications from '@/components/Notifications';
+import NotiBell from '@/components/NotiBell';
 
 export default async function Header() {
   const session: Session | null = await auth();
@@ -34,7 +35,7 @@ export default async function Header() {
           //   <Image src="/alarm.svg" alt="알림" width={20} height={20} />
           // </Link>
           <div className="ml-auto">
-            <Notifications notifications={session.user.notifications} />
+            <NotiBell userId={session.user.id!} />
           </div>
         ) : (
           <Link
@@ -66,9 +67,10 @@ export default async function Header() {
               </Button>
 
               <LoginInfo
+                userId={session.user.id!}
                 name={session.user.name!}
                 image={session.user.image}
-                notifications={session.user.notifications}
+                // notifications={session.user.notifications}
               />
               <SessionHandler session={session} />
             </>
