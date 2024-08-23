@@ -141,3 +141,34 @@ export interface ILectureReview
     name: string;
   };
 }
+
+export interface INotification {
+  _id: number;
+  target_id: number;
+  content: string;
+  extra: {
+    lecture_id: number;
+    url: string;
+  };
+  user: {
+    _id: number;
+    name: string;
+    email: string;
+    image: string;
+  };
+  channel: string;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface INotificationResponse {
+  ok: number;
+  item: INotification[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
