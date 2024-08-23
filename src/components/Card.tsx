@@ -47,7 +47,6 @@ export default function Card({ item }: ICardProp) {
       break;
   }
 
-  console.log(productItem);
   return (
     <Link
       href={`/${item?.extra?.type}/${productItem?._id}`}

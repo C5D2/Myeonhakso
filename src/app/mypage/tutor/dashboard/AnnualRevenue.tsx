@@ -1,6 +1,5 @@
 'use client';
 
-import { TrendingUp } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
 
 import {
@@ -20,21 +19,6 @@ import {
 import { Ilecture } from '@/types/lecture';
 import { IOrderSaleList } from '@/types/mypage';
 
-let chartData = [
-  { month: '1월', revenue: 0 },
-  { month: '2월', revenue: 0 },
-  { month: '3월', revenue: 0 },
-  { month: '4월', revenue: 0 },
-  { month: '5월', revenue: 0 },
-  { month: '6월', revenue: 0 },
-  { month: '7월', revenue: 0 },
-  { month: '8월', revenue: 0 },
-  { month: '9월', revenue: 0 },
-  { month: '10월', revenue: 0 },
-  { month: '11월', revenue: 0 },
-  { month: '12월', revenue: 0 },
-];
-
 const chartConfig = {
   desktop: {
     label: 'Desktop',
@@ -47,15 +31,26 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function AnnualRevenue({ orderItem }: { orderItem: IOrderSaleList[] }) {
+  let chartData = [
+    { month: '1월', revenue: 0 },
+    { month: '2월', revenue: 0 },
+    { month: '3월', revenue: 0 },
+    { month: '4월', revenue: 0 },
+    { month: '5월', revenue: 0 },
+    { month: '6월', revenue: 0 },
+    { month: '7월', revenue: 0 },
+    { month: '8월', revenue: 0 },
+    { month: '9월', revenue: 0 },
+    { month: '10월', revenue: 0 },
+    { month: '11월', revenue: 0 },
+    { month: '12월', revenue: 0 },
+  ];
+
   const nowYear = new Date().getFullYear().toString(); // 현재 년도
-  let totalRevenue = 0;
-  let totalQuantity = 0;
 
   const lectureData = orderItem
     .filter(item => item.createdAt.includes(nowYear)) //현재 년도만 추출
     .map(item => [item.createdAt, item.products[0].price]);
-
-  console.log('lectureData', lectureData);
 
   for (let i = 0; i < lectureData.length; i++) {
     let month = Number((lectureData[i][0] as string).substring(5, 7));

@@ -26,10 +26,10 @@ export default function RootPage() {
         <SwiperCard sortParam="createdAt" />
 
         <div className="flex items-center gap-2">
-          <h2 className="font-bold">인기 급상승 선생님</h2>
+          <h2 className="font-bold">면학소 신규 선생님</h2>
           <img src="/teacher.svg" className="w-6 h-6" />
         </div>
-        <SwiperCard sortParam="buyQuantity" />
+        <SwiperCard sortParam="teacher" />
       </div>
     </>
   );
