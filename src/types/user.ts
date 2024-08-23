@@ -19,6 +19,12 @@ export interface UserData {
   updatedAt: string;
 }
 
+export interface ITeacher extends Pick<UserData, '_id' | 'name' | 'image'> {
+  extra: {
+    introduction: string;
+  };
+}
+
 export type UserInToken = Required<Pick<UserData, '_id' | 'name'>> &
   Pick<UserData, 'profile'> & {
     accessToken: string;

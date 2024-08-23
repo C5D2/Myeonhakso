@@ -222,9 +222,8 @@ export async function fetchSellerOrderlist(
   const params = new URLSearchParams();
   const session = await getSession();
   const accesstoken = session?.accessToken;
-  params.set('limit', '6');
 
-  const url = `${SERVER}/seller/orders?${params.toString()}`;
+  const url = `${SERVER}/seller/orders`;
   const res = await fetch(url, {
     headers: {
       'client-id': `${CLIENT_ID}`,
