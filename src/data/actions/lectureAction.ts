@@ -88,10 +88,12 @@ export async function orderLecture(
   return resData;
 }
 
-export async function postLectureBookmark(id: string, data: object) {
+export async function postLectureBookmark(data: object) {
+  console.log('postLectureBookmark 시작', data);
+
   const session = await getSession();
 
-  const res = await fetch(`${SERVER}/bookmarks/product/${id}`, {
+  const res = await fetch(`${SERVER}/bookmarks/product`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -125,13 +127,14 @@ export async function deleteBookmark(id: string) {
 export async function postTeacherBookmark(id: string) {
   const session = await getSession();
 
-  const res = await fetch(`${SERVER}/bookmarks/user/${id}`, {
+  const res = await fetch(`${SERVER}/bookmarks/user`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'client-id': `${CLIENT_ID}`,
       Authorization: `Bearer ${session?.accessToken}`,
     },
+    body: JSON.stringify(id),
   });
 
   const resData = await res.json();
@@ -166,4 +169,20 @@ export async function sendNotifications(notifications: object[]) {
     }
   }
   return results;
+}
+
+export async function patchNotificationRead() {
+  const session = await getSession();
+
+  const res = await fetch(`${SERVER}/notifications/read`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${session?.accessToken}`,
+    },
+  });
+
+  const resData = await res.json();
+  return resData;
 }

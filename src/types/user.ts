@@ -41,3 +41,4 @@ export type UserForm = {
 };
 
 export type UserLoginForm = Pick<UserForm, 'email' | 'password'>;
+export type ReplyUser = Pick<UserData, '_id' | 'name' | 'email' | 'image'>;
