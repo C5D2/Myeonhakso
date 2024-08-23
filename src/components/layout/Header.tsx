@@ -7,6 +7,7 @@ import Button from '../Button';
 import { Session } from 'next-auth';
 import Image from 'next/image';
 import Back from './Back';
+import Notifications from '@/components/Notifications';
 
 export default async function Header() {
   const session: Session | null = await auth();
@@ -29,9 +30,12 @@ export default async function Header() {
           <Image src="/logo.svg" alt="면학소 로고" width={35} height={35} />
         </Link>
         {session?.user ? (
-          <Link href="/" className="ml-auto">
-            <Image src="/alarm.svg" alt="알림" width={20} height={20} />
-          </Link>
+          // <Link href="/" className="ml-auto">
+          //   <Image src="/alarm.svg" alt="알림" width={20} height={20} />
+          // </Link>
+          <div className="ml-auto">
+            <Notifications notifications={session.user.notifications} />
+          </div>
         ) : (
           <Link
             href="/login"
@@ -61,7 +65,11 @@ export default async function Header() {
                 <Link href={`/mypage/${type}/dashboard`}> 내 강의실 </Link>
               </Button>
 
-              <LoginInfo name={session.user.name!} image={session.user.image} />
+              <LoginInfo
+                name={session.user.name!}
+                image={session.user.image}
+                notifications={session.user.notifications}
+              />
               <SessionHandler session={session} />
             </>
           ) : (

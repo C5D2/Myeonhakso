@@ -3,10 +3,8 @@ import { ApiRes, MultiItem, SingleItem } from '@/types';
 import {
   Ilecture,
   ILectureDetail,
-  ILectureOrder,
-  ILectureOrderDetail,
-  ILectureOrderResponse,
   ILectureReview,
+  INotification,
 } from '@/types/lecture';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
@@ -157,34 +155,56 @@ export async function fetchBookmark(type = 'product') {
   return resData;
 }
 
-// export async function fetchTeacherBookmark() {
-//   const session = await getSession();
+export async function fetchBookmarkedUserList(id: number) {
+  const res = await fetch(`${SERVER}/users/${id}/bookmarks`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+    },
+  });
 
-//   if (!session) {
-//     console.error('세션 없음');
-//     return { item: [] };
-//   }
+  if (!res.ok) {
+    console.error('API 호출 에러:', res.statusText);
+    throw new Error('API 호출 실패');
+  }
 
-//   const res = await fetch(`${SERVER}/bookmarks/user`, {
-//     method: 'GET',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'client-id': `${CLIENT_ID}`,
-//       Authorization: `Bearer ${session.accessToken}`,
-//     },
-//   });
+  const resData = await res.json();
+  console.log('API 응답:', resData);
+  return resData;
+}
 
-//   if (!res.ok) {
-//     console.error('API 호출 에러:', res.statusText);
-//     throw new Error('API 호출 실패');
-//   }
+export const fetchNotificationList = async (): Promise<INotification[]> => {
+  console.log('Fetching notifications...');
+  try {
+    const response = await fetch(`/api/notifications`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('API response:', response);
 
-//   const resData = await res.json();
-//   console.log('API 응답:', resData);
-//   return resData;
-// }
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      console.error(
+        'API call error:',
+        response.status,
+        response.statusText,
+        errorMessage,
+      );
+      throw new Error(`API 호출 실패: ${response.status} ${errorMessage}`);
+    }
 
-// {{url}}/replies/products/36
+    const data = await response.json();
+    console.log('Received data:', data);
+
+    return data;
+  } catch (error) {
+    console.error('fetchNotificationList error:', error);
+    throw error;
+  }
+};
 
 export async function fetchReview(_id: number) {
   const url = `${SERVER}/replies/products/${_id}`;

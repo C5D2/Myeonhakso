@@ -137,3 +137,33 @@ export async function postTeacherBookmark(id: string) {
   const resData = await res.json();
   return resData;
 }
+
+export async function postNotification(data: object) {
+  const session = await getSession();
+
+  const res = await fetch(`${SERVER}/notifications`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${session?.accessToken}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const resData = await res.json();
+  return resData;
+}
+
+export async function sendNotifications(notifications: object[]) {
+  const results = [];
+  for (const notification of notifications) {
+    try {
+      const result = await postNotification(notification);
+      results.push(result);
+    } catch (error) {
+      console.error('알림 전송 실패:', error);
+    }
+  }
+  return results;
+}

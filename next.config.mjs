@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	images: {
-    domains: ['k.kakaocdn.net', 'api.fesp.shop', 'localhost', '*.googleusercontent.com'],
+  reactStrictMode: false,
+  images: {
+    domains: [
+      'k.kakaocdn.net',
+      'api.fesp.shop',
+      'localhost',
+      '*.googleusercontent.com',
+    ],
     remotePatterns: [
       {
         protocol: 'https',

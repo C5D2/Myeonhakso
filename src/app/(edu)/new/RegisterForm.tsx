@@ -10,7 +10,12 @@ import Button from '@/components/Button';
 import InputError from '@/components/InputError';
 import KakaoMap from '@/components/KakaoMap';
 import Submit from '@/components/Submit';
-import { patchForm, postForm } from '@/data/actions/lectureAction';
+import {
+  patchForm,
+  postForm,
+  postNotification,
+  sendNotifications,
+} from '@/data/actions/lectureAction';
 import { ILectureDetail, ILectureRegister } from '@/types/lecture';
 import classNames from 'classnames';
 import Link from 'next/link';
@@ -20,6 +25,8 @@ import DatePicker from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { produce } from 'immer';
 import moment from 'moment';
+import { newLectureNotification } from '@/utils/messageUtils';
+import { fetchBookmarkedUserList } from '@/data/fetchLecture';
 
 interface IRegisterFormProps {
   params: {
@@ -97,25 +104,6 @@ export default function RegisterForm({
       });
     }
 
-    // const newData = {
-    //   ...data,
-    //   extra: {
-    //     ...data.extra,
-    //     options: data.extra.options.map(option => ({
-    //       ...option,
-    //       startTime: option.startTime
-    //         ? convertToUTC(new Date(option.startTime)).toISOString()
-    //         : null,
-    //       endTime: option.endTime
-    //         ? convertToUTC(new Date(option.endTime)).toISOString()
-    //         : null,
-    //     })),
-    //     schedule: data.extra.schedule?.map(date =>
-    //       date ? convertToUTC(new Date(date)).toISOString() : null,
-    //     ),
-    //   },
-    // };
-
     const newData = produce(data, draft => {
       if (draft.extra) {
         draft.extra.options = draft.extra.options.map(option => ({
@@ -135,23 +123,63 @@ export default function RegisterForm({
     });
 
     let resData;
-    if (mode === 'edit') {
-      resData = await patchForm(params.id!, newData);
-    } else {
-      resData = await postForm(newData);
-    }
-    console.log(resData);
-    if (resData.ok) {
+    try {
+      if (mode === 'edit') {
+        resData = await patchForm(params.id!, newData);
+      } else {
+        resData = await postForm(newData);
+      }
+
+      console.log('API 응답:', resData); // API 응답 로깅
+
+      if (!resData || !resData.ok) {
+        throw new Error('API 호출 실패');
+      }
+
+      if (mode === 'register' && resData.item) {
+        try {
+          const bookmarkedData = await fetchBookmarkedUserList(
+            resData.item.seller_id,
+          );
+          if (!bookmarkedData || !bookmarkedData.item) {
+            throw new Error('북마크 데이터 가져오기 실패');
+          }
+
+          const bookmarkedUsers = bookmarkedData.item.user;
+          const byUser = bookmarkedData.item.byUser[0];
+
+          const notifications = newLectureNotification(
+            bookmarkedUsers,
+            {
+              id: resData.item._id,
+              name: resData.item.name,
+              type: resData.item.extra?.type,
+            },
+            byUser,
+          );
+
+          console.log('생성된 알림:', notifications);
+
+          const notificationResults = await sendNotifications(notifications);
+
+          console.log('알림 전송 결과:', notificationResults);
+
+          const successCount = notificationResults.filter(
+            result => result.ok,
+          ).length;
+          console.log(
+            `새 강의 "${resData.item.name}" 등록 및 알림 전송 완료. 성공: ${successCount}/${notifications.length}`,
+          );
+        } catch (error) {
+          console.error('알림 생성 또는 전송 중 오류 발생:', error);
+        }
+      }
+
       const id = mode === 'edit' ? params.id : resData.item._id;
       router.push(`/${newData.extra.type}/${id}`);
-    } else {
-      if ('errors' in resData) {
-        resData.errors.forEach(error =>
-          setError(error.path, { message: error.msg }),
-        );
-      } else if (resData.message) {
-        alert(resData.message);
-      }
+    } catch (error) {
+      console.error('API 호출 또는 데이터 처리 중 오류 발생:', error);
+      alert('강의 등록/수정 중 오류가 발생했습니다. 다시 시도해 주세요.');
     }
   };
 
