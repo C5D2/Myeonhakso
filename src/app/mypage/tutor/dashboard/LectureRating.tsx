@@ -9,7 +9,7 @@ export default function LectureRating({ item }: { item: Ilecture[] }) {
   const rating = (totalRating / ratingArray.length).toFixed(1);
   return (
     <div className="flex justify-center items-center h-full">
-      <p className="text-[50px] text-gray-50">{rating} 점</p>
+      <p className="text-[50px] text-gray-50 sm:text-[20px]">{rating} 점</p>
     </div>
   );
 }

@@ -11,7 +11,9 @@ function BookmarkCount({ item }: { item: Ilecture[] }) {
 
   return (
     <div className="flex justify-center items-center h-full">
-      <p className="text-[50px] text-gray-50">{totalBookmarks} 개</p>
+      <p className="text-[50px] text-gray-50 sm:text-[20px]">
+        {totalBookmarks} 개
+      </p>
     </div>
   );
 }

@@ -37,10 +37,13 @@
 
 @media screen and (max-width: 640px) {
   .fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
-    padding-bottom: 30px;
+    padding-bottom: 10px;
   }
   .fc-toolbar-title {
-    font-size: 8px;
+    font-size: 16px;
+  }
+  #fc-dom-1 {
+    font-size: 16px;
   }
   .fc-header-toolbar.fc-toolbar {
     flex-direction: column;

@@ -56,7 +56,7 @@ export function AnnualRate({ item }: ILectureProps) {
   }
 
   return (
-    <Card>
+    <Card className="p-2 mb-2">
       {/* <CardHeader>
         <CardTitle>{nowYear} 년도 강의 수강 현황</CardTitle>
         <CardDescription>{nowYear} 년도 강의 수강 현황</CardDescription>
@@ -94,7 +94,7 @@ export function AnnualRate({ item }: ILectureProps) {
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
+      <CardFooter className="flex-col items-start gap-2 text-sm sm:text-xs">
         <div className="flex gap-2 font-medium leading-none">
           {nowYear} 년도 강의 수강 현황
         </div>
