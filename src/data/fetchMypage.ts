@@ -214,3 +214,26 @@ export async function fetchsaleProduct(): Promise<MultiItem<Ilecture>> {
   }
   return resJson;
 }
+
+//anual..
+export async function fetchSellerOrderlist(
+  page?: string,
+): Promise<IOrderSaleList[]> {
+  const params = new URLSearchParams();
+  const session = await getSession();
+  const accesstoken = session?.accessToken;
+  params.set('limit', '6');
+
+  const url = `${SERVER}/seller/orders?${params.toString()}`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${accesstoken}`,
+    },
+  });
+  const resJson: ApiRes<MultiItem<IOrderSaleList>> = await res.json();
+  if (!resJson.ok) {
+    throw new Error('셀러의 주문 목록 조회 실패');
+  }
+  return resJson.item;
+}

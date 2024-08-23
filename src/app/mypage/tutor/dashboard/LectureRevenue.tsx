@@ -66,7 +66,7 @@ export default function LectureRevenue({ item }: { item: Ilecture[] }) {
   }, []);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col mt-20 sm:mt-0">
       {/* <CardHeader className="items-center pb-0">
         <CardTitle>Pie Chart - Donut with Text</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
@@ -85,7 +85,7 @@ export default function LectureRevenue({ item }: { item: Ilecture[] }) {
               data={chartData}
               dataKey="total"
               nameKey="lecture"
-              innerRadius={80}
+              innerRadius={70}
               strokeWidth={5}
             >
               <Label
@@ -101,7 +101,7 @@ export default function LectureRevenue({ item }: { item: Ilecture[] }) {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="fill-foreground text-3xl font-bold sm:text-xl"
                         >
                           {totalRevenue.toLocaleString()}₩
                         </tspan>
@@ -118,17 +118,17 @@ export default function LectureRevenue({ item }: { item: Ilecture[] }) {
             </Pie>
             <ChartLegend
               content={<ChartLegendContent nameKey="lecture" />}
-              className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+              className="sm:hidden -translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
             />
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
+      <CardFooter className="flex-col gap-2 text-sm sm:text-xs">
         <div className="flex items-center gap-2 font-medium leading-none">
           현재까지 강의별 총 수익을 확인할 수 있습니다.
         </div>
-        <div className="leading-none text-muted-foreground">
-          상위 4개로 나누며 이외의 강의는 기타에 합산하여 보여집니다.
+        <div className="leading-none text-muted-foreground sm:text-xs">
+          상위 4개로 나누며 이 외는 기타에 합산하여 보여집니다.
         </div>
       </CardFooter>
     </Card>
