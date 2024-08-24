@@ -9,11 +9,11 @@ import './swipercard.css';
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
 import Card from './Card';
-import { Ilecture } from '@/types/lecture';
+import { IBookmark, Ilecture } from '@/types/lecture';
 import useSWR from 'swr';
-import TeacherCard from './TeacherCard';
+import TeacherCard, { ICardItem } from './TeacherCard';
 import { fetchLecture, fetchTeacher } from '@/data/fetchLecture';
-import { UserData } from '@/types';
+import { ITeacher, UserData } from '@/types';
 
 function SwiperCard({ sortParam }: { sortParam: string }) {
   const path = 'products';
@@ -39,7 +39,7 @@ function SwiperCard({ sortParam }: { sortParam: string }) {
     data: teachersData,
     error: teachersError,
     isLoading: teachersLoading,
-  } = useSWR<UserData[] | null>('teachers', getTeachers);
+  } = useSWR<ITeacher[] | null>('teachers', getTeachers);
 
   // if (lecturesLoading) return <p>loading...</p>;
   // if (teachersLoading) return <p>loading...</p>;
@@ -49,7 +49,10 @@ function SwiperCard({ sortParam }: { sortParam: string }) {
   if (sortParam === 'teacher') {
     list = teachersData?.map((item, index) => (
       <SwiperSlide key={index}>
-        <TeacherCard key={index} item={item} />
+        <TeacherCard
+          key={index}
+          item={item as (ITeacher | IBookmark) & ICardItem}
+        />
       </SwiperSlide>
     ));
   } else {

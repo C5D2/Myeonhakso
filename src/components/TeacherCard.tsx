@@ -1,12 +1,12 @@
 'use client';
 
-import { ITeacher, UserData } from '@/types';
+import { ITeacher } from '@/types';
 import { IBookmark } from '@/types/lecture';
 import Link from 'next/link';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 
-interface ICardItem {
+export interface ICardItem {
   _id: number;
   extra?: {
     type: string;
