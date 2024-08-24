@@ -131,6 +131,7 @@ export interface ITeacherBookmark {
   name: string;
   image: string;
   type: string;
+  address: string;
 }
 
 export interface ILectureReview

@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { NextAuthProvider } from './providers';
 import Script from 'next/script';
 import KakaoScript from '@/components/KakaoScript';
+import ToastProvider from '@/components/ToastProvider';
 
 declare global {
   interface Window {
@@ -25,13 +26,15 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <NextAuthProvider>
-          <div className="flex flex-col h-lvh">
-            <Header />
-            <Script src="https://cdn.iamport.kr/v1/iamport.js" />
-            <div className="sm:pt-[50px] sm:pb-[60px]">{children}</div>
-            <KakaoScript />
-            <Footer />
-          </div>
+          <ToastProvider>
+            <div className="flex flex-col h-lvh">
+              <Header />
+              <Script src="https://cdn.iamport.kr/v1/iamport.js" />
+              <div className="sm:pt-[50px] sm:pb-[60px]">{children}</div>
+              <KakaoScript />
+              <Footer />
+            </div>
+          </ToastProvider>
         </NextAuthProvider>
       </body>
     </html>
