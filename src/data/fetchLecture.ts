@@ -1,5 +1,5 @@
 import { getSession } from '@/auth';
-import { ApiRes, MultiItem, SingleItem, UserData } from '@/types';
+import { ApiRes, ITeacher, MultiItem, SingleItem, UserData } from '@/types';
 import {
   Ilecture,
   ILectureDetail,
@@ -38,7 +38,7 @@ export async function fetchLecture(
 }
 
 //회원 조회
-export async function fetchTeacher(): Promise<UserData[]> {
+export async function fetchTeacher(): Promise<ITeacher[]> {
   const params = new URLSearchParams();
   params.set('type', 'seller');
   params.set('limit', LIMIT!);
@@ -49,7 +49,7 @@ export async function fetchTeacher(): Promise<UserData[]> {
     },
   });
 
-  const resJson: ApiRes<MultiItem<UserData>> = await res.json();
+  const resJson: ApiRes<MultiItem<ITeacher>> = await res.json();
   if (!resJson.ok) {
     throw new Error('선생님 목록 조회 실패');
   }
