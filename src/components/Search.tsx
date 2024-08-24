@@ -1,10 +1,12 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 function Search() {
   const searchParams = useSearchParams();
+  const pathName = usePathname();
+  const pageName = pathName.split('/')[1];
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get('keyword') || '',
@@ -16,13 +18,18 @@ function Search() {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set('keyword', term);
+    // const params = new URLSearchParams(searchParams);
+    // if (term) {
+    //   params.set('keyword', term);
+    // } else {
+    //   params.delete('keyword');
+    // }
+    console.log('pathName', pathName);
+    if (pageName) {
+      router.push(`${pageName}?keyword=${searchTerm}`);
     } else {
-      params.delete('keyword');
+      router.push(`/products?keyword=${searchTerm}`);
     }
-    router.push(`/products?${params.toString()}`);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -32,7 +39,7 @@ function Search() {
   };
 
   return (
-    <div className="relative w-full max-w-xl mx-auto">
+    <div className="relative w-full max-w-xl mx-auto sm:px-2">
       <input
         className="w-full pl-4 pr-10 py-2 rounded-full drop-shadow-md focus:outline-none focus:ring-2 focus:ring-main-green focus:border-transparent"
         type="text"

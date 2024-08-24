@@ -3,14 +3,13 @@ import SwiperBanner from '../components/Swiper';
 import Search from '@/components/Search';
 
 export default function RootPage() {
-  
   return (
     <>
-      <div className="grow-1 h-100">
+      <div className="">
         <SwiperBanner />
       </div>
-      <div className='mt-10 mx-auto max-w-[650px] w-full'>
-      <Search  />
+      <div className="mt-10 mx-auto max-w-[650px] w-full">
+        <Search />
       </div>
       <div className="max-w-[1500px] mx-auto px-10 w-full mt-10">
         <div className="flex items-center gap-2">
@@ -27,10 +26,10 @@ export default function RootPage() {
         <SwiperCard sortParam="createdAt" />
 
         <div className="flex items-center gap-2">
-          <h2 className="font-bold">인기 급상승 선생님</h2>
+          <h2 className="font-bold">면학소 신규 선생님</h2>
           <img src="/teacher.svg" className="w-6 h-6" />
         </div>
-        <SwiperCard sortParam="buyQuantity" />
+        <SwiperCard sortParam="teacher" />
       </div>
     </>
   );

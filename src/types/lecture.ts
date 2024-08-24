@@ -19,7 +19,9 @@ export interface Ilecture {
   replies: number;
   bookmarks: number;
   options: number;
+  schedule: string[];
   image?: IlectureImage;
+  rating: number;
 }
 
 export interface Iseller {
@@ -60,7 +62,7 @@ export interface ILectureRegister extends Omit<Ilecture, 'extra'> {
 
 export interface ILectureDetail extends Omit<ILectureRegister, 'seller'> {
   seller: {
-    _id: string;
+    _id: number;
     name: string;
     email: string;
     profileImage: string | null | undefined;
@@ -104,19 +106,32 @@ export interface ILectureOrderDetail
   products: ILectureProducts;
 }
 
-export interface ILectureBookmark {
+export interface IBookmark {
   _id: number;
   user_id: number;
   createdAt: string;
-  product: {
-    _id: number;
-    name: string;
-    price: string;
-    quantity: string;
-    buyQuantity: number;
-    image: string;
-    extra: Iextra;
-  };
+  extra?: { type: string };
+  product?: ILectureBookmarkProduct;
+  user?: ITeacherBookmark;
+}
+
+export interface ILectureBookmarkProduct {
+  _id: number;
+  name: string;
+  price: string;
+  quantity: string;
+  buyQuantity: number;
+  image: string;
+  extra?: Iextra;
+  rating: number;
+}
+
+export interface ITeacherBookmark {
+  _id: number;
+  name: string;
+  image: string;
+  type: string;
+  address: string;
 }
 
 export interface ILectureReview
@@ -125,5 +140,36 @@ export interface ILectureReview
     _id: number;
     image: string | null;
     name: string;
+  };
+}
+
+export interface INotification {
+  _id: number;
+  target_id: number;
+  content: string;
+  extra: {
+    lecture_id: number;
+    url: string;
+  };
+  user: {
+    _id: number;
+    name: string;
+    email: string;
+    image: string;
+  };
+  channel: string;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface INotificationResponse {
+  ok: number;
+  item: INotification[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
   };
 }

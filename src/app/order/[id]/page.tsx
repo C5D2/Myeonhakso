@@ -1,4 +1,7 @@
+'use server';
+
 import DetailCurriculum from '@/app/(edu)/[type]/[id]/DetailCurriculum';
+import BookmarkLecture from '@/components/BookmarkLecture';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
 import KakaoMap from '@/components/KakaoMap';
@@ -17,8 +20,27 @@ function formatTime(date: any) {
 
 async function OrderDetailPage({ params }: { params: { id: string } }) {
   const item = await fetchLectureDetail(params.id);
+  // const session = await getSession();
+  // const user = session?.user;
   const seller_id = item?.seller._id;
-  const data = await fetchOtherLectures(seller_id!, '3');
+  const data = await fetchOtherLectures(String(seller_id!), '3');
+
+  let isBookmarked = false;
+  let bookmarkId: number | null = null;
+
+  // if (user) {
+  //   // 강의 북마크 데이터
+  //   const data = await fetchLectureBookmark();
+  //   const product = data.item;
+
+  //   const bookmarkedItem = product.find((item: IBookmark) => {
+  //     return item.product && item.product._id === Number(params.id);
+  //   });
+  //   if (bookmarkedItem) {
+  //     isBookmarked = true;
+  //     bookmarkId = bookmarkedItem._id;
+  //   }
+  // }
 
   // 지금 강의는 다른 강의에서 빼야됨,,,
   // 목록(type) 카드 사이즈 맞추기
@@ -41,7 +63,11 @@ async function OrderDetailPage({ params }: { params: { id: string } }) {
               <p>{item?.content}</p>
               <div className="flex justify-between">
                 <div className="flex gap-3">
-                  <Image src="/heart.svg" width={40} height={40} alt="찜" />
+                  <BookmarkLecture
+                    params={params}
+                    initialIsBookmarked={isBookmarked}
+                    bookmarkId={bookmarkId}
+                  />
                   <Image
                     src="/share.svg"
                     width={30}
@@ -81,7 +107,7 @@ async function OrderDetailPage({ params }: { params: { id: string } }) {
 
           <div className="mt-[50px]">
             <h3 className="font-bold">화상 강의</h3>
-            <div className="rounded-lg bg-gray-10 h-[140px] flex place-content-center gap-5">
+            <div className="rounded-lg bg-gray-10 h-[140px] flex place-content-center items-center gap-5">
               <Image src="/video.svg" width={30} height={30} alt="화상강의" />
               {item?.extra.url ? (
                 <p className="place-content-center">{item?.extra?.url}</p>

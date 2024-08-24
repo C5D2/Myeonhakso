@@ -2,8 +2,10 @@
 
 import Button from '@/components/Button';
 import Submit from '@/components/Submit';
+import Toast from '@/components/Toast';
 import { signup } from '@/data/actions/userAction';
 import { fetchEmailValidation } from '@/data/postFetch';
+import useToast from '@/hooks/useToast';
 import { UserForm } from '@/types';
 import useModalStore from '@/zustand/useModalStore';
 import { useRouter } from 'next/navigation';
@@ -25,7 +27,11 @@ function Signupform() {
     mode: 'onSubmit', 
   });
 
-  const [selectedType, setSelectedType] = useState<'user' | 'seller'>('user');
+ const [selectedType, setSelectedType] = useState<'user' | 'seller'>('user');
+
+  const { toast, message, showToast } = useToast();
+  const [selectedType, setSelectedType] = useState('user');
+
   const handleTypeClick = (value: 'user' | 'seller') => {
     setSelectedType(value);
     setValue('type', value);
@@ -77,13 +83,12 @@ function Signupform() {
           setError(error.path, { message: error.msg }),
         );
       } else if (resData.message) {
-        alert(resData.message);
+        showToast(resData.message);
       }
     }
   };
 
   const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
   const handleEmailValidationClick = async () => {
     if (emailValue.trim() === '') {
       alert('이메일 주소를 입력해주세요');
@@ -98,6 +103,7 @@ function Signupform() {
     try {
       const response = await fetchEmailValidation(emailValue);
       if (response.ok === 1) {
+
         alert('사용 가능한 이메일입니다.');
       } else if (response.ok === 0) {
         alert('이미 사용 중인 이메일입니다.');
@@ -107,6 +113,7 @@ function Signupform() {
     } catch (error) {
       console.error('Error during email validation:', error);
       alert('이메일 확인 중 오류가 발생했습니다.');
+
     }
   };
 
@@ -116,6 +123,8 @@ function Signupform() {
       onSubmit={handleSubmit(addUser)}
       className="max-w-screen-md mx-auto mt-14"
     >
+      {toast && <Toast text={message} />}
+
       <div className="mb-12 flex justify-center gap-14" id="type">
         <button
           className={`px-8 py-4 ${selectedType === 'user' ? 'bg-main-green' : 'bg-main-gray'} hover:bg-main-yellow text-white font-semibold rounded-md cursor-pointer`}
@@ -222,6 +231,7 @@ function Signupform() {
             {...register('attach', {
               required: selectedType === 'seller' ? '이미지는 필수입니다.' : false,
             })}
+
           />
         </div>
         {isSubmitted && errors.attach && <p className="text-red-500 text-sm mt-1">{errors.attach.message}</p>}

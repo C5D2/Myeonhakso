@@ -46,7 +46,7 @@ export default function KakaoMap({ address }: { address: string }) {
       loadKakaoMap();
     } else {
       const script = document.createElement('script');
-      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_CLIENT}&autoload=false&libraries=services`;
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services`;
       script.onload = () => {
         window.kakao.maps.load(loadKakaoMap);
       };

@@ -1,0 +1,75 @@
+.fc.fc-media-screen {
+  padding: 10px;
+}
+
+.fc-toolbar-title {
+  font-size: 0.5em;
+}
+#fc-dom-86 {
+  font-size: 20px;
+}
+.fc-col-header {
+  background-color: #e8efdd;
+}
+
+.fc-button-group {
+  /* gap: 5px;/ */
+}
+.fc-button-group .fc-button.fc-button-primary {
+  background-color: #88b14b;
+  border: none;
+  border-radius: 20%;
+}
+.fc-today-button {
+  border: none;
+  --fc-button-border-color: #005c86;
+  --fc-button-bg-color: #005c86;
+}
+.fc-event-time {
+  display: none;
+}
+.fc-event-main {
+  height: 17px;
+}
+.fc-event-title.fc-sticky {
+  font-size: 12px;
+}
+
+@media screen and (max-width: 640px) {
+  .fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
+    padding-bottom: 10px;
+  }
+  .fc-toolbar-title {
+    font-size: 16px;
+  }
+  #fc-dom-1 {
+    font-size: 16px;
+  }
+  .fc-header-toolbar.fc-toolbar {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+  .fc-button-group {
+    margin: 0;
+  }
+  /* .fc-toolbar-chunk {
+    display: flex;
+    gap: 2px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .fc-today-button.fc-button.fc-button-primary {
+    width: fit-content;
+    font-size: 12px;
+  }
+  .fc-icon {
+    width: 10px;
+    height: 10px;
+  }
+  .fc-prev-button {
+    width: 10px;
+    height: 10px;
+  } */
+}

@@ -1,3 +1,4 @@
+
 'use client'
 
 import Submit from "@/components/Submit"
@@ -9,7 +10,6 @@ import { useSession } from "next-auth/react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-
 
 function EditForm() {
   const { data: session, update, status} = useSession()
@@ -54,6 +54,7 @@ useEffect(() => {
   }
 }, [session, setValue]);
 
+
   useEffect(() => {
     if (isUpdated) {
       openModal({
@@ -69,8 +70,8 @@ useEffect(() => {
 
 
   const handleEmailFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-    event.target.blur()
-    }
+    event.target.blur();
+  };
 
   const handleImageClick = () => {
     document.getElementById('attach')?.click();
@@ -80,11 +81,11 @@ useEffect(() => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         setSelectedImage(e.target?.result as string);
       };
       reader.readAsDataURL(file);
-      setSelectedFile(file); 
+      setSelectedFile(file);
     }
   };
 
@@ -99,7 +100,7 @@ useEffect(() => {
       return;
     }
 
-    let imageUrl = session?.user?.image
+    let imageUrl = session?.user?.image;
 
     if (selectedFile) {
       try {
@@ -138,7 +139,7 @@ useEffect(() => {
       });
       setSelectedImage(imageUrl);
       setIsUpdated(true);
-     
+
       } else {
         console.error('Error updating user:');
       }
@@ -179,11 +180,23 @@ useEffect(() => {
     <div className="mb-8">
       <div className="flex justify-between ">
         <label
-          className="block text-gray-500 mb-2 font-semibold pt-2"
-          htmlFor="email"
+          className="block text-gray-500 mb-2 font-semibold"
+          htmlFor="name"
         >
-          이메일
+          이름
         </label>
+        <input
+          id="name"
+          type="name"
+          className="w-full px-3 py-2 border rounded-md"
+          {...register('name', {
+            required: '이름을 입력하세요.',
+            minLength: {
+              value: 2,
+              message: '이름을 2글자 이상 입력해주세요.',
+            },
+          })}
+        />
       </div>
       <input
         id="email"
@@ -249,4 +262,4 @@ useEffect(() => {
 	)
 }
 
-export default EditForm
+export default EditForm;

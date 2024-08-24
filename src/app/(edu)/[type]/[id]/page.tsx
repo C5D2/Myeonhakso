@@ -1,66 +1,64 @@
 import DetailButton from '@/app/(edu)/[type]/[id]/DetailButton';
-import DetailCurriculum from '@/app/(edu)/[type]/[id]/DetailCurriculum';
 import { getSession } from '@/auth';
-import AddBookmarkLecture from '@/components/AddBookmarkLecture';
-import Button from '@/components/Button';
 import Card from '@/components/Card';
-import DeleteBookmarkLecture from '@/components/DeleteBookmarkLecture';
 import KakaoMap from '@/components/KakaoMap';
 import {
+  fetchBookmark,
   fetchLectureDetail,
   fetchOtherLectures,
-  getLectureBookmark,
 } from '@/data/fetchLecture';
-import { ILectureBookmark } from '@/types/lecture';
+import { IBookmark } from '@/types/lecture';
 import Image from 'next/image';
 import Tab from './Tab';
+import BookmarkLecture from '@/components/BookmarkLecture';
+import SubscribeButton from '@/app/(edu)/[type]/[id]/SubscribeButton';
+import { calculateDays } from '@/utils/calculateDays';
+import { ShareButton } from '@/app/(edu)/[type]/[id]/ShareButton';
 
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-
-  const year = date.getUTCFullYear();
-  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-  const day = date.getUTCDate().toString().padStart(2, '0');
-
-  return `${year}.${month}.${day}`;
-}
-
-function formatTime(dateString: string) {
-  const date = new Date(dateString);
-
-  const hours = date.getUTCHours().toString().padStart(2, '0');
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-
-  return `${hours}:${minutes}`;
-}
-
-// 이미 구매한 강의는 구매 버튼을 disabled로
 async function DetailPage({ params }: { params: { id: string } }) {
   const session = await getSession();
   const user = session?.user;
   const item = await fetchLectureDetail(params.id);
   const seller_id = item?.seller._id;
-  const data = await fetchOtherLectures(seller_id!, '3');
+  const type = item?.extra.type;
+  const data = await fetchOtherLectures(String(seller_id!), '3');
+  // 날짜 계산
+  const daysDifference = calculateDays(item?.extra?.schedule);
 
   let isBookmarked = false;
   let bookmarkId: number | null = null;
+  let isSubscribed = false;
+  let subscribeId: string | null = null;
 
   if (user) {
-    const data = await getLectureBookmark();
+    // 강의 북마크 데이터
+    const data = await fetchBookmark();
     const product = data.item;
 
-    const bookmarkedItem = product.find((item: ILectureBookmark) => {
+    const bookmarkedItem = product.find((item: IBookmark) => {
       return item.product && item.product._id === Number(params.id);
     });
     if (bookmarkedItem) {
       isBookmarked = true;
       bookmarkId = bookmarkedItem._id;
     }
-  }
-  console.log(bookmarkId);
 
-  // 지금 강의는 다른 강의에서 빼야됨,,,
-  // 목록(type) 카드 사이즈 맞추기
+    // 선생님 북마크 데이터
+    const teacherData = await fetchBookmark('user');
+    const user = teacherData.item;
+
+    const bookmarkedTeacher = user.find((item: IBookmark) => {
+      return item.user && item.user._id === Number(seller_id);
+    });
+    if (bookmarkedTeacher) {
+      isSubscribed = true;
+      subscribeId = bookmarkedTeacher._id;
+    }
+  }
+  console.log(subscribeId);
+
+  // TODO: 지금 강의는 다른 강의에서 빼야됨,,,
+  // 공유하기도 하기
   const list = data?.map((item, index) => (
     <div
       className="max-w-[300px] h-[320px] rounded-xl flex flex-grow justify-between"
@@ -70,193 +68,256 @@ async function DetailPage({ params }: { params: { id: string } }) {
     </div>
   ));
 
+  // TODO: 난이도마다 레벨 svg 따로~
   return (
-    <div>
-      <div className="h-[640px]">
-        <div className="h-5/6 bg-light-green">
-          <div className="mx-[170px] my-[100px] md:mx-[30px] md:my-[20px] pt-28 mt-auto mb-12">
-            <div className="flex gap-5 w-full">
-              <div className="rounded-lg bg-gray-10 h-[300px] px-20 py-10 box-border flex flex-col justify-evenly flex-grow">
-                <h2 className="text-2xl font-extrabold">{item?.name}</h2>
-                <p>{item?.content}</p>
-                <div className="flex gap-3">
-                  {isBookmarked && bookmarkId !== null ? (
-                    <DeleteBookmarkLecture bookmarkId={bookmarkId} />
-                  ) : (
-                    <AddBookmarkLecture params={params} />
-                  )}
-                  <Image
-                    src="/share.svg"
-                    width={30}
-                    height={20}
-                    alt="공유하기"
-                  />
-                </div>
-              </div>
-              <div className="rounded-lg bg-gray-10 w-[400px] max-h-[300px] px-10 py-10 box-border flex flex-col justify-evenly">
-                <h2 className="text-2xl font-extrabold">{item?.price}원</h2>
-                {item?.quantity === item?.buyQuantity ? (
-                  <p>이미 구매한 강의입니다.</p>
-                ) : (
-                  <>
-                    <p>수강 옵션을 선택해주세요.</p>
-                    <select name="" id="">
-                      {item?.extra?.options.map((option, index) => (
-                        <option key={index} value={index}>
-                          {option.days.join(', ')}{' '}
-                          {formatTime(option.startTime ?? '')} ~{' '}
-                          {formatTime(option.endTime ?? '')}
-                        </option>
-                      ))}
-                    </select>
+    <div className="relative min-h-screen">
+      <div className="absolute top-0 left-0 w-full h-[50vh] bg-light-green z-0" />
 
-                    <DetailButton
-                      params={params}
-                      item={item}
-                      user={{
-                        name: user?.name ?? null,
-                        email: user?.email ?? null,
-                      }}
-                      id={params.id}
-                    />
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-lg bg-gray-10 h-[170px] mt-[50px] px-20 py-10 border-box flex place-content-evenly items-center">
-              <Image src="/lesson.svg" width={40} height={40} alt="레슨수" />
-              <div>
-                <p>레슨 수</p>
-                <p>{item?.extra.curriculum.length}개</p>
-              </div>
-              <Image src="/level-low.svg" width={30} height={40} alt="난이도" />
-              <div>
-                <p>난이도</p>
-                <p>{item?.extra.level}</p>
-              </div>
-              <Image src="/calendar.svg" width={40} height={40} alt="일정" />
-              <div>
-                {/* TODO: 수강 일정 서버 보내는 함수 수정 후 확인할 것 */}
-                <p>수강 일정</p>
-                <p>
-                  {formatDate(item?.extra?.schedule[0] ?? '')} -{' '}
-                  {formatDate(item?.extra?.schedule[1] ?? '')}
-                </p>
-              </div>
-              <Image
-                src="/category.svg"
-                width={40}
-                height={40}
-                alt="카테고리"
-              />
-              <div>
-                <p>카테고리</p>
-                <p>{item?.extra.type}</p>
-              </div>
-            </div>
-
-            <div className="rounded-lg bg-gray-10 h-[170px] mt-[50px] px-8 py-10 border-box flex place-content-evenly items-center gap-3">
-              <Image
-                src="/teacher_detail.svg"
-                width={80}
-                height={80}
-                alt="선생님 사진"
-              />
-              <div>
-                <h2>{item?.seller.name}</h2>
-                <p>짱짱걸데스</p>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-start justify-evenly">
-                  <Image src="/star.svg" width={20} height={20} alt="만족도" />
-                  <p className="inline">수강생 만족도 4.8</p>
-                </div>
-                <Button>선생님 구독하기</Button>
-              </div>
-            </div>
-
-            <div className="mt-[50px]">
-              <h3 className="font-bold">강의 일정</h3>
-              <div className="rounded-lg bg-gray-10 h-[170px] px-8 py-10 border-box flex place-content-evenly items-center">
-                <div className="flex gap-4 items-center">
-                  <Image
-                    src="/calendar.svg"
-                    width={40}
-                    height={40}
-                    alt="일정"
-                  />
-                  <p>
-                    {formatDate(item?.extra?.schedule[0] ?? '')} -{' '}
-                    {formatDate(item?.extra?.schedule[1] ?? '')}
+      <div className="relative z-10 pt-20">
+        <div className="max-w-[1500px] mx-auto px-10 w-full">
+          <div className="-mt-20">
+            <div className="pt-20">
+              <div className="flex gap-5 w-full">
+                <div className="rounded-3xl bg-gray-10 h-[300px] px-20 py-10 box-border flex flex-col border border-main-light-green/50 justify-evenly flex-grow">
+                  <p className="text-main-green font-black text-lg">
+                    {item?.extra.type}
                   </p>
+                  <h2 className="text-3xl font-bold">{item?.name}</h2>
+                  <p>{item?.content}</p>
+                  <div className="flex gap-3">
+                    <BookmarkLecture
+                      params={params}
+                      initialIsBookmarked={isBookmarked}
+                      bookmarkId={bookmarkId}
+                      type={type}
+                    />
+                    <ShareButton />
+                  </div>
                 </div>
+                <div className="rounded-3xl bg-gray-10 w-[400px] max-h-[300px] p-10 box-border border border-main-light-green/50 flex flex-col gap-5">
+                  {item?.quantity === item?.buyQuantity ? (
+                    <p>이미 구매한 강의입니다.</p>
+                  ) : (
+                    <>
+                      <p className="font-extrabold">수강 옵션을 선택해주세요</p>
+                      <select name="" id="">
+                        {(item?.extra?.options ?? []).map((option, index) => (
+                          <option key={index} value={index}>
+                            {(option.days ?? []).join(', ')}{' '}
+                            {option.startTime ?? ''} ~ {option.endTime ?? ''}
+                          </option>
+                        ))}
+                      </select>
 
-                <div className="flex gap-4 items-center">
-                  <Image src="/time.svg" width={40} height={40} alt="시간" />
-                  <div className="flex flex-col">
-                    {item?.extra?.options.map((option, index) => (
-                      <div key={index}>
-                        <p>
-                          {option.days.join(', ')}{' '}
-                          {formatTime(option.startTime ?? '')} ~{' '}
-                          {formatTime(option.endTime ?? '')}
-                        </p>
-                      </div>
-                    ))}
+                      <h2 className="text-2xl font-black flex justify-end mb-auto">
+                        {item?.price
+                          .toString()
+                          .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                        원
+                      </h2>
+
+                      <DetailButton
+                        params={params}
+                        item={item}
+                        user={{
+                          name: user?.name ?? null,
+                          email: user?.email ?? null,
+                        }}
+                        id={params.id}
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-[50px] flex gap-5">
+                <div className="flex-1 rounded-3xl bg-gray-10 px-8 py-6 border border-main-light-green/50 flex items-center justify-between">
+                  <div className="flex items-center gap-10">
+                    <Image
+                      src="/lesson.svg"
+                      width={40}
+                      height={40}
+                      alt="레슨수"
+                    />
+                    <div>
+                      <p className="text-lg">레슨 수</p>
+                      <p className="text-3xl font-black">
+                        {item?.extra.curriculum.length}개
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 rounded-3xl bg-gray-10 px-8 py-6 border border-main-light-green/50 flex items-center justify-between">
+                  <div className="flex items-center gap-10">
+                    <Image
+                      src="/level-low.svg"
+                      width={30}
+                      height={40}
+                      alt="난이도"
+                    />
+                    <div>
+                      <p className="text-lg">난이도</p>
+                      <p className="text-3xl font-black">{item?.extra.level}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 rounded-3xl bg-gray-10 px-8 py-6 border border-main-light-green/50 flex items-center justify-between">
+                  <div className="flex items-center gap-10">
+                    <Image
+                      src="/calendar.svg"
+                      width={50}
+                      height={50}
+                      alt="일정"
+                    />
+                    <div>
+                      <p className="text-lg">수강 일정</p>
+                      <p className="text-xl font-black">
+                        {item?.extra?.schedule[0] ?? ''} -{' '}
+                        {item?.extra?.schedule[1] ?? ''}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="mt-[50px]">
-              <h3 className="font-bold">화상 강의</h3>
-              <div className="rounded-lg bg-gray-10 h-[140px] place-content-center">
-                <p>* 화상강의 주소는 수강신청 완료 후 확인 가능합니다.</p>
-              </div>
-            </div>
-
-            <div className="mt-[50px]">
-              <h3 className="font-bold">대면 강의</h3>
-              <div className="rounded-lg bg-gray-10 pb-5">
-                {item?.extra?.address === '' ? (
-                  <p>화상으로 진행되는 강의입니다.</p>
+              <h2 className="text-2xl mt-[50px] font-black">강사 소개</h2>
+              <div className="rounded-3xl bg-gray-10 h-[170px] mt-[15px] px-8 py-10 border-box  border border-main-light-green/50 flex place-content-evenly items-center gap-3">
+                {item?.seller.profileImage ? (
+                  <Image
+                    className="rounded-full"
+                    src={item?.seller.profileImage}
+                    width={80}
+                    height={80}
+                    alt="선생님 사진"
+                  />
                 ) : (
-                  <>
-                    <KakaoMap address={item?.extra?.address!} />
-                    <p>{item?.extra.address}</p>
-                  </>
+                  <Image
+                    src="/teacher_detail.svg"
+                    width={80}
+                    height={80}
+                    alt="선생님 사진"
+                  />
                 )}
+
+                <div>
+                  <div className="flex justify-evenly items-center">
+                    <h2 className="text-2xl font-black mr-3">
+                      {item?.seller.name}
+                    </h2>
+                    <Image
+                      src="/star.svg"
+                      width={20}
+                      height={20}
+                      alt="만족도"
+                    />
+                    <p className="inline">4.8</p>
+                  </div>
+                  <p>선생님 소개</p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <SubscribeButton
+                    initialIsSubscribed={isSubscribed}
+                    teacherId={String(seller_id)}
+                    subscribeId={subscribeId}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="mt-[50px]">
-              <h3 className="font-bold">강의를 미리 들어보세요</h3>
-              <div
-                className="rounded-lg bg-gray-10 w-full relative overflow-hidden"
-                style={{ paddingTop: '56.25%' }}
-              >
-                <iframe
-                  src={item?.extra.preview}
-                  allowFullScreen
-                  className="absolute top-0 left-0 w-full h-full border-0"
-                />
+              <div className="mt-[50px]">
+                <h2 className="text-2xl font-black mb-4">강의 일정</h2>
+                <div className="flex gap-4">
+                  <div className="rounded-3xl w-full bg-gray-10 border border-main-light-green/50 flex flex-col gap-3 items-center justify-center py-6">
+                    <h2 className="text-3xl font-black text-main-green">
+                      {daysDifference}일
+                    </h2>
+                    <p>
+                      {item?.extra?.schedule[0] ?? ''} -{' '}
+                      {item?.extra?.schedule[1] ?? ''}
+                    </p>
+                  </div>
+
+                  <div className="rounded-3xl w-full p-6 bg-gray-10 border border-main-light-green/50">
+                    <div className="flex justify-center mb-4 gap-5">
+                      {['월', '화', '수', '목', '금', '토', '일'].map(day => {
+                        const isIncluded = item?.extra?.options.some(option =>
+                          option.days.includes(day),
+                        );
+                        return (
+                          <span
+                            className={`${
+                              isIncluded ? 'bg-main-yellow' : 'bg-main-green'
+                            } text-white px-4 py-3 rounded-full w-12 h-12 flex items-center justify-center`}
+                            key={day}
+                          >
+                            {day}
+                          </span>
+                        );
+                      })}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {item?.extra?.options.map((option, index) => (
+                        <div className="flex items-center gap-2" key={index}>
+                          <span className="bg-main-yellow w-4 h-4 rounded-full"></span>
+                          <p>
+                            {option.days.join(', ')} {option.startTime ?? ''} ~{' '}
+                            {option.endTime ?? ''}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div className="mt-[50px] flex flex-col gap-3">
-              <Tab item={item} />
-            </div>
-
-            <div className="mt-[50px]">
-              <h3 className="font-bold">오하요 선생님의 다른 강의</h3>
-              <div className="flex flex-wrap content-start max-w-[1400px]">
-                {list}
+              <div className="mt-[50px]">
+                <h2 className="text-2xl font-black">화상 강의</h2>
+                <div className="mt-5 place-content-center">
+                  <p className="text-2xl">
+                    화상강의 주소는 수강신청 완료 후 확인 가능합니다.
+                  </p>
+                  {/* <Image src="/right-arrow.svg" alt="화살표" /> */}
+                </div>
               </div>
-            </div>
-
-            <div className="mt-[50px]">
-              <h3 className="font-bold">다른 수강생이 많이 듣는 토픽</h3>
+              <div className="mt-[50px]">
+                <h2 className="text-2xl font-black">대면 강의</h2>
+                <div className="rounded-3xl bg-gray-10 flex border border-main-light-green/50 mt-5 p-5">
+                  {item?.extra?.address === '' ? (
+                    <p>화상으로 진행되는 강의입니다.</p>
+                  ) : (
+                    <>
+                      <KakaoMap address={item?.extra?.address!} />
+                      <p>{item?.extra.address}</p>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="mt-[50px]">
+                <h2 className="text-2xl font-black">강의 맛보기</h2>
+                <div
+                  className="rounded-3xl bg-gray-10 w-full relative  order border-main-light-green/50 mt-5 overflow-hidden"
+                  style={{ paddingTop: '56.25%' }}
+                >
+                  <iframe
+                    src={item?.extra.preview}
+                    allowFullScreen
+                    className="absolute top-0 left-0 w-full h-full border-0"
+                  />
+                </div>
+              </div>
+              <div className="mt-[50px] flex flex-col gap-3">
+                <Tab item={item} />
+              </div>
+              <div className="mt-[50px]">
+                <h3 className="font-bold mb-5">
+                  {item?.seller.name} 선생님의 다른 강의
+                </h3>
+                <div className="flex flex-wrap content-start max-w-[1400px]">
+                  {list}
+                </div>
+              </div>
+              <div className="mt-[50px]">
+                <h3 className="font-bold mb-5">다른 수강생이 많이 듣는 토픽</h3>
+              </div>
             </div>
           </div>
         </div>

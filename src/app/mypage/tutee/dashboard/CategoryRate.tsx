@@ -1,8 +1,7 @@
 'use client';
 
-import { TrendingUp } from 'lucide-react';
-import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from 'recharts';
-
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+import { IOrderSaleList } from '@/types/mypage';
 import {
   Card,
   CardContent,
@@ -17,17 +16,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { IOrderSaleList } from '@/types/mypage';
 
-const chartData = [
-  { category: 'tech', visitors: 1, fill: 'var(--color-tech)' },
-  { category: 'language', visitors: 2, fill: 'var(--color-language)' },
-  { category: 'hobby', visitors: 2, fill: 'var(--color-hobby)' },
-  // { browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
-  // { browser: 'other', visitors: 90, fill: 'var(--color-other)' },
-];
-
-interface ILectureProps {
+export interface ILectureProps {
   item: IOrderSaleList[];
 }
 
@@ -47,19 +37,34 @@ const chartConfig = {
     label: '취미',
     color: 'hsl(var(--chart-3))',
   },
-  // edge: {
-  //   label: 'Edge',
-  //   color: 'hsl(var(--chart-4))',
-  // },
-  // other: {
-  //   label: 'Other',
-  //   color: 'hsl(var(--chart-5))',
-  // },
 } satisfies ChartConfig;
 
 export function CategoryRate({ item }: ILectureProps) {
+  const products = item.flatMap(item => item.products);
+  const type = products.map(item => item.extra.type);
+
+  const chartData = [
+    {
+      category: 'tech',
+      visitors: type.filter(type => type === 'tech').length,
+      fill: 'var(--color-tech)',
+    },
+    {
+      category: 'language',
+      visitors: type.filter(type => type === 'language').length,
+      fill: 'var(--color-language)',
+    },
+    {
+      category: 'hobby',
+      visitors: type.filter(type => type === 'hobby').length,
+      fill: 'var(--color-hobby)',
+    },
+    // { browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
+    // { browser: 'other', visitors: 90, fill: 'var(--color-other)' },
+  ];
+
   return (
-    <Card>
+    <Card className="p-3 sm:mb-10">
       {/* <CardHeader>
         <CardTitle>Bar Chart - Active</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
@@ -101,18 +106,14 @@ export function CategoryRate({ item }: ILectureProps) {
           </BarChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
+      <CardFooter className="flex-col items-start gap-2 text-sm sm:text-xs">
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          현재까지 수강한 카테고리별 강의 수를 확인할 수 있습니다.
         </div>
-      </CardFooter> */}
+      </CardFooter>
     </Card>
   );
 }
-
 // import { Ilecture } from '@/types/lecture';
 // import { IOrderSaleList } from '@/types/mypage';
 

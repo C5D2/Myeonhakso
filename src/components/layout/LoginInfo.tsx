@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 
 import {  signOut } from "next-auth/react";
 import Submit from "../Submit"
@@ -6,17 +7,28 @@ import Image from "next/image";
 import useUserStore from "@/zustand/userStore";
 import useModalStore from "@/zustand/useModalStore";
 
-
 function LoginInfo({
+  userId,
   name,
   image,
+  // notifications,
 }: {
+  userId: string;
   name: string;
   image?: string | null;
+  // notifications: number;
 }) {
+  const clearUser = useUserStore(state => state.clearUser);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
 
 	const clearUser = useUserStore((state) => state.clearUser);
   const openModal = useModalStore((state) => state.openModal);
+
+  // const toggleDropdown = () => {
+  //   setIsDropdownOpen(!isDropdownOpen);
+  // };
+
 
   const handleSignOut = (event: React.FormEvent) => {
     event.preventDefault();
@@ -28,29 +40,31 @@ function LoginInfo({
         },
       },
     });	
+
     clearUser();
   };
 
-
-	return (
-		<form onSubmit={handleSignOut}>
-		<p className="flex items-center text-sm mx-3">
-			{image && (
-				<Image
-					className="w-8 rounded-full mr-2"
-					src={image}
-					width="40"
-					height="40"
-					alt="프로필 이미지"
-				/>
-			)}
-			{name}님 :)
-			<Submit className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white ml-1 ">
-				로그아웃
-			</Submit>
-		</p>
-	</form>
-	)
+  return (
+    <form onSubmit={handleSignOut}>
+      <div className="flex items-center text-sm mx-3">
+        {image && (
+          <Image
+            className="w-8 rounded-full mr-2"
+            src={image}
+            width="40"
+            height="40"
+            alt="프로필 이미지"
+          />
+        )}
+        {name}님 :)
+        {/* <Notifications notifications={notifications} /> */}
+        <NotiBell userId={userId} />
+        <Submit className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white">
+          로그아웃
+        </Submit>
+      </div>
+    </form>
+  );
 }
 
-export default LoginInfo
+export default LoginInfo;

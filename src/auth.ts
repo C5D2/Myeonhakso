@@ -23,7 +23,7 @@ const refreshAccessToken = async (token: JWT) => {
       headers: {
         'Content-Type': 'application/json',
         'client-id': `${CLIENT_ID}`,
-        'Authorization': `Bearer ${token.refreshToken}`,
+        Authorization: `Bearer ${token.refreshToken}`,
       },
     });
 
@@ -49,7 +49,13 @@ const refreshAccessToken = async (token: JWT) => {
   }
 };
 
-export const { handlers, signIn, signOut, auth, unstable_update: update } = NextAuth({
+export const {
+  handlers,
+  signIn,
+  signOut,
+  auth,
+  unstable_update: update,
+} = NextAuth({
   providers: [
     CredentialsProvider({
       credentials: {
@@ -70,7 +76,7 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
           SingleItem<UserData>,
           UserLoginForm
         > = await res.json();
-        
+
         if (resJson.ok) {
           console.log('resJson', resJson.item);
           const user = resJson.item;
@@ -82,6 +88,7 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
             image: user.image && SERVER + user.image,
             type: user.type,
             address: user.address,
+            notifications: user.notifications,
             accessToken: user.token?.accessToken!,
             refreshToken: user.token?.refreshToken!,
             accessTokenExpires: Date.now() + TOKEN_VALIDITY_PERIOD,
@@ -136,6 +143,7 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
         token.image = user.image;
         token.type = user.type;
         token.address = user.address;
+        token.notifications = user.notifications;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.accessTokenExpires = user.accessTokenExpires;
@@ -156,7 +164,7 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
       //   token.refreshToken = user.refreshToken;
       // }
 
-       // 토큰 만료 체크, refreshToken으로 accessToken 갱신
+      // 토큰 만료 체크, refreshToken으로 accessToken 갱신
       if (Date.now() < token.accessTokenExpires!) {
         return token;
       }
@@ -175,6 +183,7 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
       session.user.image = token.image as string;
       session.user.type = token.type as string;
       session.user.address = token.address as string;
+      session.user.notifications = token.notifications as number;
 
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
@@ -188,7 +197,4 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
   },
 });
 
-
-
 export { auth as getSession, update as updateSession };
-
