@@ -81,6 +81,7 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
             email: user.email,
             image: user.image && SERVER + user.image,
             type: user.type,
+            address: user.address,
             accessToken: user.token?.accessToken!,
             refreshToken: user.token?.refreshToken!,
             accessTokenExpires: Date.now() + TOKEN_VALIDITY_PERIOD,
@@ -134,14 +135,18 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
         token.email = user.email;
         token.image = user.image;
         token.type = user.type;
+        token.address = user.address;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.accessTokenExpires = user.accessTokenExpires;
+
       }
 
       if (trigger === 'update' && session) {
-        token.image = SERVER + session.user.image
+        token.image = session.user.image
         token.name = session.user.name
+        token.address = session.user.address
+      
       }
       // 토큰 만료 체크, refreshToken으로 accessToken 갱신
 
@@ -169,6 +174,7 @@ export const { handlers, signIn, signOut, auth, unstable_update: update } = Next
       session.user.email = token.email as string;
       session.user.image = token.image as string;
       session.user.type = token.type as string;
+      session.user.address = token.address as string;
 
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;

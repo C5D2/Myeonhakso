@@ -6,7 +6,6 @@ import Categories from './Categories';
 import Button from '../Button';
 import { Session } from 'next-auth';
 
-
 export default async function Header() {
   const session: Session | null = await auth();
   let type;

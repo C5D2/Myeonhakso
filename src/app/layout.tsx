@@ -4,6 +4,8 @@ import './globals.css';
 import { Metadata } from 'next';
 import { NextAuthProvider } from './providers';
 import Script from 'next/script';
+import Modal from '@/components/Modal';
+import ModalHandler from '@/components/layout/ModalHandler';
 
 export const metadata: Metadata = {
   title: '면학소 Home',
@@ -25,6 +27,8 @@ export default function RootLayout({
             {children}
             <Footer />
           </div>
+          <ModalHandler />
+          <Modal />
         </NextAuthProvider>
       </body>
     </html>

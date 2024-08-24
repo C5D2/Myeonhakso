@@ -4,7 +4,7 @@ import LoginForm from './LoginForm';
 export const metadata: Metadata = {
   openGraph: {
     title: '로그인',
-    description: '로그인 페이지.',
+    description: '면학소 로그인 페이지.',
     // images: {
     // 	url: "/images/fesp.webp"
     // },

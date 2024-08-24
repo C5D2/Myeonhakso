@@ -30,6 +30,7 @@ export type UserForm = {
   password: string,
   attach?: string | string[],
   image?: string | null,
+  address?: string
 };
 
 export type UserLoginForm = Pick<UserForm, 'email' | 'password' >

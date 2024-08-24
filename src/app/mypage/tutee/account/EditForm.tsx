@@ -3,6 +3,8 @@
 import Submit from "@/components/Submit"
 import { editUserInfo, uploadUserImage } from "@/data/actions/userAction"
 import { UserForm } from "@/types"
+import useModalStore from "@/zustand/useModalStore"
+import useUserStore from "@/zustand/userStore"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
@@ -10,26 +12,61 @@ import { useForm } from "react-hook-form"
 
 
 function EditForm() {
-  const { data: session, status, update} = useSession()
+  const { data: session, update, status} = useSession()
+  const { setUser } = useUserStore()
   const [selectedImage, setSelectedImage] = useState<string | null | undefined>(session?.user?.image ||null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const openModal = useModalStore((state) => state.openModal);
 
-  const { register, handleSubmit, setValue } = useForm<UserForm>({
-    defaultValues: {
-      type: (session?.user?.type as 'user' | 'seller' | 'admin') || 'user',
-      name: session?.user?.name || '',
-      email: session?.user?.email || '',
-    }
-  })
+  const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm<UserForm>(
+   {
+   defaultValues: {
+     type: (session?.user?.type as 'user' | 'seller' | 'admin') || 'user',
+     name: session?.user?.name || '',
+     email: session?.user?.email || '',
+     address: session?.user?.address || ''
+   }
+ }
+)
+
+
+useEffect(() => {
+  if (status === "authenticated" && session?.user) {
+    reset({
+      type: session.user.type as 'user' | 'seller' | 'admin',
+      name: session.user.name || '',
+      email: session.user.email || '',
+      address: session.user.address || '',
+    });
+    setSelectedImage(session.user.image || '');
+  }
+}, [session, status, reset]);
+
+useEffect(() => {
+  if (session?.user) {
+    // useEffect를 통해 필드 값을 수동으로 업데이트
+    setValue('type', session.user.type as 'user' | 'seller' | 'admin');
+    setValue('name', session.user.name || '');
+    setValue('email', session.user.email || '');
+    setValue('address', session.user.address || '');
+    setSelectedImage(session.user.image || '');
+  }
+}, [session, setValue]);
 
   useEffect(() => {
-    if (session?.user) {
-      setValue('type', session.user.type as 'user' | 'seller' | 'admin');
-      setValue('name', session.user.name || '');
-      setValue('email', session.user.email || '');
-      setSelectedImage(session.user.image || '');
+    if (isUpdated) {
+      openModal({
+        content: "회원 정보가 성공적으로 수정되었습니다.",
+        callbackButton: {
+          확인: () => {
+            setIsUpdated(false);
+          },
+        },
+      });
     }
-  }, [session, setValue]); 
+  }, [isUpdated, openModal]);
+
 
   const handleEmailFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     event.target.blur()
@@ -66,13 +103,15 @@ function EditForm() {
 
     if (selectedFile) {
       try {
-         imageUrl = await uploadUserImage(selectedFile, session.accessToken);
+        imageUrl = await uploadUserImage(selectedFile, session.accessToken);
       } catch (error) {
         console.error('Failed to upload image:', error);
         return;
       }
     }
+
     formData.append('image', imageUrl || '');
+    formData.append('address', data.address || '');
 
     try {
       const resData = await editUserInfo(formData, session);
@@ -83,13 +122,23 @@ function EditForm() {
           ...session?.user,
           name: data.name,
           image: imageUrl,
+          address: data.address,
         }
       };
        await update(updateData)
-        window.location.reload();
-        setSelectedImage(session.user?.image);
-        // modal으로 변경되었다는 표시 남겨주기 
-
+       setUser({
+        id: session?.user?.id!,
+        name: data.name,
+        email: session?.user?.email!,
+        image: imageUrl,
+        type: session?.user?.type as string,
+        accessToken: session?.accessToken!,
+        refreshToken: session?.refreshToken!,
+        address: data.address,
+      });
+      setSelectedImage(imageUrl);
+      setIsUpdated(true);
+     
       } else {
         console.error('Error updating user:');
       }
@@ -98,19 +147,15 @@ function EditForm() {
     }
   };
 
+  if (status === "loading" || !session) {
+    return <div>Loading...</div>; // 로딩 상태 처리
+  }
+
 	return (
 		<form
       onSubmit={handleSubmit(editUser)}
       className="max-w-4xl mx-4 "
     >
-    {/* <div className="mb-12 flex justify-center gap-14" id="type">
-      <input
-        id="type"
-        type="hidden"
-        {...register('type')}
-      />
-    </div> */}
-
     <div className="mb-4">
       <label
         className="block text-gray-500 mb-2 font-semibold"
@@ -146,7 +191,6 @@ function EditForm() {
         className="w-full px-3 py-2 border rounded-md text-gray-90"
         {...register('email')}
         onFocus={handleEmailFocus}
-        // readOnly
        />
     </div>
 
@@ -168,16 +212,7 @@ function EditForm() {
               alt="프로필 이미지"
             />
           )}
-            <input
-            type="file"
-            id="attach"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageChange}
-          />
-        </div>
-        {/* 이미지가 없는 사용자일때 */}
-        <input
+          <input
           type="file"
           id="attach"
           accept="image/*"
@@ -185,8 +220,26 @@ function EditForm() {
           className="w-full px-3 py-2 border rounded-lg"
           onChange={handleImageChange}
         />
+        </div>   
       </div>
     </div>
+    {session?.user?.type === 'seller' && (
+        <div className="mb-8">
+           <label
+          className="block text-gray-500 mb-2 font-semibold"
+          htmlFor="address"
+        >
+          자기소개
+        </label>
+        <div className="w-50 h-50 border rounded-md ">
+          <textarea {...register('address', {required: '강사 소개는 필수입니다.'})}
+          placeholder='강사님의 소개를 적어주세요'
+          className="w-full px-3 py-2 border rounded-lg"
+          />
+        </div>
+        {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
+        </div>
+      )}
     <div className="mt-10 flex justify-center items-center">
       <Submit className="w-full px-3 py-4 bg-main-green hover:bg-main-yellow text-white font-semibold rounded-md">
         회원 정보 수정
