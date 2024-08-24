@@ -59,7 +59,7 @@ export default async function Page({
       <div className="my-10">
         <Search />
       </div>
-      <div className="flex gap-x-10 gap-y-20 sm:gap-x-5">
+      <div className="flex gap-x-10 gap-y-20 sm:gap-x-3 px-2">
         <Filter />
         <div className="flex flex-col gap-10 w-full max-w-[1320px]">
           <div className="flex flex-wrap content-start gap-10 max-w-[1400px]">

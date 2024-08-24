@@ -1,5 +1,7 @@
 'use client';
 
+import Categories from '@/components/layout/Categories';
+import Link from 'next/link';
 import {
   redirect,
   usePathname,
@@ -24,6 +26,11 @@ export default function Filter() {
   }
 
   const router = useRouter();
+  // const handleClickCategory = e => {
+  //   const target = e.target as HTMLInputElement;
+  //   router.replace(`/${e.target.value}`);
+  // };
+
   const handleClickOption: React.ChangeEventHandler<HTMLInputElement> = e => {
     const target = e.target as HTMLInputElement;
     // 라디오를 눌렀을 때
@@ -90,32 +97,51 @@ export default function Filter() {
   return (
     <div className="w-[350px] min-w-[100px] sm:w-[25%]">
       <div className="border border-gray-30 rounded-xl mx-[50px] sm:mx-0 sm:text-sm ">
-        <div className="flex ">
-          <h3 className="p-5 font-bold mr-auto">필터</h3>
+        <div className="flex p-5 sm:px-2">
+          <h3 className="font-bold mr-auto ">필터</h3>
           <button
-            className="p-5 bg-[url('/img/hero-pattern.svg')]"
+            className="w-5 h-5 bg-[url('/reset.svg')] my-auto bg-no-repeat bg-cover"
             type="button"
             onClick={handleReset}
           ></button>
         </div>
+        {/* 모바일일 경우 */}
+        <hr className="dsm:hidden" />
+        <div className="dsm:hidden w-full p-10 flex flex-col sm:p-3 sm:text-xs">
+          <label className="font-semibold mb-3">카테고리</label>
+          {/* <div className="flex flex-col gap-2 w-full">
+            <div className="w-[80%] border border-gray-30 text-center">
+              <Link href={`/tech`}>IT</Link>
+            </div>
+            <div className="w-[80%] border border-gray-30 text-center">
+              <Link href={`/language`}>어학</Link>
+            </div>
+            <div className="w-[80%] border border-gray-30 text-center">
+              <Link href={`/hobby`}>취미</Link>
+            </div>
+          </div> */}
+          <Categories />
+        </div>
 
-        <hr />
+        <hr className="" />
 
-        <div className="w-full p-10 flex flex-col sm:p-3 sm:text-xs">
-          <select
-            onChange={handleChangeSelectbox}
-            name="sortName"
-            id="sort"
-            className="border border-gray-30 rounded-md px-5 py-1 mb-10 mx-auto w-[80%] sm:px-1 sm:w-full"
-          >
-            <option value={`{"createdAt":-1}`}>최신순</option>
-            <option value={`{"createdAt":1}`}>오래된순</option>
-            <option value={`{"bookmarks":1}`}>인기순</option>
-            <option value={`{"price":-1}`}>가격높은순</option>
-            <option value={`{"price":1}`}>가격낮은순</option>
-          </select>
+        <div className="w-full p-8 flex flex-col sm:p-3 sm:text-xs">
+          <div className="flex ">
+            <select
+              onChange={handleChangeSelectbox}
+              name="sortName"
+              id="sort"
+              className="border border-gray-30 rounded-md px-5 py-1 mb-10 sm:my-5 mx-auto w-[80%] sm:px-1 sm:w-full"
+            >
+              <option value={`{"createdAt":-1}`}>최신순</option>
+              <option value={`{"createdAt":1}`}>오래된순</option>
+              <option value={`{"bookmarks":1}`}>인기순</option>
+              <option value={`{"price":-1}`}>가격높은순</option>
+              <option value={`{"price":1}`}>가격낮은순</option>
+            </select>
+          </div>
 
-          <hr className="mb-10" />
+          <hr className="sm:mb-5 mb-10" />
 
           <label className="font-semibold mb-3">난이도</label>
           <div className="flex flex-col gap-2">

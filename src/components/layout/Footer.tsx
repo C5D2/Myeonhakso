@@ -1,3 +1,4 @@
+import MobileMypageButton from '@/app/mypage/MobileMypageButton';
 import { auth } from '@/auth';
 import { Session } from 'next-auth';
 import Link from 'next/link';
@@ -49,11 +50,12 @@ export default async function Footer() {
                   <p className="text-[10px]">북마크</p>
                 </Link>
               )}
+              <MobileMypageButton type={type} />
 
-              <Link href={`/mypage/${type}/dashboard`}>
+              {/* <Link href={`/mypage/${type}/dashboard`}>
                 <img src="/footer-mypage.svg" alt="" className="mx-auto" />
                 <p className="text-[10px]">내강의실</p>
-              </Link>
+              </Link> */}
             </>
           ) : (
             <>
@@ -69,9 +71,9 @@ export default async function Footer() {
                 <img src="/footer-home.svg" alt="" className="mx-auto" />
                 <p className="text-[10px]">홈</p>
               </Link>
-              <Link href="/login">
+              <Link href={`/login`}>
                 <img src="/footer-mypage.svg" alt="" className="mx-auto" />
-                <p className="text-[10px]">내강의실</p>
+                <p className="text-[10px]">로그인</p>
               </Link>
             </>
           )}

@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  //fetchOrderlist
   const { item } = await fetchOrderProduct();
-  // item?.products.map(item => console.log(item));
 
   return (
     <>
