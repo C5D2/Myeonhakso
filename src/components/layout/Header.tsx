@@ -10,6 +10,7 @@ import Back from './Back';
 import Notifications from '@/components/Notifications';
 import NotiBell from '@/components/NotiBell';
 
+
 export default async function Header() {
   const session: Session | null = await auth();
   let type;

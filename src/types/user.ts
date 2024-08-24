@@ -28,12 +28,14 @@ export type UserInToken = Required<Pick<UserData, '_id' | 'name'>> &
   };
 
 export type UserForm = {
-  type: UserRole;
-  name: string;
-  email: string;
-  password: string;
-  attach?: string | string[];
-  image?: string | null;
+  type: UserRole,
+  name: string,
+  email: string,
+  password: string,
+  attach?: string | string[],
+  image?: string | null,
+  address?: string
+
 };
 
 export type UserLoginForm = Pick<UserForm, 'email' | 'password'>;

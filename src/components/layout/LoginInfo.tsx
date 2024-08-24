@@ -1,11 +1,11 @@
 'use client';
 
-import { signOut } from 'next-auth/react';
-import Submit from '../Submit';
-import Image from 'next/image';
-import useUserStore from '@/zustand/userStore';
-import Notifications from '@/components/Notifications';
-import NotiBell from '@/components/NotiBell';
+
+import {  signOut } from "next-auth/react";
+import Submit from "../Submit"
+import Image from "next/image";
+import useUserStore from "@/zustand/userStore";
+import useModalStore from "@/zustand/useModalStore";
 
 function LoginInfo({
   userId,
@@ -21,13 +21,26 @@ function LoginInfo({
   const clearUser = useUserStore(state => state.clearUser);
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+
+	const clearUser = useUserStore((state) => state.clearUser);
+  const openModal = useModalStore((state) => state.openModal);
+
   // const toggleDropdown = () => {
   //   setIsDropdownOpen(!isDropdownOpen);
   // };
 
-  const handleSignOut = async (event: React.FormEvent) => {
+
+  const handleSignOut = (event: React.FormEvent) => {
     event.preventDefault();
-    await signOut({ redirect: true, callbackUrl: '/' });
+		openModal({
+      content: `${name}님 로그아웃 하시겠습니까?`,
+      callbackButton: {
+        확인: async() => {
+          await signOut({ redirect: true, callbackUrl: '/' });
+        },
+      },
+    });	
+
     clearUser();
   };
 

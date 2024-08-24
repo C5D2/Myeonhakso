@@ -4,8 +4,13 @@ import './globals.css';
 import { Metadata } from 'next';
 import { NextAuthProvider } from './providers';
 import Script from 'next/script';
+
+import Modal from '@/components/Modal';
+import ModalHandler from '@/components/layout/ModalHandler';
+
 import KakaoScript from '@/components/KakaoScript';
 import ToastProvider from '@/components/ToastProvider';
+
 
 declare global {
   interface Window {
@@ -35,6 +40,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </ToastProvider>
+          <ModalHandler />
         </NextAuthProvider>
       </body>
     </html>

@@ -87,6 +87,7 @@ export const {
             email: user.email,
             image: user.image && SERVER + user.image,
             type: user.type,
+            address: user.address,
             notifications: user.notifications,
             accessToken: user.token?.accessToken!,
             refreshToken: user.token?.refreshToken!,
@@ -141,15 +142,19 @@ export const {
         token.email = user.email;
         token.image = user.image;
         token.type = user.type;
+        token.address = user.address;
         token.notifications = user.notifications;
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.accessTokenExpires = user.accessTokenExpires;
+
       }
 
       if (trigger === 'update' && session) {
-        token.image = SERVER + session.user.image;
-        token.name = session.user.name;
+        token.image = session.user.image
+        token.name = session.user.name
+        token.address = session.user.address
+      
       }
       // 토큰 만료 체크, refreshToken으로 accessToken 갱신
 
@@ -177,6 +182,7 @@ export const {
       session.user.email = token.email as string;
       session.user.image = token.image as string;
       session.user.type = token.type as string;
+      session.user.address = token.address as string;
       session.user.notifications = token.notifications as number;
 
       session.accessToken = token.accessToken;

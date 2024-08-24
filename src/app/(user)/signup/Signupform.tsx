@@ -7,13 +7,14 @@ import { signup } from '@/data/actions/userAction';
 import { fetchEmailValidation } from '@/data/postFetch';
 import useToast from '@/hooks/useToast';
 import { UserForm } from '@/types';
-import useUserStore from '@/zustand/userStore';
+import useModalStore from '@/zustand/useModalStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 function Signupform() {
-  const setUser = useUserStore(state => state.setUser);
+  const openModal = useModalStore((state) => state.openModal);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -22,10 +23,15 @@ function Signupform() {
     watch,
     formState: { errors },
     setError,
-  } = useForm<UserForm>();
+  } = useForm<UserForm>({
+    mode: 'onSubmit', 
+  });
+
+ const [selectedType, setSelectedType] = useState<'user' | 'seller'>('user');
 
   const { toast, message, showToast } = useToast();
   const [selectedType, setSelectedType] = useState('user');
+
   const handleTypeClick = (value: 'user' | 'seller') => {
     setSelectedType(value);
     setValue('type', value);
@@ -34,25 +40,44 @@ function Signupform() {
   const emailValue = watch('email', '');
 
   const addUser = async (formData: UserForm) => {
+    setIsSubmitted(true);
     const userData = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      console.log('Key:', key, 'Value:', value);
-      if (key !== 'attach') {
+      if (key !== 'attach' && key !== 'extra') {
         userData.append(key, value as string);
       }
     });
-    if (formData.attach) {
+    if (formData.attach && formData.attach.length > 0) {
       userData.append('attach', formData.attach[0]);
-      console.log('Attach:', formData.attach[0]);
+    }
+
+    if (formData.address) {
+      userData.append('address', formData.address);
+    }
+
+    if (selectedType === 'seller') {
+      if (!formData.attach || formData.attach.length === 0) {
+        setError('attach', { type: 'required', message: '이미지는 필수입니다.' });
+        return;
+      }
+      if(!formData.address){
+        setError('address', { type: 'required', message: '강사 소개는 필수입니다.' });
+        return;
+      }
     }
 
     const resData = await signup(userData);
-    console.log('Response Data:', resData);
     if (resData.ok) {
-      showToast(`${resData.item.name}님 회원가입을 환영합니다.`);
-      router.push('/');
+      openModal({
+        content: `${resData.item.name}님 회원가입을 환영합니다. :)`,
+        callbackButton: {
+          확인 : () => {
+            router.push('/');
+          },
+        },
+      });
+  
     } else {
-      // API 서버의 에러 메시지 처리
       if ('errors' in resData) {
         resData.errors.forEach(error =>
           setError(error.path, { message: error.msg }),
@@ -63,17 +88,32 @@ function Signupform() {
     }
   };
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   const handleEmailValidationClick = async () => {
+    if (emailValue.trim() === '') {
+      alert('이메일 주소를 입력해주세요');
+      return;
+    }
+  
+    if (!EMAIL_REGEX.test(emailValue)) {
+      alert('유효한 이메일 형식이 아닙니다');
+      return;
+    }
+
     try {
       const response = await fetchEmailValidation(emailValue);
       if (response.ok === 1) {
-        showToast('사용 가능한 이메일입니다.');
+
+        alert('사용 가능한 이메일입니다.');
       } else if (response.ok === 0) {
-        showToast('이미 사용 중인 이메일입니다.');
-      }
+        alert('이미 사용 중인 이메일입니다.');
+      } else {
+      alert('이메일 확인 중 오류가 발생했습니다.');
+    }
     } catch (error) {
       console.error('Error during email validation:', error);
-      showToast('이메일 확인 중 오류가 발생했습니다.');
+      alert('이메일 확인 중 오류가 발생했습니다.');
+
     }
   };
 
@@ -127,7 +167,7 @@ function Signupform() {
             },
           })}
         />
-        {/* <p className="ml-2 mt-1 text-sm text-red-500">이메일은 필수입니다.</p> */}
+         {isSubmitted && errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
       </div>
       <div className="mb-8">
         <div className="flex justify-between ">
@@ -156,7 +196,7 @@ function Signupform() {
             },
           })}
         />
-        {/* <p className="ml-2 mt-1 text-sm text-red-500">이메일은 필수입니다.</p> */}
+         {isSubmitted && errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
       </div>
       <div className="mb-8">
         <label
@@ -172,8 +212,7 @@ function Signupform() {
           className="w-full px-3 py-2 border rounded-md"
           {...register('password', { required: '비밀번호를 입력하세요' })}
         />
-        {/* <p className="ml-2 mt-1 text-sm text-red-500">비밀번호는 필수입니다.</p>
-				<a href="#" className="block mt-6 ml-auto text-gray-500 text-sm hover:underline">비밀번호를 잊으셨나요?</a> */}
+        {isSubmitted && errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
       </div>
       <div className="mb-8">
         <label
@@ -189,13 +228,33 @@ function Signupform() {
             accept="image/*"
             placeholder="이미지를 선택하세요"
             className="w-full px-3 py-2 border rounded-lg"
-            {...register('attach')}
+            {...register('attach', {
+              required: selectedType === 'seller' ? '이미지는 필수입니다.' : false,
+            })}
+
           />
         </div>
-
-        {/* <p className="ml-2 mt-1 text-sm text-red-500">비밀번호는 필수입니다.</p>
-				<a href="#" className="block mt-6 ml-auto text-gray-500 text-sm hover:underline">비밀번호를 잊으셨나요?</a> */}
+        {isSubmitted && errors.attach && <p className="text-red-500 text-sm mt-1">{errors.attach.message}</p>}
       </div>
+      {selectedType === 'seller' && (
+        <div className="mb-8">
+           <label
+          className="block text-gray-500 mb-2 font-semibold"
+          htmlFor="address"
+        >
+          자기소개
+        </label>
+        <div className="w-50 h-50 border rounded-md ">
+          <textarea {...register('address', { required: '강사 소개는 필수입니다.' })}
+          placeholder='강사님의 소개를 적어주세요'
+          className="w-full px-3 py-2 border rounded-lg"
+          />
+        </div>
+        {isSubmitted && errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
+        </div>
+      )}
+    
+
       <div className="mt-10 flex justify-center items-center">
         <Submit className="w-full px-3 py-4 bg-main-green hover:bg-main-yellow text-white font-semibold rounded-md">
           회원가입
