@@ -13,7 +13,7 @@ function LoginInfo({
   image,
   // notifications,
 }: {
-  userId:string;
+  userId: string;
   name: string;
   image?: string | null;
   // notifications: number;
@@ -46,7 +46,7 @@ function LoginInfo({
         {name}님 :)
         {/* <Notifications notifications={notifications} /> */}
         <NotiBell userId={userId} />
-        <Submit className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white ml-1 ">
+        <Submit className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white">
           로그아웃
         </Submit>
       </div>

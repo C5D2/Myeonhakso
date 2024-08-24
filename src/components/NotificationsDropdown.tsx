@@ -58,7 +58,7 @@ export default function NotificationsDropdown({
 
   return (
     <div className="absolute w-[200px] top-16 md:right-5 md:top-11 text-center text-black bg-white rounded-lg shadow-md z-[99]">
-      <div className="text-lg text-main-dark-green font-black px-2 py-1 border-b-[2px] border-x-main-dark-green">
+      <div className="text-lg text-gray-700 font-black px-2 py-1 border-b-[2px] border-x-main-dark-green">
         알림
       </div>
       {notifications.length > 0 ? (
@@ -68,7 +68,7 @@ export default function NotificationsDropdown({
               key={notification._id}
               className="px-3 py-2 border-b last:border-b-0"
             >
-              <div className="text-xs text-gray-500">
+              <div className="rounded-md bg-light-green text-xs text-gray-90 mb-1">
                 {moment(notification.createdAt).format('YYYY-MM-DD')}
               </div>
               <div className="text-sm">{notification.content}</div>
