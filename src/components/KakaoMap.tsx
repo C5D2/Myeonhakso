@@ -56,7 +56,7 @@ export default function KakaoMap({ address }: { address: string }) {
 
   return (
     <>
-      <div id="map" ref={mapRef} className="w-full h-screen" />
+      <div id="map" ref={mapRef} className="w-full h-screen md:h-96" />
     </>
   );
 }

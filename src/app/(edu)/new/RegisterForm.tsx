@@ -13,7 +13,6 @@ import Submit from '@/components/Submit';
 import {
   patchForm,
   postForm,
-  postNotification,
   sendNotifications,
 } from '@/data/actions/lectureAction';
 import { ILectureDetail, ILectureRegister } from '@/types/lecture';
@@ -27,6 +26,8 @@ import { produce } from 'immer';
 import moment from 'moment';
 import { newLectureNotification } from '@/utils/messageUtils';
 import { fetchBookmarkedUserList } from '@/data/fetchLecture';
+import useModalStore from '@/zustand/useModalStore';
+import { Slide, toast } from 'react-toastify';
 
 interface IRegisterFormProps {
   params: {
@@ -45,6 +46,7 @@ export default function RegisterForm({
   mode,
   lectureDetailData,
 }: IRegisterFormProps) {
+  const openModal = useModalStore(state => state.openModal);
   const router = useRouter();
   const {
     register,
@@ -79,10 +81,6 @@ export default function RegisterForm({
 
   console.log(lectureDetailData);
 
-  // const convertToUTC = (date: Date) => {
-  //   return moment(date).utc().format();
-  // };
-
   const onRangeChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -93,6 +91,17 @@ export default function RegisterForm({
     if (end) {
       setValue('extra.schedule.1', moment(end).format('YYYY-MM-DD'));
     }
+  };
+
+  const handleOpenModal = () => {
+    openModal({
+      title: mode === 'edit' ? '강의 수정' : '강의 등록',
+      content: `정말로 ${mode === 'edit' ? '수정' : '등록'}하시겠습니까?`,
+      callbackButton: {
+        확인: () => handleSubmit(handleFormSubmit)(),
+        취소: () => {},
+      },
+    });
   };
 
   const handleFormSubmit = async (data: ILectureRegister) => {
@@ -179,15 +188,18 @@ export default function RegisterForm({
       router.push(`/${newData.extra.type}/${id}`);
     } catch (error) {
       console.error('API 호출 또는 데이터 처리 중 오류 발생:', error);
-      alert('강의 등록/수정 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      toast('오류가 발생했습니다. 다시 시도해 주세요.', {
+        position: 'top-center',
+        transition: Slide,
+      });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
+    <form onSubmit={handleSubmit(handleOpenModal)}>
       <div className="mx-[170px] my-[100px] md:mx-[30px] md:my-[20px]">
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="name">
+          <label className="block font-black text-gray-600 mb-2" htmlFor="name">
             강의 이름
           </label>
           <input
@@ -202,7 +214,10 @@ export default function RegisterForm({
           <InputError target={errors.name} />
         </div>
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="price">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="price"
+          >
             강의 가격
           </label>
           <input
@@ -218,7 +233,10 @@ export default function RegisterForm({
           <InputError target={errors.price} />
         </div>
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="level">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="level"
+          >
             카테고리
           </label>
 
@@ -228,7 +246,10 @@ export default function RegisterForm({
           {/* <InputError target={errors.extra?.type} /> */}
         </div>
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="level">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="level"
+          >
             난이도
           </label>
 
@@ -238,7 +259,10 @@ export default function RegisterForm({
           <InputError target={errors.extra?.level} />
         </div>
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="quantity">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="quantity"
+          >
             강의 참여 가능 인원
           </label>
 
@@ -249,7 +273,10 @@ export default function RegisterForm({
 
         {/* TODO: 강의 소개 150글자 이내로 */}
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="content">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="content"
+          >
             강의 소개
           </label>
           <input
@@ -264,7 +291,10 @@ export default function RegisterForm({
           <InputError target={errors.content} />
         </div>
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="preview">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="preview"
+          >
             미리보기 강의 영상
           </label>
           <input
@@ -279,7 +309,10 @@ export default function RegisterForm({
           <InputError target={errors.extra?.preview} />
         </div>
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="schedule">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="schedule"
+          >
             강의 일정
           </label>
           {/* <input
@@ -311,7 +344,10 @@ export default function RegisterForm({
           {/* <InputError target={errors.extra?.schedule} /> */}
         </div>
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="option">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="option"
+          >
             강의 옵션
           </label>
           <Option
@@ -326,7 +362,10 @@ export default function RegisterForm({
           {/* <InputError target={errors.extra?.options} /> */}
         </div>
         <div className="m-4">
-          <label className="block text-gray-600 mb-2" htmlFor="curriculum">
+          <label
+            className="block font-black text-gray-600 mb-2"
+            htmlFor="curriculum"
+          >
             커리큘럼
           </label>
           <Curriculum
@@ -343,7 +382,7 @@ export default function RegisterForm({
             type="button"
             onClick={() => setTab(0)}
             className={classNames('pb-1', {
-              'border-b-2 border-gray-500': tab === 0,
+              'border-b-2 font-black text-gray-600 border-gray-500': tab === 0,
             })}
           >
             대면강의
@@ -352,7 +391,7 @@ export default function RegisterForm({
             type="button"
             onClick={() => setTab(1)}
             className={classNames('pb-1', {
-              'border-b-2 border-gray-500': tab === 1,
+              'border-b-2 font-black text-gray-600 border-gray-500': tab === 1,
             })}
           >
             화상강의
