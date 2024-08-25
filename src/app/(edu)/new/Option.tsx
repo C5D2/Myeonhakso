@@ -26,12 +26,7 @@ interface IOptionProps {
   endTime: string | null;
 }
 
-export default function Option({
-  control,
-  register,
-  setValue,
-  watch,
-}: IOptionProps) {
+export default function Option({ control, setValue, watch }: IOptionProps) {
   const { fields, append, remove } = useFieldArray<
     ILectureRegister,
     'extra.options'
@@ -80,90 +75,122 @@ export default function Option({
   console.log(options);
   return (
     <>
-      <Button
-        radius="lg"
-        onClick={() => append({ days: [], startTime: null, endTime: null })}
-      >
-        옵션 추가
-      </Button>
-      {fields.map((field, rowIndex) => (
-        <div key={field.id}>
-          <ul className="flex items-baseline gap-2 m-2">
-            <span className="text-gray-600 mr-2 mb-2 flex-shrink-0">
-              옵션 {rowIndex + 1}
-            </span>
-            {DAY_OPTION?.map((item: string) => (
-              <li key={item}>
-                <button
-                  type="button"
-                  className={classNames(
-                    'border-2 hover:bg-black/5 rounded-md px-4 py-2 flex flex-col gap-2 md:px-2 md:py-1',
-                    {
-                      'border-2 border-green-400':
-                        options[rowIndex]?.days?.includes(item),
-                    },
+      <div className="w-full mx-auto">
+        <Button
+          radius="lg"
+          onClick={() => append({ days: [], startTime: null, endTime: null })}
+        >
+          옵션 추가
+        </Button>
+        <div className="mt-3 flex flex-col gap-3">
+          {fields.map((field, rowIndex) => (
+            <div
+              key={field.id}
+              className="bg-main-light-green/30 p-4 rounded-lg"
+            >
+              <div className="flex flex-wrap items-center gap-5">
+                <span className="text-gray-600 font-semibold">
+                  옵션 {rowIndex + 1}
+                </span>
+                <div className="flex flex-wrap gap-3 md:gap-2">
+                  {DAY_OPTION?.map((item: string) => (
+                    <button
+                      key={item}
+                      type="button"
+                      className={classNames(
+                        'border-2 hover:border-main-green text-gray-500 rounded-full px-3 py-2 text-md md:px-2 md:py-1',
+                        {
+                          'border-2 border-main-green':
+                            options[rowIndex]?.days?.includes(item),
+                        },
+                      )}
+                      onClick={() => handleOptionToggle(rowIndex, item)}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-28">
+                    <DatePicker
+                      selected={
+                        options[rowIndex]?.startTime
+                          ? moment(
+                              options[rowIndex].startTime,
+                              'HH:mm',
+                            ).toDate()
+                          : null
+                      }
+                      onChange={(time: Date | null) =>
+                        onSelectStartTime(time, rowIndex)
+                      }
+                      locale={ko}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={30}
+                      minTime={setHours(setMinutes(new Date(), 0), 9)}
+                      maxTime={setHours(setMinutes(new Date(), 0), 21)}
+                      timeCaption="Time"
+                      dateFormat="h:mm aa"
+                      placeholderText="시작 시간"
+                      className="w-full px-4 py-2 text-md border rounded"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 w-28">
+                    <DatePicker
+                      selected={
+                        options[rowIndex]?.endTime
+                          ? moment(options[rowIndex].endTime, 'HH:mm').toDate()
+                          : null
+                      }
+                      onChange={(time: Date | null) =>
+                        onSelectEndTime(time, rowIndex)
+                      }
+                      locale={ko}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={30}
+                      minTime={
+                        options[rowIndex]?.startTime
+                          ? moment(
+                              options[rowIndex].startTime,
+                              'HH:mm',
+                            ).toDate()
+                          : setHours(setMinutes(new Date(), 0), 9)
+                      }
+                      maxTime={setHours(setMinutes(new Date(), 0), 21)}
+                      excludeTimes={
+                        options[rowIndex]?.startTime
+                          ? [
+                              moment(
+                                options[rowIndex].startTime,
+                                'HH:mm',
+                              ).toDate(),
+                            ]
+                          : []
+                      }
+                      timeCaption="Time"
+                      dateFormat="h:mm aa"
+                      placeholderText="종료 시간"
+                      disabled={!options[rowIndex]?.startTime}
+                      className="w-full px-4 py-2 text-md border rounded"
+                    />
+                  </div>
+                  {rowIndex > 0 && (
+                    <button
+                      className="px-3 py-1 bg-main-red/50 text-white rounded hover:bg-main-red text-sm"
+                      type="button"
+                      onClick={() => remove(rowIndex)}
+                    >
+                      삭제
+                    </button>
                   )}
-                  onClick={() => handleOptionToggle(rowIndex, item)}
-                >
-                  {item}
-                </button>
-              </li>
-            ))}
-            <DatePicker
-              selected={
-                options[rowIndex]?.startTime
-                  ? moment(options[rowIndex].startTime, 'HH:mm').toDate()
-                  : null
-              }
-              onChange={(time: Date | null) =>
-                onSelectStartTime(time, rowIndex)
-              }
-              locale={ko}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={30}
-              minTime={setHours(setMinutes(new Date(), 0), 9)}
-              maxTime={setHours(setMinutes(new Date(), 0), 21)}
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-              placeholderText="시작 시간"
-            />
-
-            <DatePicker
-              selected={
-                options[rowIndex]?.endTime
-                  ? moment(options[rowIndex].endTime, 'HH:mm').toDate()
-                  : null
-              }
-              onChange={(time: Date | null) => onSelectEndTime(time, rowIndex)}
-              locale={ko}
-              showTimeSelect
-              showTimeSelectOnly
-              timeIntervals={30}
-              minTime={
-                options[rowIndex]?.startTime
-                  ? moment(options[rowIndex].startTime, 'HH:mm').toDate()
-                  : setHours(setMinutes(new Date(), 0), 9)
-              }
-              maxTime={setHours(setMinutes(new Date(), 0), 21)}
-              excludeTimes={
-                options[rowIndex]?.startTime
-                  ? [moment(options[rowIndex].startTime, 'HH:mm').toDate()]
-                  : []
-              }
-              timeCaption="Time"
-              dateFormat="h:mm aa"
-              placeholderText="종료 시간"
-              disabled={!options[rowIndex]?.startTime}
-            />
-            {rowIndex > 0 && (
-              <button type="button" onClick={() => remove(rowIndex)}>
-                삭제
-              </button>
-            )}
-          </ul>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </>
   );
 }

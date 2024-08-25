@@ -9,6 +9,7 @@ import { useFetchBookmark } from '@/hooks/useBookmarkActions';
 import { IBookmark } from '@/types/lecture';
 import { GetAuthInfo } from '@/utils/authUtils';
 import { useEffect, useState } from 'react';
+import { Slide, toast } from 'react-toastify';
 
 interface SubscribeButtonProps {
   initialIsSubscribed: boolean;
@@ -47,7 +48,10 @@ export default function SubscribeButton({
   const handleSubscribeToggle = async () => {
     if (!teacherId) {
       console.error('선생님 id를 찾을 수 없습니다.');
-      alert('선생님 정보를 찾을 수 없습니다.');
+      toast('선생님 정보를 찾을 수 없습니다.', {
+        position: 'top-center',
+        transition: Slide,
+      });
       return;
     }
     if (!user) {
@@ -77,8 +81,11 @@ export default function SubscribeButton({
       mutate();
     } catch (error) {
       console.error('구독 처리 실패:', error);
-      setIsSubscribed(!newSubscribedState); // 이전 상태로 복원
-      alert('일시적인 오류가 발생했습니다. 다시 시도해주세요.');
+      setIsSubscribed(!newSubscribedState);
+      toast('일시적인 오류가 발생했습니다. 다시 시도해주세요.', {
+        position: 'top-center',
+        transition: Slide,
+      });
     }
   };
 
