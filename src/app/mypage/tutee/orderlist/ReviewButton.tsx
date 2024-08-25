@@ -4,6 +4,7 @@ import { postReview } from '@/data/actions/mypageAction';
 import { IReviewRegister } from '@/types/mypage';
 import React, { MouseEventHandler, useState } from 'react';
 import { useForm, UseFormRegister } from 'react-hook-form';
+import { toast, Bounce } from 'react-toastify';
 
 interface DOMEvent<T extends EventTarget> extends Event {
   readonly target: T;
@@ -44,6 +45,13 @@ export default function ReviewButton({
 
     const resData = await postReview(formData);
     setButtonState(!buttonState);
+
+    if (resData.ok) {
+      toast('후기 등록이 완료되었습니다.', {
+        position: 'top-center',
+        transition: Bounce,
+      });
+    }
 
     if ('errors' in resData) {
       console.error(resData.errors);
