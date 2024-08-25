@@ -6,6 +6,7 @@ import Submit from "../Submit"
 import Image from "next/image";
 import useUserStore from "@/zustand/userStore";
 import useModalStore from "@/zustand/useModalStore";
+import NotiBell from "../NotiBell";
 
 function LoginInfo({
   userId,
@@ -20,9 +21,6 @@ function LoginInfo({
 }) {
   const clearUser = useUserStore(state => state.clearUser);
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-
-	const clearUser = useUserStore((state) => state.clearUser);
   const openModal = useModalStore((state) => state.openModal);
 
   // const toggleDropdown = () => {

@@ -40,6 +40,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </ToastProvider>
+          <Modal />
           <ModalHandler />
         </NextAuthProvider>
       </body>
