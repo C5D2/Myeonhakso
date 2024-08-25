@@ -15,6 +15,7 @@ import { format, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import moment from 'moment';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // function formatDate(date: any) {
 //   return format(parseISO(date), 'yyyy.MM.dd', { locale: ko });
@@ -97,9 +98,18 @@ async function OrderDetailPage({ params }: { params: { id: string } }) {
                       />
                       <ShareButton />
                     </div>
-                    <Button size="lg" radius="lg">
-                      1:1 문의하기
-                    </Button>
+
+                    <div className="bg-main-green px-3 py-1 rounded-md text-lg text-white">
+                      <Link
+                        href={{
+                          pathname: '/mypage/tutee/qna/new',
+                          query: item?._id.toString(),
+                        }}
+                      >
+                        1:1 문의하기
+                      </Link>
+                    </div>
+                    {/* </Button> */}
                   </div>
                 </div>
               </div>

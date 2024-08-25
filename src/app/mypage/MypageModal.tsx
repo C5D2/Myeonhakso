@@ -105,7 +105,7 @@ function MypageModal({
   }
 
   return (
-    <div className="h-[calc(100%-120px)] w-full fixed left-0 bottom-[60px] flx justify-center items-center bg-black bg-opacity-50 text-center">
+    <div className="h-[calc(100%-110px)] w-full fixed left-0 bottom-[60px] flx justify-center items-center bg-black bg-opacity-50 text-center">
       <div className="absolute top-0 right-0 w-[70%] h-full bg-white border pt-[50px]">
         {sideBar}
       </div>

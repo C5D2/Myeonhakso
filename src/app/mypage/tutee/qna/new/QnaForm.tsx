@@ -13,7 +13,13 @@ export type IPostQna = {
   share: number[];
 };
 
-export default function QnaForm({ product }: { product: Ilecture[] }) {
+export default function QnaForm({
+  product,
+  prodId,
+}: {
+  product: Ilecture[];
+  prodId: number | undefined;
+}) {
   const {
     register,
     formState: { errors },
@@ -51,6 +57,7 @@ export default function QnaForm({ product }: { product: Ilecture[] }) {
               key={index}
               id="lecture"
               value={item.seller_id}
+              selected={item._id === prodId}
               {...register('share')}
             >
               {item.name}
