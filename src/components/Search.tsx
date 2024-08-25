@@ -18,13 +18,7 @@ function Search() {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    // const params = new URLSearchParams(searchParams);
-    // if (term) {
-    //   params.set('keyword', term);
-    // } else {
-    //   params.delete('keyword');
-    // }
-    console.log('pathName', pathName);
+
     if (pageName) {
       router.push(`${pageName}?keyword=${searchTerm}`);
     } else {

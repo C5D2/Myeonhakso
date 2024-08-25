@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function RecentLecture({ item }: { item: IOrderSaleList }) {
-  const type = item.products[0].extra.type;
+  const type = item?.products[0]?.extra.type;
 
   return (
     <>

@@ -114,19 +114,3 @@ export function CategoryRate({ item }: ILectureProps) {
     </Card>
   );
 }
-// import { Ilecture } from '@/types/lecture';
-// import { IOrderSaleList } from '@/types/mypage';
-
-// interface ILectureProps {
-//   item: IOrderSaleList[];
-// }
-
-// function CategoryRate({ item }: ILectureProps) {
-//   const products = item.flatMap(item => item.products);
-//   const type = products.map(item => item.extra.type);
-//   console.log(type); // 타입 추출 완료
-
-//   return <div>CategoryRate</div>;
-// }
-
-// export default CategoryRate;
