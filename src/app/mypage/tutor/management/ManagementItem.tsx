@@ -3,8 +3,10 @@
 import Button from '@/components/Button';
 import { useFetchLecture } from '@/hooks/useLectureActions';
 import { Ilecture } from '@/types/lecture';
+import useModalStore from '@/zustand/useModalStore';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Slide, toast } from 'react-toastify';
 
 interface IProduct {
   item: Ilecture;
@@ -13,16 +15,34 @@ export default function ManagementItem({ item }: IProduct) {
   const [isDeleted, setIsDeleted] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { deleteLecture } = useFetchLecture();
+  const openModal = useModalStore(state => state.openModal);
+
+  const handleOpenModal = () => {
+    openModal({
+      title: '강의 삭제',
+      content: '정말로 삭제하시겠습니까?',
+      callbackButton: {
+        확인: () => handleLectureDelete(),
+        취소: () => {},
+      },
+    });
+  };
 
   const handleLectureDelete = async () => {
     setIsDeleting(true);
     try {
       await deleteLecture(String(item._id));
       setIsDeleted(true);
-      alert('강의가 삭제되었습니다.');
+      toast('강의가 삭제되었습니다.', {
+        position: 'top-center',
+        transition: Slide,
+      });
     } catch (error) {
       console.error('강의 삭제 실패:', error);
-      alert('강의 삭제에 실패했습니다. 다시 시도해주세요.');
+      toast('강의 삭제에 실패했습니다. 다시 시도해주세요.', {
+        position: 'top-center',
+        transition: Slide,
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -82,7 +102,7 @@ export default function ManagementItem({ item }: IProduct) {
         </Link> */}
         <Button
           className="lg:px-2 lg:text-xs xl:px-3 text-white bg-gray-90 w-fit rounded-md text-sm py-1 px-5 border border-black"
-          onClick={handleLectureDelete}
+          onClick={handleOpenModal}
           disabled={isDeleting}
         >
           강의 삭제
