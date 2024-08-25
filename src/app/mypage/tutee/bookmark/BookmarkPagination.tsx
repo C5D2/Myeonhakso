@@ -1,12 +1,8 @@
-'use client';
-
+import React, { useState, useEffect } from 'react';
 import Card from '@/components/Card';
 import TeacherCard from '@/components/TeacherCard';
 import { IBookmark } from '@/types/lecture';
 import Image from 'next/image';
-import { useState } from 'react';
-
-const ITEM_COUNT = 8;
 
 interface BookmarkPaginationProps {
   items: IBookmark[];
@@ -14,10 +10,27 @@ interface BookmarkPaginationProps {
 
 export default function BookmarkPagination({ items }: BookmarkPaginationProps) {
   const [currentPage, setCurrentPage] = useState(0);
+  const [itemCount, setItemCount] = useState(8);
 
-  const pageCount = Math.ceil(items.length / ITEM_COUNT);
-  const offset = currentPage * ITEM_COUNT;
-  const currentPageItems = items.slice(offset, offset + ITEM_COUNT);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 758) {
+        setItemCount(4);
+      } else if (window.innerWidth < 1280) {
+        setItemCount(6);
+      } else {
+        setItemCount(8);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const pageCount = Math.ceil(items.length / itemCount);
+  const offset = currentPage * itemCount;
+  const currentPageItems = items.slice(offset, offset + itemCount);
 
   const passNextPage = () => {
     setCurrentPage(prevPage => Math.min(prevPage + 1, pageCount - 1));
@@ -32,7 +45,7 @@ export default function BookmarkPagination({ items }: BookmarkPaginationProps) {
   };
 
   return (
-    <div className="grid grid-cols-4 grid-rows-2 gap-4 relative mx-5">
+    <div className="grid grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-4 relative mx-5">
       {currentPageItems.map((item, index) => (
         <div className="max-w-[300px] h-[320px] rounded-xl" key={index}>
           {isLectureItem(item) ? (
