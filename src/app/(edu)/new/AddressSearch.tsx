@@ -40,7 +40,10 @@ export default function AddressSearch({
   return (
     <>
       <div className="col-span-full relative">
-        <label htmlFor="address" className="block leading-6 text-gray-900">
+        <label
+          htmlFor="address"
+          className="block font-black leading-6 text-gray-600"
+        >
           주소
         </label>
         <div className="mt-2">

@@ -9,6 +9,7 @@ import {
 } from '@/data/actions/lectureAction';
 import { IBookmark } from '@/types/lecture';
 import Bookmark from '@/components/icons/Bookmark';
+import { Slide, toast } from 'react-toastify';
 
 export default function BookmarkLecture({
   params,
@@ -34,7 +35,6 @@ export default function BookmarkLecture({
   // 데이터가 로드된 후 북마크 상태 설정
   useEffect(() => {
     if (!isLoading && data) {
-      console.log(data);
       const isAlreadyBookmarked = data.some(
         (data: IBookmark) => data.product?._id === id,
       );
@@ -50,13 +50,18 @@ export default function BookmarkLecture({
     }
   }, [data, isLoading, id]);
 
+  console.log(data);
+
   const bookmarkData = {
+    target_id: id,
     extra: {
       type,
     },
   };
 
   const handleBookmarkToggle = async () => {
+    console.log('handleBookmarkToggle 시작', { isBookmarked, bookmarkId });
+
     if (!user) {
       return;
     }
@@ -71,13 +76,17 @@ export default function BookmarkLecture({
     // 로컬 상태 업데이트하여 UI에서 즉시 반영
     setIsBookmarked(!isBookmarked);
     mutate(updatedData, false);
+    console.log(updatedData);
 
     try {
       // 서버에 요청
       if (isBookmarked) {
-        await deleteBookmark(String(bookmarkId));
+        const deleteResult = await deleteBookmark(String(bookmarkId));
+        console.log('deleteLectureBookmark 결과:', deleteResult);
       } else {
-        await postLectureBookmark(String(id), bookmarkData);
+        const result = await postLectureBookmark(bookmarkData);
+        console.log('postLectureBookmark 결과:', result);
+
         // 새로 갱신된 북마크 ID 업데이트
         const newBookmark = updatedData.find(
           (bookmark: any) => bookmark.product?._id === id,
@@ -94,7 +103,10 @@ export default function BookmarkLecture({
       // 실패할 경우 원래 데이터로 롤백
       setIsBookmarked(isBookmarked); // 원래 상태로 롤백
       mutate(data, false);
-      alert('일시적인 오류가 발생했습니다. 다시 시도해주세요.');
+      toast('일시적인 오류가 발생했습니다. 다시 시도해주세요.', {
+        position: 'top-center',
+        transition: Slide,
+      });
     }
   };
 

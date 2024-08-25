@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { Slide, toast } from 'react-toastify';
 
 export function ShareButton() {
   const [buttonState, setButtonState] = useState<boolean>(false);
@@ -45,8 +46,10 @@ export function SharePopup({
     t.select();
     document.execCommand('copy');
     document.body.removeChild(t);
-
-    alert('링크가 복사되었습니다.');
+    toast('링크가 복사되었습니다.', {
+      position: 'top-center',
+      transition: Slide,
+    });
   };
 
   return (
