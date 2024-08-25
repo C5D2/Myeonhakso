@@ -28,9 +28,8 @@ function Signupform() {
   });
 
  const [selectedType, setSelectedType] = useState<'user' | 'seller'>('user');
-
   const { toast, message, showToast } = useToast();
-  const [selectedType, setSelectedType] = useState('user');
+ 
 
   const handleTypeClick = (value: 'user' | 'seller') => {
     setSelectedType(value);
