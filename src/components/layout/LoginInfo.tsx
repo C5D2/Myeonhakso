@@ -1,12 +1,12 @@
 'use client';
 
-
-import {  signOut } from "next-auth/react";
-import Submit from "../Submit"
-import Image from "next/image";
-import useUserStore from "@/zustand/userStore";
-import useModalStore from "@/zustand/useModalStore";
-import NotiBell from "../NotiBell";
+import { signOut } from 'next-auth/react';
+import Submit from '../Submit';
+import Image from 'next/image';
+import useUserStore from '@/zustand/userStore';
+import useModalStore from '@/zustand/useModalStore';
+import NotiBell from '../NotiBell';
+import { Bounce, toast } from 'react-toastify';
 
 function LoginInfo({
   userId,
@@ -21,25 +21,32 @@ function LoginInfo({
 }) {
   const clearUser = useUserStore(state => state.clearUser);
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const openModal = useModalStore((state) => state.openModal);
+  const openModal = useModalStore(state => state.openModal);
 
   // const toggleDropdown = () => {
   //   setIsDropdownOpen(!isDropdownOpen);
   // };
 
-
-  const handleSignOut = (event: React.FormEvent) => {
+  const handleSignOut = async (event: React.FormEvent) => {
     event.preventDefault();
-		openModal({
-      content: `${name}님 로그아웃 하시겠습니까?`,
-      callbackButton: {
-        확인: async() => {
-          await signOut({ redirect: true, callbackUrl: '/' });
-        },
-      },
-    });	
+    // openModal({
+    //   content: `${name}님 로그아웃 하시겠습니까?`,
+    //   callbackButton: {
+    //     확인: async() => {
+    //       await signOut({ redirect: true, callbackUrl: '/' });
+    //     },
+    //   },
+    // });
+    toast('로그아웃 완료되었습니다.', {
+      position: 'top-center',
+      transition: Bounce,
+    });
 
     clearUser();
+
+    setTimeout(async () => {
+      await signOut({ redirect: true, callbackUrl: '/' });
+    }, 500);
   };
 
   return (
