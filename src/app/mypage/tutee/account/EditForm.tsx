@@ -181,22 +181,10 @@ useEffect(() => {
       <div className="flex justify-between ">
         <label
           className="block text-gray-500 mb-2 font-semibold"
-          htmlFor="name"
+          htmlFor="email"
         >
-          이름
+          이메일
         </label>
-        <input
-          id="name"
-          type="name"
-          className="w-full px-3 py-2 border rounded-md"
-          {...register('name', {
-            required: '이름을 입력하세요.',
-            minLength: {
-              value: 2,
-              message: '이름을 2글자 이상 입력해주세요.',
-            },
-          })}
-        />
       </div>
       <input
         id="email"
