@@ -31,10 +31,10 @@ export default function DetailCurriculum({ item }: IDetailCurriculumProps) {
         ).map((curriculumItem, index) => (
           <div
             key={index}
-            className="rounded-lg border border-gray-30 text-xl h-[80px] flex items-center p-10 gap-16"
+            className="rounded-lg border border-gray-30 text-xl h-[80px] flex items-center py-2 px-5 gap-10"
           >
-            <span>{index + 1}강</span>
-            <span>{curriculumItem.content}</span>
+            <p className="w-[20%] font-semibold ">{index + 1}강</p>
+            <p className="sm:text-sm w-[full] ">{curriculumItem.content}</p>
           </div>
         ))}
       </div>

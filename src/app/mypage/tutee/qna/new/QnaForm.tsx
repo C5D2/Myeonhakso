@@ -4,6 +4,7 @@ import { postQna } from '@/data/actions/mypageAction';
 import { Ilecture } from '@/types/lecture';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { Bounce, Slide, toast } from 'react-toastify';
 
 export type IPostQna = {
   private: true;
@@ -34,7 +35,10 @@ export default function QnaForm({
 
     const resData = await postQna(formData);
     if (resData.ok) {
-      alert('등록 완료');
+      toast('문의글 등록이 완료되었습니다.', {
+        position: 'top-center',
+        transition: Bounce,
+      });
       router.push('/mypage/tutee/qna');
     }
     console.log('resData', resData);

@@ -95,7 +95,7 @@ export default function DetailButton({
   return (
     <>
       <Button size="lg" radius="lg" onClick={paymentHandler}>
-        <span className="text-2xl font-extrabold">수강 신청</span>
+        <span className="text-2xl font-extrabold sm:text-xl">수강 신청</span>
       </Button>
       {toast && <Toast text={message} />}
     </>

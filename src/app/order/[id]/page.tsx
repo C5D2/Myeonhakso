@@ -85,32 +85,32 @@ async function OrderDetailPage({ params }: { params: { id: string } }) {
           <div className="-mt-20">
             <div className="pt-20">
               <div className="flex gap-5 w-full md:flex-col">
-                <div className="rounded-3xl bg-gray-10 px-20 py-10 box-border flex flex-col justify-evenly flex-grow gap-2">
-                  <h2 className="text-2xl font-extrabold">{item?.name}</h2>
-                  <p>{item?.content}</p>
-                  <div className="flex justify-between items-center md:flex-col md:gap-5">
-                    <div className="flex gap-3">
-                      <BookmarkLecture
-                        params={params}
-                        initialIsBookmarked={isBookmarked}
-                        bookmarkId={bookmarkId}
-                        type={type}
-                      />
-                      <ShareButton />
-                    </div>
-
-                    <div className="bg-main-green px-3 py-1 rounded-md text-lg text-white">
-                      <Link
-                        href={{
-                          pathname: '/mypage/tutee/qna/new',
-                          query: item?._id.toString(),
-                        }}
-                      >
-                        1:1 문의하기
-                      </Link>
-                    </div>
-                    {/* </Button> */}
+                <div className="rounded-3xl bg-gray-10 px-20 py-8 md:px-10 md:py-8 gap-2 box-border flex flex-col border border-main-light-green/50 justify-evenly flex-grow">
+                  <h2 className="sm:text-xl text-2xl font-extrabold">
+                    {item?.name}
+                  </h2>
+                  <p className="sm:text-md">{item?.content}</p>
+                  <div className="sm:mx-auto flex gap-3">
+                    <BookmarkLecture
+                      params={params}
+                      initialIsBookmarked={isBookmarked}
+                      bookmarkId={bookmarkId}
+                      type={type}
+                    />
+                    <ShareButton />
                   </div>
+
+                  <div className="sm:mx-auto ml-auto bg-main-green px-3 py-1 rounded-md text-lg text-white">
+                    <Link
+                      href={{
+                        pathname: '/mypage/tutee/qna/new',
+                        query: item?._id.toString(),
+                      }}
+                    >
+                      1:1 문의하기
+                    </Link>
+                  </div>
+                  {/* </Button> */}
                 </div>
               </div>
 
