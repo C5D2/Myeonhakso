@@ -52,7 +52,7 @@ export function SharePopup({
   return (
     <>
       <div className="h-full w-full fixed left-0 top-0 flx justify-center items-center bg-black bg-opacity-50 text-center">
-        <div className="absolute top-1/3 left-1/3 transform -translate-x-1/2 -translate-y-1/2 inset-1 w-full max-w-[400px] h-[200px] bg-white rounded-xl shadow-lg">
+        <div className="absolute top-1/3 left-1/3 md:left-52 transform -translate-x-1/2 -translate-y-1/2 inset-1 w-full max-w-[400px] h-[200px] bg-white rounded-xl shadow-lg">
           <button
             className="absolute right-0 top-3 px-4 py-1 bg-[url('/exit.svg')] w-5 h-5 bg-contain bg-no-repeat ml-auto"
             onClick={() => setButtonState(!buttonState)}

@@ -18,11 +18,16 @@ const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 export async function fetchLecture(
   path: string,
   sort?: object,
-  // limit?: string,
+  limit?: string,
 ): Promise<Ilecture[]> {
   const params = new URLSearchParams();
   sort && params.set('sort', JSON.stringify(sort));
-  params.set('limit', LIMIT!);
+  if (limit) {
+    params.set('limit', limit.toString());
+  } else {
+    params.set('limit', LIMIT!);
+  }
+  // params.set('limit', LIMIT!);
   const url = `${SERVER}/${path}?${params.toString()}`;
   const res = await fetch(url, {
     headers: {

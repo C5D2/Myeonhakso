@@ -1,5 +1,6 @@
 'use client';
 
+import LectureLevel, { ILevelType } from '@/components/LectureLevel';
 import { IBookmark, Ilecture } from '@/types/lecture';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -96,7 +97,7 @@ export default function Card({ item }: ICardProp) {
         <div className="flex">
           <div className="flex gap-1 mr-auto">
             <div className="w-5 h-5">
-              <Image src="/level-low.svg" alt="레벨" width={20} height={20} />
+              <LectureLevel level={productItem?.extra?.level as ILevelType} />
             </div>
             <p>{productItem?.extra?.level}</p>
           </div>
