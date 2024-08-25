@@ -18,6 +18,8 @@ import { ShareButton } from '@/app/(edu)/[type]/[id]/ShareButton';
 import moment from 'moment';
 import LectureLevel, { ILevelType } from '@/components/LectureLevel';
 
+const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
+
 async function DetailPage({ params }: { params: { id: string } }) {
   const session = await getSession();
   const user = session?.user;
@@ -98,8 +100,10 @@ async function DetailPage({ params }: { params: { id: string } }) {
                   <p className="text-main-green font-black text-lg">
                     {item?.extra.type}
                   </p>
-                  <h2 className="text-3xl font-bold">{item?.name}</h2>
-                  <p>{item?.content}</p>
+                  <h2 className="text-3xl font-bold sm:text-xl">
+                    {item?.name}
+                  </h2>
+                  <p className="sm:text-md">{item?.content}</p>
                   <div className="flex gap-3">
                     <BookmarkLecture
                       params={params}
@@ -156,8 +160,8 @@ async function DetailPage({ params }: { params: { id: string } }) {
                       alt="레슨수"
                     />
                     <div>
-                      <p className="text-lg">레슨 수</p>
-                      <p className="text-3xl font-black">
+                      <p className="text-lg sm:text-sm">레슨 수</p>
+                      <p className="text-3xl font-black sm:text-sm">
                         {item?.extra.curriculum.length}개
                       </p>
                     </div>
@@ -167,8 +171,10 @@ async function DetailPage({ params }: { params: { id: string } }) {
                   <div className="flex items-center gap-10">
                     <LectureLevel level={item?.extra.level as ILevelType} />
                     <div>
-                      <p className="text-lg">난이도</p>
-                      <p className="text-3xl font-black">{item?.extra.level}</p>
+                      <p className="text-lg sm:text-sm">난이도</p>
+                      <p className="text-3xl font-black sm:text-sm">
+                        {item?.extra.level}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -181,8 +187,8 @@ async function DetailPage({ params }: { params: { id: string } }) {
                       alt="일정"
                     />
                     <div>
-                      <p className="text-lg">수강 일정</p>
-                      <p className="text-xl font-black">
+                      <p className="text-lg sm:text-sm">수강 일정</p>
+                      <p className="text-xl font-black sm:text-sm">
                         {moment(item?.extra?.schedule[0]).format(
                           'YYYY-MM-DD',
                         ) ?? ''}{' '}
@@ -199,10 +205,10 @@ async function DetailPage({ params }: { params: { id: string } }) {
               <h2 className="text-2xl mt-[50px] font-black">강사 소개</h2>
               <div className="rounded-3xl bg-gray-10 mt-[15px] px-8 py-10 border-box border border-main-light-green/50 flex md:flex-col place-content-evenly items-center gap-3">
                 <div className="flex place-items-center gap-5">
-                  {item?.seller.profileImage ? (
+                  {item?.seller?.image ? (
                     <Image
                       className="rounded-full"
-                      src={item?.seller.profileImage}
+                      src={`${SERVER}/${item?.seller?.image}`}
                       width={80}
                       height={80}
                       alt="선생님 사진"
