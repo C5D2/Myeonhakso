@@ -41,8 +41,7 @@ export default function QnaForm({
       });
       router.push('/mypage/tutee/qna');
     }
-    console.log('resData', resData);
-    // const resData
+    return resData;
   };
 
   return (
@@ -55,15 +54,13 @@ export default function QnaForm({
         className="sm:w-full flex flex-col w-[70%] px-5 mx-auto"
       >
         <label className="font-semibold mr-3">강의 선택</label>
-        <select className="w-[200px] mb-3 border border-gray-30 px-2 py-1 rounded-lg">
+        <select
+          className="w-[200px] mb-3 border border-gray-30 px-2 py-1 rounded-lg"
+          defaultValue={prodId ? prodId.toString() : ''}
+          {...register('share')}
+        >
           {product.map((item, index) => (
-            <option
-              key={index}
-              id="lecture"
-              value={item.seller_id}
-              selected={item._id === prodId}
-              {...register('share')}
-            >
+            <option key={index} id="lecture" value={item.seller_id}>
               {item.name}
             </option>
           ))}

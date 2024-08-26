@@ -35,11 +35,10 @@ export async function fetchOrderlist(
 export async function fetchQnaLecturelist(): Promise<
   MultiItem<IOrderSaleList>
 > {
-  const params = new URLSearchParams();
   const session = await getSession();
   const accesstoken = session?.accessToken;
 
-  const url = `${SERVER}/orders?${params.toString()}`;
+  const url = `${SERVER}/orders`;
   const res = await fetch(url, {
     headers: {
       'client-id': `${CLIENT_ID}`,
