@@ -16,7 +16,7 @@ export default function Notifications({
 
   return (
     <>
-      {isDropdownOpen && <NotificationsDropdown />}
+      {/* {isDropdownOpen && <NotificationsDropdown />} */}
 
       <div className="flex relative">
         <button type="button" onClick={toggleDropdown}>
