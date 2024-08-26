@@ -30,7 +30,7 @@ IT, 어학, 취미 카테고리로 강의를 나누어져있으며, 강의는 **
 일본어로 '공부하자' 는 뜻의 뱅쿄시요, 일본어에 친숙한 팀원 3명이 모여 짓게 되었습니다. 
 | [류채영(팀장)](https://github.com/chaeyoungg) | [김나라](https://github.com/C5D2) | [홍설아](https://github.com/sulahhong) |
 |---|---|---|
-|<img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/profile.png" width="200" height="200">| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/KakaoTalk_20240826_163751761.png" width="200" height="200" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/KakaoTalk_20240826_163751761.png"  width="200" height="200"/> |
+|<img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/profile.png" width="200" height="200">| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/메타몽.jpg" width="200" height="200" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/KakaoTalk_20240826_163751761.png"  width="200" height="200"/> |
 
 <br />
 
