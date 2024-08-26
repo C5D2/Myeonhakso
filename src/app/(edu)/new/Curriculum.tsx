@@ -46,7 +46,7 @@ export default function Curriculum({ control, register }: ICurriculumProps) {
             <input
               type="text"
               placeholder="일정별 커리큘럼을 입력해주세요."
-              className="w-full p-2 border rounded-lg focus:outline-none focus:border-green-400"
+              className="w-full p-4 md:p-2 border rounded-lg focus:outline-none focus:border-green-400"
               {...register(`extra.curriculum.${index}.content`, {
                 required: '일정별 커리큘럼을 1개 이상 입력해주시기 바랍니다.',
               })}

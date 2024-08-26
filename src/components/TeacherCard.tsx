@@ -61,7 +61,7 @@ export default function TeacherCard({ item }: ICardProp) {
         </div>
       </div>
       <div className="flex flex-col min-w-[30%] w-full h-36 px-3">
-        <h4 className="m-auto font-semibold text-md w-full h-[50%] sm:text-sm">
+        <h4 className="m-auto font-semibold text-md w-full h-[50%] sm:text-sm text-center">
           {(item as IBookmark)?.user?.name || (item as ITeacher)?.name}
           <p className="font-light">선생님</p>
         </h4>

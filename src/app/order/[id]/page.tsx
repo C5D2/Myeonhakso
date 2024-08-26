@@ -156,9 +156,7 @@ async function OrderDetailPage({ params }: { params: { id: string } }) {
                 <div className="mt-[50px]">
                   <h2 className="text-2xl font-black">화상 강의</h2>
                   <div className="mt-5 place-content-center">
-                    <p className="text-2xl">
-                      화상강의는 Zoom 수업으로 진행됩니다.
-                    </p>
+                    <p className="text-2xl">{item?.extra?.url}</p>
                   </div>
                 </div>
               ) : (
