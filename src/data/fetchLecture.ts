@@ -75,7 +75,7 @@ export async function fetchCategory(
   sort && params.set('sort', JSON.stringify(sort));
   keyword && params.set('keyword', keyword);
   console.log('keyword', JSON.stringify(keyword));
-  params.set('limit', '8');
+  params.set('limit', LIMIT!);
   // const url = `${SERVER}/${path}?${params.toString()}`;
   const url = `${SERVER}/products?${params.toString()}`;
   console.log('url', url);
