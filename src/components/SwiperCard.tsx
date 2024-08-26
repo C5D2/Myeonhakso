@@ -14,6 +14,7 @@ import useSWR from 'swr';
 import TeacherCard, { ICardItem } from './TeacherCard';
 import { fetchLecture, fetchTeacher } from '@/data/fetchLecture';
 import { ITeacher, UserData } from '@/types';
+import { now } from 'moment';
 
 function SwiperCard({ sortParam }: { sortParam: string }) {
   const path = 'products';
@@ -22,7 +23,11 @@ function SwiperCard({ sortParam }: { sortParam: string }) {
 
   const getLectures = async (path: string, sort?: object) => {
     const data = await fetchLecture(path, sort);
-    return data;
+    const filterData = data.filter(item => {
+      return new Date(item.extra.schedule[0] as string) > new Date();
+    });
+
+    return filterData;
   };
   const getTeachers = async () => {
     const data = await fetchTeacher();
