@@ -2,7 +2,6 @@ import QnaForm from './QnaForm';
 import { fetchQnaLecturelist } from '@/data/fetchMypage';
 
 async function page({ searchParams }: { searchParams: URLSearchParams }) {
-  // sea;
   const prodId = Object.keys(searchParams)[0];
 
   const data = await fetchQnaLecturelist();

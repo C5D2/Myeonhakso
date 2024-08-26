@@ -23,17 +23,20 @@ export default function QnaForm({
 }) {
   const {
     register,
+    setValue,
     formState: { errors },
     handleSubmit,
   } = useForm<IPostQna>();
   const router = useRouter();
 
+  console.log('product', product);
   const handleQna = async (formData: any) => {
     formData.type = 'qna';
     formData.private = true;
-    formData.share = [Number(formData.share)];
+    // console.log('resData', formData);
 
     const resData = await postQna(formData);
+    console.log('resData', formData.share);
     if (resData.ok) {
       toast('문의글 등록이 완료되었습니다.', {
         position: 'top-center',
@@ -42,6 +45,17 @@ export default function QnaForm({
       router.push('/mypage/tutee/qna');
     }
     return resData;
+  };
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOption = event.target.selectedOptions[0];
+    const dataValue = selectedOption.getAttribute('data-value');
+
+    console.log('dataValue', dataValue);
+
+    if (dataValue) {
+      setValue('share', [Number(dataValue)]); // formData에 data-value 저장
+    }
   };
 
   return (
@@ -57,10 +71,15 @@ export default function QnaForm({
         <select
           className="w-[200px] mb-3 border border-gray-30 px-2 py-1 rounded-lg"
           defaultValue={prodId ? prodId.toString() : ''}
-          {...register('share')}
+          onChange={handleSelectChange}
         >
           {product.map((item, index) => (
-            <option key={index} id="lecture" value={item.seller_id}>
+            <option
+              key={index}
+              id="lecture"
+              value={item._id}
+              data-value={item.seller_id}
+            >
               {item.name}
             </option>
           ))}
