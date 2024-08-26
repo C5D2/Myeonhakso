@@ -28,7 +28,9 @@ import { newLectureNotification } from '@/utils/messageUtils';
 import { fetchBookmarkedUserList } from '@/data/fetchLecture';
 import useModalStore from '@/zustand/useModalStore';
 import { Slide, toast } from 'react-toastify';
-
+// import 'react-datepicker/dist/react-datepicker.css';
+import { ko } from 'date-fns/locale';
+import './ScheduleDatePicker.css';
 interface IRegisterFormProps {
   params: {
     id?: string;
@@ -78,8 +80,6 @@ export default function RegisterForm({
       if (end) setEndDate(new Date(end));
     }
   }, [mode, lectureDetailData]);
-
-  console.log(lectureDetailData);
 
   const onRangeChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
@@ -139,8 +139,6 @@ export default function RegisterForm({
         resData = await postForm(newData);
       }
 
-      console.log('API 응답:', resData); // API 응답 로깅
-
       if (!resData || !resData.ok) {
         throw new Error('API 호출 실패');
       }
@@ -167,17 +165,17 @@ export default function RegisterForm({
             byUser,
           );
 
-          console.log('생성된 알림:', notifications);
-
           const notificationResults = await sendNotifications(notifications);
-
-          console.log('알림 전송 결과:', notificationResults);
 
           const successCount = notificationResults.filter(
             result => result.ok,
           ).length;
-          console.log(
+          toast(
             `새 강의 "${resData.item.name}" 등록 및 알림 전송 완료. 성공: ${successCount}/${notifications.length}`,
+            {
+              position: 'top-center',
+              transition: Slide,
+            },
           );
         } catch (error) {
           console.error('알림 생성 또는 전송 중 오류 발생:', error);
@@ -197,7 +195,7 @@ export default function RegisterForm({
 
   return (
     <form onSubmit={handleSubmit(handleOpenModal)}>
-      <div className="mx-[170px] my-[100px] md:mx-[30px] md:my-[20px]">
+      <div className="max-w-[1500px] min-w-[380px] mx-auto px-56 w-full my-[50px] xl:px-56 lg:px-36 md:px-10 md:my-[20px]">
         <div className="m-4">
           <label className="block font-black text-gray-600 mb-2" htmlFor="name">
             강의 이름
@@ -315,30 +313,25 @@ export default function RegisterForm({
           >
             강의 일정
           </label>
-          {/* <input
-            type="date"
-            id="schedule"
-            placeholder="강의 일정을 선택하세요."
-            {...register('extra.schedule', {
-              required: '강의 일정을 선택해주시기 바랍니다.',
-            })}
-          /> */}
           <Controller
             name="extra.schedule"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <DatePicker
-                dateFormat="YYYY-MM-DD"
-                selected={startDate}
-                onChange={(dates: [Date | null, Date | null]) => {
-                  onRangeChange(dates);
-                  onChange(dates);
-                }}
-                startDate={startDate || undefined}
-                endDate={endDate || undefined}
-                selectsRange
-                inline
-              />
+              <div className="ScheduleDatePicker">
+                <DatePicker
+                  dateFormat="YYYY-MM-DD"
+                  selected={startDate}
+                  onChange={(dates: [Date | null, Date | null]) => {
+                    onRangeChange(dates);
+                    onChange(dates);
+                  }}
+                  startDate={startDate || undefined}
+                  endDate={endDate || undefined}
+                  selectsRange
+                  inline
+                  locale={ko}
+                />
+              </div>
             )}
           />
           {/* <InputError target={errors.extra?.schedule} /> */}
@@ -398,9 +391,6 @@ export default function RegisterForm({
           </button>
         </div>
         <div className="m-4">
-          {/* <label className="block text-gray-600 mb-2" htmlFor="address">
-            대면강의
-          </label> */}
           {tab === 0 && (
             <div>
               <AddressSearch

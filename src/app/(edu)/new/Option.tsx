@@ -47,8 +47,6 @@ export default function Option({ control, setValue, watch }: IOptionProps) {
   };
 
   const onSelectStartTime = (time: Date | null, rowIndex: number) => {
-    console.log(time);
-
     if (time) {
       setValue(
         `extra.options.${rowIndex}.startTime`,
@@ -63,7 +61,6 @@ export default function Option({ control, setValue, watch }: IOptionProps) {
   };
 
   const onSelectEndTime = (time: Date | null, rowIndex: number) => {
-    console.log(time);
     if (time) {
       setValue(
         `extra.options.${rowIndex}.endTime`,
@@ -72,7 +69,6 @@ export default function Option({ control, setValue, watch }: IOptionProps) {
     }
   };
 
-  console.log(options);
   return (
     <>
       <div className="w-full mx-auto">
@@ -86,13 +82,13 @@ export default function Option({ control, setValue, watch }: IOptionProps) {
           {fields.map((field, rowIndex) => (
             <div
               key={field.id}
-              className="bg-main-light-green/30 p-4 rounded-lg"
+              className="bg-main-light-green/30 p-5 md:p-3 rounded-lg"
             >
               <div className="flex flex-wrap items-center gap-5">
                 <span className="text-gray-600 font-semibold">
                   옵션 {rowIndex + 1}
                 </span>
-                <div className="flex flex-wrap gap-3 md:gap-2">
+                <div className="flex flex-wrap gap-3 items-center md:gap-2">
                   {DAY_OPTION?.map((item: string) => (
                     <button
                       key={item}

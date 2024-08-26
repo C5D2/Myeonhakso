@@ -50,8 +50,6 @@ export default function BookmarkLecture({
     }
   }, [data, isLoading, id]);
 
-  console.log(data);
-
   const bookmarkData = {
     target_id: id,
     extra: {
@@ -60,8 +58,6 @@ export default function BookmarkLecture({
   };
 
   const handleBookmarkToggle = async () => {
-    console.log('handleBookmarkToggle 시작', { isBookmarked, bookmarkId });
-
     if (!user) {
       return;
     }
@@ -76,16 +72,13 @@ export default function BookmarkLecture({
     // 로컬 상태 업데이트하여 UI에서 즉시 반영
     setIsBookmarked(!isBookmarked);
     mutate(updatedData, false);
-    console.log(updatedData);
 
     try {
       // 서버에 요청
       if (isBookmarked) {
         const deleteResult = await deleteBookmark(String(bookmarkId));
-        console.log('deleteLectureBookmark 결과:', deleteResult);
       } else {
         const result = await postLectureBookmark(bookmarkData);
-        console.log('postLectureBookmark 결과:', result);
 
         // 새로 갱신된 북마크 ID 업데이트
         const newBookmark = updatedData.find(
