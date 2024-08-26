@@ -69,7 +69,7 @@ export default function SubscribeButton({
 
     try {
       if (newSubscribedState) {
-        await postTeacherBookmark(teacherId); // 구독 추가
+        await postTeacherBookmark(Number(teacherId)); // 구독 추가
       } else {
         if (subscribeId) {
           await deleteBookmark(subscribeId); // 구독 해지

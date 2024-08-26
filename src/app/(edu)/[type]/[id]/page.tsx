@@ -17,8 +17,29 @@ import { calculateDays } from '@/utils/calculateDays';
 import { ShareButton } from '@/app/(edu)/[type]/[id]/ShareButton';
 import moment from 'moment';
 import LectureLevel, { ILevelType } from '@/components/LectureLevel';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { type: string; id: string };
+}): Promise<Metadata> {
+  const boardName = params.type;
+  const item = await fetchLectureDetail(params.id);
+  if (item === null) notFound();
+  return {
+    title: `${boardName} - ${item.name}`,
+    description: `${boardName} - ${item.content}`,
+    openGraph: {
+      title: `${boardName} - ${item.name}`,
+      description: `${boardName} - ${item.content}`,
+      url: `/${params.type}/${params.id}`,
+    },
+  };
+}
 
 async function DetailPage({ params }: { params: { id: string } }) {
   const session = await getSession();
@@ -32,6 +53,14 @@ async function DetailPage({ params }: { params: { id: string } }) {
     { bookmarks: -1 },
     String(4),
   );
+
+  // 일자 경과
+  const currentDate = new Date();
+  const scheduleEndDate = item?.extra?.schedule[1]
+    ? new Date(item.extra.schedule[1])
+    : null;
+  const isClosed = scheduleEndDate ? currentDate > scheduleEndDate : false;
+
   // 날짜 계산
   const daysDifference = calculateDays(item?.extra?.schedule);
 
@@ -65,8 +94,6 @@ async function DetailPage({ params }: { params: { id: string } }) {
       subscribeId = bookmarkedTeacher._id;
     }
   }
-  console.log(subscribeId);
-  console.log(bookmarkId);
 
   // TODO: 지금 강의는 다른 강의에서 빼야됨,,,
   const otherLectureList = otherData?.map((item, index) => (
@@ -114,9 +141,14 @@ async function DetailPage({ params }: { params: { id: string } }) {
                     <ShareButton />
                   </div>
                 </div>
-                <div className="rounded-3xl bg-gray-10 max-h-[300px] min-w-[450px] sm:min-w-[300px] p-10 box-border border border-main-light-green/50 flex flex-col gap-5">
-                  {item?.quantity === item?.buyQuantity ? (
-                    <p>이미 구매한 강의입니다.</p>
+
+                <div className="rounded-3xl bg-gray-10 max-h-[300px] min-w-[300px] xxl:min-w-[450px] p-10 box-border border border-main-light-green/50 flex flex-col justify-center gap-5">
+                  {isClosed || item?.quantity == item?.buyQuantity ? (
+                    <div className="flex place-content-center">
+                      <p className="font-black text-gray-800 text-3xl">
+                        마감된 강의입니다.
+                      </p>
+                    </div>
                   ) : (
                     <>
                       <p className="font-extrabold">수강 옵션을 선택해주세요</p>
