@@ -48,7 +48,7 @@ export function AnnualRate({ item }: ILectureProps) {
 
   const nowYearLecture = lectureDate.filter(item => item?.includes('2024'));
 
-  const month = nowYearLecture.map(item => item?.substring(6, 7));
+  const month = nowYearLecture.map(item => item?.substring(5, 7));
 
   for (let i = 0; i < month.length; i++) {
     let numMonth = Number(month[i]) - 1;
