@@ -75,3 +75,7 @@ export type ApiRes<T> = T | CoreErrorRes | AuthErrorRes;
  * 
  */ 
 // export type ApiRes<T, E = never> = E extends never ? ApiResWithoutValidation<T> : ApiResWithValidation<T, E>;
+
+export interface RefreshTokenRes extends CoreSuccessRes {
+  accessToken: string
+};

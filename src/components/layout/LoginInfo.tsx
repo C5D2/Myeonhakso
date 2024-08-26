@@ -7,18 +7,10 @@ import Image from "next/image";
 import useUserStore from "@/zustand/userStore";
 import useModalStore from "@/zustand/useModalStore";
 import NotiBell from "../NotiBell";
+import { normalizeImageUrl } from "@/utils/imageUrlUtils";
 
-function LoginInfo({
-  userId,
-  name,
-  image,
-  // notifications,
-}: {
-  userId: string;
-  name: string;
-  image?: string | null;
-  // notifications: number;
-}) {
+function LoginInfo() {
+  const user = useUserStore(state => state.user);
   const clearUser = useUserStore(state => state.clearUser);
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const openModal = useModalStore((state) => state.openModal);
@@ -31,7 +23,7 @@ function LoginInfo({
   const handleSignOut = (event: React.FormEvent) => {
     event.preventDefault();
 		openModal({
-      content: `${name}님 로그아웃 하시겠습니까?`,
+      content: `${user?.name}님 로그아웃 하시겠습니까?`,
       callbackButton: {
         확인: async() => {
           await signOut({ redirect: true, callbackUrl: '/' });
@@ -45,18 +37,18 @@ function LoginInfo({
   return (
     <form onSubmit={handleSignOut}>
       <div className="flex items-center text-sm mx-3">
-        {image && (
+        {user?.image && (
           <Image
             className="w-8 rounded-full mr-2"
-            src={image}
+            src={normalizeImageUrl(user.image)}
             width="40"
             height="40"
             alt="프로필 이미지"
           />
         )}
-        {name}님 :)
+        {user?.name}님 :)
         {/* <Notifications notifications={notifications} /> */}
-        <NotiBell userId={userId} />
+        <NotiBell userId={user?.id!} />
         <Submit className="py-1 px-2 text-sm text-gray-500 hover:bg-main-green rounded hover:text-white">
           로그아웃
         </Submit>
