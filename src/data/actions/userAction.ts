@@ -7,6 +7,7 @@ import {
   UserData,
   UserForm,
 } from '@/types';
+import { normalizeImageUrl } from '@/utils/imageUrlUtils';
 import { Session } from 'next-auth';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
@@ -100,10 +101,23 @@ export async function editUserInfo(
     name: formData.get('name'),
     email: formData.get('email'),
     address: formData.get('address'),
-    image: formData.get('image') || session?.user?.image || '',
+    image: formData.get('image') || '',
 
   };
 
+  const imageValue = formData.get('image');
+
+  if (typeof imageValue === 'string') {
+    userData.image = normalizeImageUrl(imageValue);
+  } else if (imageValue instanceof File) {
+    try {
+      const uploadedImageUrl = await uploadUserImage(imageValue, session.accessToken);
+      userData.image = normalizeImageUrl(uploadedImageUrl);
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      throw new Error('Image upload failed');
+    }
+  }
   const res = await fetch(`${SERVER}/users/${session?.user?.id}`, {
     method: 'PATCH',
     headers: {
@@ -134,3 +148,4 @@ export async function postUserBookmark(id: string) {
   console.log('data', resData);
   return resData;
 }
+

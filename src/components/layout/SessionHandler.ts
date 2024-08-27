@@ -6,7 +6,6 @@ import { Session } from 'next-auth';
 
 function SessionHandler({ session }: { session: Session | null }) {
   const { user, setUser, clearUser } = useUserStore();
-  const prevSessionRef = useRef<Session | null>(null);
 
   useEffect(() => {
     if (session?.user) {
@@ -26,7 +25,6 @@ function SessionHandler({ session }: { session: Session | null }) {
       clearUser();
     }
 
-    prevSessionRef.current = session;
   }, [session, setUser, clearUser]);
 
   return null;

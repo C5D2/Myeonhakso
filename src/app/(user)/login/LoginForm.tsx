@@ -1,9 +1,9 @@
 import Submit from '@/components/Submit';
 import {
   signInWithCredentials,
-  signInWithGoogle,
-  signInWithKaKao,
-  signInWithNaver,
+  signUpWithGoogle,
+  signUpWithKaKao,
+  signUpWithNaver,
 } from '@/data/actions/authAction';
 import Link from 'next/link';
 
@@ -56,7 +56,7 @@ function LoginForm() {
         <div className="flex-grow border-t border-gray-400"></div>
       </div>
       <div className="flex justify-center space-x-12 my-4 mt-6">
-        <button formAction={signInWithNaver}>
+        <button formAction={signUpWithNaver}>
           <img
             src="/images/naver-login.svg"
             alt="Naver"
@@ -64,7 +64,7 @@ function LoginForm() {
           />
         </button>
 
-        <button type="submit" formAction={signInWithKaKao}>
+        <button type="submit" formAction={signUpWithKaKao}>
           <img
             src="/images/kakao-talk.svg"
             alt="KakaoTalk"
@@ -72,7 +72,7 @@ function LoginForm() {
           />
         </button>
 
-        <button type="submit" formAction={signInWithGoogle}>
+        <button type="submit" formAction={signUpWithGoogle}>
           <img
             src="/images/google-login.svg"
             alt="Google"
