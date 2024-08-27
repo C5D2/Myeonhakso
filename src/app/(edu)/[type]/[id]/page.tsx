@@ -279,19 +279,12 @@ async function DetailPage({
                   )}
 
                   <div>
-                    <div className="flex justify-evenly items-center">
+                    <div className="flex flex-col justify-evenly items-center gap-3">
                       <h2 className="text-2xl font-black mr-3">
                         {item?.seller.name}
                       </h2>
-                      <Image
-                        src="/star.svg"
-                        width={20}
-                        height={20}
-                        alt="만족도"
-                      />
-                      <p className="inline">4.8</p>
+                      <p>{item?.seller.address}</p>
                     </div>
-                    <p>{item?.seller.address}</p>
                   </div>
                 </div>
 
