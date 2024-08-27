@@ -1,53 +1,23 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import NaverProvider from 'next-auth/providers/naver';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
-import { JWT } from 'next-auth/jwt';
 
 import {
   ApiResWithValidation,
+  OAuthUser,
+  RefreshTokenRes,
   SingleItem,
   UserData,
   UserLoginForm,
 } from './types';
+import { loginOAuth, signupWithOAuth } from './data/actions/authAction';
+import { fetchAccessToken } from './data/actions/fetchUser';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 const TOKEN_VALIDITY_PERIOD = 3600 * 1000; // 1시간(3600초) -> 밀리초로 변환
-
-const refreshAccessToken = async (token: JWT) => {
-  try {
-    const res = await fetch(`${SERVER}/auth/refresh`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'client-id': `${CLIENT_ID}`,
-        Authorization: `Bearer ${token.refreshToken}`,
-      },
-    });
-
-    const refreshedTokens = await res.json();
-
-    if (!res.ok || refreshedTokens.ok !== 1) {
-      throw refreshedTokens;
-    }
-
-    return {
-      ...token,
-      accessToken: refreshedTokens.accessToken,
-      accessTokenExpires: Date.now() + TOKEN_VALIDITY_PERIOD,
-      refreshToken: token.refreshToken, // 기존 리프레시 토큰 사용
-    };
-  } catch (error) {
-    console.error('Error refreshing access token', error);
-
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-    };
-  }
-};
 
 export const {
   handlers,
@@ -56,6 +26,7 @@ export const {
   auth,
   unstable_update: update,
 } = NextAuth({
+  trustHost: true,
   providers: [
     CredentialsProvider({
       credentials: {
@@ -94,8 +65,7 @@ export const {
             accessTokenExpires: Date.now() + TOKEN_VALIDITY_PERIOD,
           };
         } else {
-          return null;
-          // throw new Error();
+          throw new CredentialsSignin(resJson.message, { cause: resJson });
         }
       },
     }),
@@ -119,82 +89,148 @@ export const {
   pages: {
     signIn: '/login',
   },
-  callbacks: {
     // 로그인 처리를 계속 할지 여부 결정
     // true를 리턴하면 로그인 처리를 계속하고 false를 리턴하거나 Error를 throw하면 로그인 흐름을 중단
     // user: authorize()가 리턴한 값
-    async signIn({ user }) {
-      return true;
-
-      // user에 들어있는 사용자 정보를 이용해서 우리쪽 DB에 저장 (회원가입) 절차 필요
-
-      // 가입된 회원의 경우 자동으로 로그인 처리
-    },
-
-    // 로그인 성공한 회원 정보로 token 객체 설정
-
-    // 최초 로그인시 user 객체 전달,
-
-    async jwt({ token, user, trigger, session }) {
-      if (user) {
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.image = user.image;
-        token.type = user.type;
-        token.address = user.address;
-        token.notifications = user.notifications;
-        token.accessToken = user.accessToken;
-        token.refreshToken = user.refreshToken;
-        token.accessTokenExpires = user.accessTokenExpires;
-
-      }
-
-      if (trigger === 'update' && session) {
-        token.image = session.user.image
-        token.name = session.user.name
-        token.address = session.user.address
+    callbacks: {
+      async signIn({ user, account, profile }) {
+        console.log("USER: ", user, "Account: ", account, "Profile: ", profile);
       
-      }
-      // 토큰 만료 체크, refreshToken으로 accessToken 갱신
-
-      // refreshToken도 만료되었을 경우 로그아웃 처리
-      // if (user?.accessToken) {
-      //   token.accessToken = user.accessToken;
-      //   token.refreshToken = user.refreshToken;
-      // }
-
-      // 토큰 만료 체크, refreshToken으로 accessToken 갱신
-      if (Date.now() < token.accessTokenExpires!) {
+        if (account?.provider === 'credentials') {
+          return true;
+        }
+      
+        if (!account?.providerAccountId) {
+          console.error("Provider account ID is missing");
+          return false;
+        }
+      
+        let loginType: "email" | "kakao" | "google" | "naver";
+        switch (account.provider) {
+          case "kakao":
+          case "google":
+          case "naver":
+            loginType = account.provider;
+            break;
+          default:
+            console.error("지원하지 않는 provider입니다.:", account.provider);
+            return false;
+        }
+      
+        let email = user.email || (loginType === 'kakao' ? `${profile?.id}@kakao.com` : undefined);
+      
+        let data: OAuthUser = {
+          type: "user",
+          loginType: loginType,
+          name: user.name || '',
+          email: email || '',
+          image: user.image || '',
+          extra: {
+            ...profile,
+            providerAccountId: account.providerAccountId
+          }
+        };
+      
+        try {
+          // 로그인 먼저 시도
+          const loginRes = await loginOAuth(account.providerAccountId);
+          if (loginRes.ok) {
+            // 사용자 계정이 존재하는 경우, 로그인 데이터를 사용하여 객체 업데이트 진행
+            Object.assign(user, {
+              id: String(loginRes.item._id),
+              type: loginRes.item.type,
+              accessToken: loginRes.item.token?.accessToken,
+              refreshToken: loginRes.item.token?.refreshToken,
+              accessTokenExpires: Date.now() + TOKEN_VALIDITY_PERIOD,
+            });
+            return true;
+          }
+        } catch (error) {
+          console.log("로그인 실패, 회원가입 시도");
+        }
+      
+        // 로그인에 실패할 경우, 회원가입 시도
+        try {
+          const signupRes = await signupWithOAuth(data);
+          if (signupRes.ok) {
+            // 회원가입이 성공적으로 완료된 경우, 로그인 시도
+            const loginRes = await loginOAuth(account.providerAccountId);
+            if (loginRes.ok) {
+              Object.assign(user, {
+                id: String(loginRes.item._id),
+                type: loginRes.item.type,
+                accessToken: loginRes.item.token?.accessToken,
+                refreshToken: loginRes.item.token?.refreshToken,
+                accessTokenExpires: Date.now() + TOKEN_VALIDITY_PERIOD,
+              });
+              return true;
+            }
+          }
+        } catch (error) {
+          console.error("회원가입 실패:", error);
+        }
+      
+        return false; // 모든 시도가 실패할 경우 false 반환
+      },
+  
+      async jwt({ token, user, session, trigger }) {
+        if (user) {
+          token.id = user.id;
+          token.name = user.name;
+          token.email = user.email;
+          token.image = user.image;
+          token.type = user.type;
+          token.address = user.address;
+          token.notifications = user.notifications;
+          token.accessToken = user.accessToken;
+          token.refreshToken = user.refreshToken;
+          token.accessTokenExpires = user.accessTokenExpires;
+        }
+  
+        // 토큰 만료 여부 확인
+        if (token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
+          try {
+            console.log('토큰이 만료되었습니다. 리프레시 토큰 발행 중...');
+            const res = await fetchAccessToken(token.refreshToken);
+            if (res.ok) {
+              const resJson: RefreshTokenRes = await res.json();
+              token.accessToken = resJson.accessToken;
+              token.accessTokenExpires = Date.now() + TOKEN_VALIDITY_PERIOD;
+            } else {
+              console.log('토큰 갱신에 실패했습니다.');
+              return { ...token, error: "액세스 토큰 갱신 오류" };
+            }
+          } catch (error) {
+            console.error('엑세스 토큰 갱신 중 오류 발생:', error);
+            return { ...token, error: "액세스 토큰 갱신 오류" };
+          }
+        }
+  
+        if (trigger === 'update' && session) {
+          token.image = session.user.image;
+          token.name = session.user.name;
+          token.address = session.user.address;
+        }
+        
         return token;
-      }
-
-      return refreshAccessToken(token);
-      // return token
+      },
+  
+      async session({ session, token }) {
+        session.user.id = token.id as string;
+        session.user.name = token.name;
+        session.user.email = token.email as string;
+        session.user.image = token.image as string;
+        session.user.type = token.type as string;
+        session.user.address = token.address as string;
+        session.user.notifications = token.notifications as number;
+  
+        session.accessToken = token.accessToken;
+        session.refreshToken = token.refreshToken;
+  
+        console.log('Session Callback:', { session, token });
+        return session;
+      },
     },
-
-    // 클라이언트에서 세션 정보 요청시 호출
-    // token 객체 정보로 session 객체 설정
-    async session({ session, token }) {
-      // console.log('Session Callback:', { session, token });
-      session.user.id = token.id as string;
-      session.user.name = token.name;
-      session.user.email = token.email as string;
-      session.user.image = token.image as string;
-      session.user.type = token.type as string;
-      session.user.address = token.address as string;
-      session.user.notifications = token.notifications as number;
-
-      session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
-
-      return session;
-
-      // console.log('Session Callback:', { session, token });
-
-      // return session;
-    },
-  },
-});
+  });
 
 export { auth as getSession, update as updateSession };

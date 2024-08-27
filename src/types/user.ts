@@ -7,7 +7,7 @@ export interface UserData {
   phone?: string;
   address?: string;
   type: UserRole;
-  loginType?: 'email' | 'kakao';
+  loginType?: 'email' | 'kakao'| 'google' | 'naver' ;
   image?: string | null;
   notifications: number;
   profile?: string;
@@ -17,6 +17,7 @@ export interface UserData {
   };
   createdAt: string;
   updatedAt: string;
+  extra?: Record<string, any>;
 }
 
 export type ITeacher = Pick<UserData, '_id' | 'name' | 'image' | 'address'>;
@@ -26,6 +27,7 @@ export type UserInToken = Required<Pick<UserData, '_id' | 'name'>> &
     accessToken: string;
     refreshToken: string;
   };
+
 
 export type UserForm = {
   type: UserRole,
@@ -40,3 +42,4 @@ export type UserForm = {
 
 export type UserLoginForm = Pick<UserForm, 'email' | 'password'>;
 export type ReplyUser = Pick<UserData, '_id' | 'name' | 'email' | 'image'>;
+export type OAuthUser = Required<Pick<UserData, 'type' | 'loginType'>> & Partial<Pick<UserData, 'name' | 'email' | 'image' | 'extra'>>;

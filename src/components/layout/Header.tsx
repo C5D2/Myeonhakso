@@ -8,6 +8,7 @@ import { Session } from 'next-auth';
 import Image from 'next/image';
 import Back from './Back';
 import NotiBell from '@/components/NotiBell';
+import { SSEHandler } from './SseHandler';
 
 export default async function Header() {
   const session: Session | null = await auth();
@@ -20,6 +21,7 @@ export default async function Header() {
 
   return (
     <>
+     {session?.user && <SSEHandler userId={session.user.id!} />}
       {/* 모바일헤더 */}
       <div className="bg-white z-30 fixed top-0 left-0 mb-auto w-full h-[50px] dsm:hidden flex justify-between px-5 py-3">
         <Back />
@@ -66,9 +68,6 @@ export default async function Header() {
               </Button>
 
               <LoginInfo
-                userId={session.user.id!}
-                name={session.user.name!}
-                image={session.user.image}
                 // notifications={session.user.notifications}
               />
               <SessionHandler session={session} />

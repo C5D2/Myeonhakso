@@ -4,12 +4,14 @@
 import Submit from "@/components/Submit"
 import { editUserInfo, uploadUserImage } from "@/data/actions/userAction"
 import { UserForm } from "@/types"
+import { normalizeImageUrl } from "@/utils/imageUrlUtils"
 import useModalStore from "@/zustand/useModalStore"
 import useUserStore from "@/zustand/userStore"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+
 
 function EditForm() {
   const { data: session, update, status} = useSession()
@@ -96,7 +98,7 @@ useEffect(() => {
     formData.append('type', data.type);
 
     if (!session || !session.accessToken) {
-      console.error('User or accessToken is missing');
+      console.error('사용자 정보 혹은 엑세스 토큰 오류');
       return;
     }
 
@@ -106,7 +108,7 @@ useEffect(() => {
       try {
         imageUrl = await uploadUserImage(selectedFile, session.accessToken);
       } catch (error) {
-        console.error('Failed to upload image:', error);
+        console.error('사진 업로드 실패:', error);
         return;
       }
     }
@@ -151,6 +153,7 @@ useEffect(() => {
   if (status === "loading" || !session) {
     return <div>Loading...</div>; // 로딩 상태 처리
   }
+
 
 	return (
 		<form
@@ -207,7 +210,7 @@ useEffect(() => {
           {selectedImage  && (
             <Image
               className="object-cover rounded-md"
-              src={selectedImage}
+              src={normalizeImageUrl(selectedImage)}
               width="300"
               height="300"
               alt="프로필 이미지"

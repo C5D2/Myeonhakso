@@ -1,4 +1,12 @@
 'use client';
+import {
+  signInWithCredentials,
+
+  signUpWithGoogle,
+  signUpWithKaKao,
+  signUpWithNaver,
+  signupWithOAuth,
+} from '@/data/actions/authAction';
 
 import Button from '@/components/Button';
 import Submit from '@/components/Submit';
@@ -24,7 +32,7 @@ function Signupform() {
     formState: { errors },
     setError,
   } = useForm<UserForm>({
-    mode: 'onSubmit', 
+    // mode: 'onSubmit', 
   });
 
  const [selectedType, setSelectedType] = useState<'user' | 'seller'>('user');
@@ -117,8 +125,10 @@ function Signupform() {
   };
 
   return (
+    <>
     <form
-      action="/"
+      // action="/"
+      action={signInWithCredentials}
       onSubmit={handleSubmit(addUser)}
       className="max-w-screen-md mx-auto mt-14"
     >
@@ -252,38 +262,47 @@ function Signupform() {
         {isSubmitted && errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
         </div>
       )}
-    
 
       <div className="mt-10 flex justify-center items-center">
         <Submit className="w-full px-3 py-4 bg-main-green hover:bg-main-yellow text-white font-semibold rounded-md">
           회원가입
         </Submit>
       </div>
-      <div className="flex items-center my-4 mt-16">
+    </form>
+      <div className="flex items-center my-4 mt-10 ">
         <div className="flex-grow border-t border-gray-400"></div>
         <span className="mx-4 text-gray-400 text-xl font-semibold">
           간편 회원가입
         </span>
         <div className="flex-grow border-t border-gray-400"></div>
       </div>
-      <div className="flex justify-center space-x-12 my-4 mt-6">
-        <img
-          src="/images/naver-login.svg"
-          alt="Naver"
-          className="h-10 w-10 cursor-pointer"
-        />
-        <img
-          src="/images/kakao-talk.svg"
-          alt="KakaoTalk"
-          className="h-10 w-10 cursor-pointer"
-        />
-        <img
-          src="/images/google-login.svg"
-          alt="Google"
-          className="h-10 w-10 cursor-pointer"
-        />
+      <div className="flex justify-center space-x-12 my-4 mt-6 mb-10">
+        <button onClick={() => signUpWithNaver()}>
+          <img
+            src="/images/naver-login.svg"
+            alt="Naver"
+            className="h-10 w-10 cursor-pointer"
+          />
+        </button>
+
+        <button type="submit" onClick={()=> signUpWithKaKao()}>
+          <img
+            src="/images/kakao-talk.svg"
+            alt="KakaoTalk"
+            className="h-10 w-10 cursor-pointer"
+          />
+        </button>
+
+        <button onClick={()=> signUpWithGoogle()}>
+          <img
+            src="/images/google-login.svg"
+            alt="Google"
+            className="h-10 w-10 cursor-pointer"
+          />
+          
+        </button>
       </div>
-    </form>
+      </>
   );
 }
 

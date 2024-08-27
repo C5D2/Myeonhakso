@@ -6,6 +6,8 @@ const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
 
 
+
+
 export async function fetchUser(session : Session) {
 	
 	try {
@@ -29,4 +31,16 @@ export async function fetchUser(session : Session) {
 	} catch {
 		console.error('에러2222')
 	}
+}
+
+// 액세스 토큰 재발행
+export async function fetchAccessToken(refreshToken: string) {
+
+  const url = `${SERVER}/auth/refresh`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`
+    },
+  });
+  return res;
 }
