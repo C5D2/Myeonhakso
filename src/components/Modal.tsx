@@ -8,6 +8,7 @@ const Modal: React.FC = () => {
   const buttons = Object.entries(callbackButton).map(
     ([buttonName, callback], index) => (
       <button
+        className="w-full"
         key={index}
         onClick={() => {
           closeModal();

@@ -8,6 +8,8 @@ import {
 import { useFetchBookmark } from '@/hooks/useBookmarkActions';
 import { IBookmark } from '@/types/lecture';
 import { GetAuthInfo } from '@/utils/authUtils';
+import useModalStore from '@/zustand/useModalStore';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Slide, toast } from 'react-toastify';
 
@@ -24,6 +26,8 @@ export default function SubscribeButton({
 }: SubscribeButtonProps) {
   const { data, isLoading, mutate } = useFetchBookmark('user');
   const { user } = GetAuthInfo();
+  const router = useRouter();
+  const openModal = useModalStore(state => state.openModal);
 
   const [isSubscribed, setIsSubscribed] = useState(initialIsSubscribed);
   const [subscribeId, setSubscribeId] = useState(initialSubscribeId);
@@ -55,6 +59,19 @@ export default function SubscribeButton({
       return;
     }
     if (!user) {
+      openModal({
+        title: '로그인',
+        content: (
+          <>
+            로그인 시 이용 가능합니다. <br />
+            로그인하시겠습니까?
+          </>
+        ),
+        callbackButton: {
+          확인: () => router.push('/login'),
+          취소: () => {},
+        },
+      });
       return;
     }
 
