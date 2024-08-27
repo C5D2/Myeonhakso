@@ -81,7 +81,7 @@ export default function ManagementItem({ item }: IProduct) {
       </div>
       <p className="basis-3/12 px-2 keep-all">{item?.name}</p>
       <p className="basis-1/12 sm:hidden">
-        {item?.rating ? item?.rating : '—'}
+        {item?.rating ? item?.rating.toFixed(1) : '—'}
       </p>
       <p className="basis-2/12 sm:hidden">
         {item?.buyQuantity ? item?.buyQuantity : '_'}
