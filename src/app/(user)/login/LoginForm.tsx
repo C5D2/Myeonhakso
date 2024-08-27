@@ -23,6 +23,7 @@ function LoginForm() {
           placeholder="이메일을 입력하세요"
           className="w-full px-3 py-2 border rounded-md "
           name="email"
+          defaultValue="teacher1@myeonhakso.com"
         />
         {/* <p className="ml-2 mt-1 text-sm text-red-500">이메일은 필수입니다.</p> */}
       </div>
@@ -39,6 +40,7 @@ function LoginForm() {
           placeholder="비밀번호를 입력하세요"
           className="w-full px-3 py-2 border rounded-md"
           name="password"
+          defaultValue="11111111"
         />
         {/* <p className="ml-2 mt-1 text-sm text-red-500">비밀번호는 필수입니다.</p>
 				<a href="#" className="block mt-6 ml-auto text-gray-500 text-sm hover:underline">비밀번호를 잊으셨나요?</a> */}

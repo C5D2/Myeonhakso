@@ -9,6 +9,7 @@ IT, 어학, 취미 카테고리로 강의를 나누어져있으며, 강의는 **
 
 </div>
 
+
   
 ## 목차
 1. [프로젝트 팀 소개](#프로젝트-팀-소개)
@@ -23,6 +24,8 @@ IT, 어학, 취미 카테고리로 강의를 나누어져있으며, 강의는 **
 
 
 <br />
+<br />
+
 
 
 ## 프로젝트 팀 소개
@@ -114,6 +117,8 @@ Remove : 파일을 삭제하는 작업만 수행하는 경우
 ```
 
 <br />
+<br />
+
 
 
 ## 🍕 담당 페이지 및 기능
@@ -142,6 +147,8 @@ Remove : 파일을 삭제하는 작업만 수행하는 경우
   - 전역 모달
 
 <br />
+<br />
+
 
 ## 🖥️주요 기능 화면 구성 - 웹
 ### 1. 회원가입 및 로그인 (SNS 로그인)
@@ -178,16 +185,10 @@ Remove : 파일을 삭제하는 작업만 수행하는 경우
 |---|---|
 | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%83%81%ED%92%88%20%ED%9B%84%EA%B8%B0.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%ED%8C%90%EB%A7%A4%EB%82%B4%EC%97%AD.gif" width="400" /> |
 
-### 6. 알림 기능
-|북마크한 강사의 신규 강의 알림|
-|---|
-| <img src="" width="400" /> |
-
 ### 7. 1:1 질의응답
 |(학생)1:1 질의응답 작성|(강사)문의 응답|
 |---|---|
 | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AC%B8%EC%9D%98%ED%95%98%EA%B8%B0.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AC%B8%EC%9D%98%EB%8B%B5%EB%B3%80%EC%99%84%EB%A3%8C.gif" width="400" /> |
-
 
 ### 8. (강사, 회원) 대시보드
 |(강사)대시보드|(회원)대시보드|
@@ -216,7 +217,7 @@ Remove : 파일을 삭제하는 작업만 수행하는 경우
 ### 4. (강사) 강의등록, 강의관리
 |강의등록|강의수정|강의삭제|
 |---|---|---|
-| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B0%95%EC%9D%98%EB%93%B1%EB%A1%9D.gif" width="280" /> | <img src="" width="280" /> | <img src="" width="280" /> |
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B0%95%EC%9D%98%EB%93%B1%EB%A1%9D.gif" width="280" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B0%95%EC%9D%98%EC%88%98%EC%A0%95.gif" width="280" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%20%EA%B0%95%EC%9D%98%20%EC%82%AD%EC%A0%9C.gif" width="280" /> |
 
 ### 5. 북마크
 |강의, 강사 북마크|북마크 목록|
@@ -224,33 +225,53 @@ Remove : 파일을 삭제하는 작업만 수행하는 경우
 |  <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EB%B6%81%EB%A7%88%ED%81%AC.gif" width="280" />  |   <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EB%B6%81%EB%A7%88%ED%81%AC%EB%AA%A9%EB%A1%9D.gif" width="280" /> |
 
 ### 6. 판매목록, 구매목록, 후기
-|(강사)판매목록|(강사)판매목록, 후기 작성|
+|(강사)판매목록|(학생)구매목록, 후기 작성|
 |---|---|
-| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%ED%8C%90%EB%A7%A4%EB%AA%A9%EB%A1%9D.gif" width="280" /> | <img src="" width="280" /> |
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%ED%8C%90%EB%A7%A4%EB%AA%A9%EB%A1%9D.gif" width="280" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%20%ED%9B%84%EA%B8%B0.gif" width="280" /> |
 
-### 6. 알림 기능
+### 7. 알림 기능
 |북마크한 강사의 신규 강의 알림|
 |---|
-| <img src="" width="300" /> |
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%20%EC%95%8C%EB%A6%BC.gif" width="300" /> |
 
-### 7. 1:1 질의응답
+### 8. 1:1 질의응답
 |(학생)1:1 질의응답 작성|(강사)문의 응답|
 |---|---|
 | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EC%A7%88%EC%9D%98%EC%9D%91%EB%8B%B5%EC%9E%91%EC%84%B1.gif" width="280" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EC%A7%88%EC%9D%98%EC%9D%91%EB%8B%B5%EB%8B%B5%EB%B3%80.gif" width="280" /> |
 
-
-### 8. (강사, 회원) 대시보드
+### 9. (강사, 회원) 대시보드
 |(강사)대시보드|(회원)대시보드|
 |---|---|
 | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B0%95%EC%82%AC%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.gif" width="280" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%ED%95%99%EC%83%9D%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.gif" width="280" /> |
 
-
+<br />
 <br />
 
 ## 😻프로젝트 소감
+🐁 류채영
+``` html
+SSR과 CSR을 모두 경험해볼 수 있는 뜻깊은 프로젝트였습니다! 밤낮없이 기능 개발하고 회의하면서
+초보 팀장이었던 저를 믿고 프로젝트에 열정적으로 임해주신 뱅쿄시요 팀원들에게 너무 감사합니다! ♥ :D
+앞으로 더 많이 성장한 모습으로 또 만나요!
+```
+
+🇰🇷 김나라
+``` html
+교육 도메인은 예전부터 하고 싶었었는데 이번에 할 수 있게 되어서 감개무량합니다.
+거기에 마음 맞는 팀원들과 함께 할 수 있어 더욱 뜻 깊었던 프로젝트라고 생각합니다.
+이번 프로젝트에서는 평소에 도전하고 싶었던 기능을 경험할 수 있어서 좋았습니다. 
+이 자리를 빌려 난관에 빠질 때마다 많은 도움을 주었던 저희 팀원들(객원 팀원인 길용쌤 포함!!)께 감사의 인사를 전합니다.
+```
+
+❄️홍설아
+``` html
+NextAuth && Type 혼돈의 굴레 속에서 헤엄치다가 중간에 탈주하게 되어 나라님 채영님의 멋진 발표를 볼 수 없는 것이 한이 될 것 만 같지만
+Next.js와 TypeScript로 흥미로운 프로젝트 할 수 있도록 아이디어 내주신 나라선배와 J로써 기강 잡아주신 채영팀장님 능력자분들과 함께할 수 있어서 정말 즐거웠어요!!
+ 많이 배워 갑니다! 뱅쿄시요 면학요정들 고생 많으셨고 감사했어요! 설명요정 용쌤도 정말 감사했습니다!! 
+```
 
 
-
+<br />
 <br />
 
 ## 📁관련 문서
