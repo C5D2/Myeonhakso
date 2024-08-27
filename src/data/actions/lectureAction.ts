@@ -89,8 +89,6 @@ export async function orderLecture(
 }
 
 export async function postLectureBookmark(data: object) {
-  console.log('postLectureBookmark 시작', data);
-
   const session = await getSession();
 
   const res = await fetch(`${SERVER}/bookmarks/product`, {
@@ -124,7 +122,7 @@ export async function deleteBookmark(id: string) {
   return resData;
 }
 
-export async function postTeacherBookmark(id: string) {
+export async function postTeacherBookmark(id: number) {
   const session = await getSession();
 
   const res = await fetch(`${SERVER}/bookmarks/user`, {
@@ -134,7 +132,7 @@ export async function postTeacherBookmark(id: string) {
       'client-id': `${CLIENT_ID}`,
       Authorization: `Bearer ${session?.accessToken}`,
     },
-    body: JSON.stringify(id),
+    body: JSON.stringify({ target_id: id }),
   });
 
   const resData = await res.json();

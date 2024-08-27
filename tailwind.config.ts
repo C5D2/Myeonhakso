@@ -96,9 +96,9 @@ const config: Config = {
       // max : 00px 보다 작을 때 동작
       sm: { max: '640px' },
       md: { max: '768px' }, //모바일
-      lg: { max: '1024px' },
-      xl: { max: '1280px' }, //태블릿
-      xxl: { max: '1536px' },
+      lg: { min: '769px', max: '1024px' },
+      xl: { min: '1025px', max: '1280px' }, //태블릿
+      xxl: { min: '1279px', max: '1536px' },
       dsm: { min: '641px' },
     },
   },

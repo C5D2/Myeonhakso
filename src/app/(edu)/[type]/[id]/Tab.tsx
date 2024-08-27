@@ -12,7 +12,6 @@ interface IDetailCurriculumProps {
 
 export default function Tab({ item }: IDetailCurriculumProps) {
   const [toggleState, setToggleState] = useState(1);
-  // console.log('toggle', toggleState);
 
   const toggleTab = (index: number) => {
     setToggleState(index);

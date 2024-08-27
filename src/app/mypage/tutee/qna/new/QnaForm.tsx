@@ -4,6 +4,7 @@ import { postQna } from '@/data/actions/mypageAction';
 import { Ilecture } from '@/types/lecture';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { Bounce, Slide, toast } from 'react-toastify';
 
 export type IPostQna = {
   private: true;
@@ -13,26 +14,48 @@ export type IPostQna = {
   share: number[];
 };
 
-export default function QnaForm({ product }: { product: Ilecture[] }) {
+export default function QnaForm({
+  product,
+  prodId,
+}: {
+  product: Ilecture[];
+  prodId: number | undefined;
+}) {
   const {
     register,
+    setValue,
     formState: { errors },
     handleSubmit,
   } = useForm<IPostQna>();
   const router = useRouter();
 
+  console.log('product', product);
   const handleQna = async (formData: any) => {
     formData.type = 'qna';
     formData.private = true;
-    formData.share = [Number(formData.share)];
+    // console.log('resData', formData);
 
     const resData = await postQna(formData);
+    console.log('resData', formData.share);
     if (resData.ok) {
-      alert('등록 완료');
+      toast('문의글 등록이 완료되었습니다.', {
+        position: 'top-center',
+        transition: Bounce,
+      });
       router.push('/mypage/tutee/qna');
     }
-    console.log('resData', resData);
-    // const resData
+    return resData;
+  };
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOption = event.target.selectedOptions[0];
+    const dataValue = selectedOption.getAttribute('data-value');
+
+    console.log('dataValue', dataValue);
+
+    if (dataValue) {
+      setValue('share', [Number(dataValue)]); // formData에 data-value 저장
+    }
   };
 
   return (
@@ -45,13 +68,17 @@ export default function QnaForm({ product }: { product: Ilecture[] }) {
         className="sm:w-full flex flex-col w-[70%] px-5 mx-auto"
       >
         <label className="font-semibold mr-3">강의 선택</label>
-        <select className="w-[200px] mb-3 border border-gray-30 px-2 py-1 rounded-lg">
+        <select
+          className="w-[200px] mb-3 border border-gray-30 px-2 py-1 rounded-lg"
+          defaultValue={prodId ? prodId.toString() : ''}
+          onChange={handleSelectChange}
+        >
           {product.map((item, index) => (
             <option
               key={index}
               id="lecture"
-              value={item.seller_id}
-              {...register('share')}
+              value={item._id}
+              data-value={item.seller_id}
             >
               {item.name}
             </option>

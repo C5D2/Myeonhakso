@@ -5,6 +5,7 @@ import {
   signUpWithKaKao,
   signUpWithNaver,
 } from '@/data/actions/authAction';
+import Link from 'next/link';
 
 function LoginForm() {
   return (
@@ -78,6 +79,14 @@ function LoginForm() {
             className="h-10 w-10 cursor-pointer"
           />
         </button>
+      </div>
+      <div className="mt-10 flex gap-2 items-center">
+        <p className="ml-auto text-gray-400 text-sm font-light inline-block">
+          아직 면학소 회원이 아니신가요 ?{' '}
+        </p>{' '}
+        <Link href="/signup" className="text-gray-50">
+          회원가입
+        </Link>
       </div>
     </form>
   );

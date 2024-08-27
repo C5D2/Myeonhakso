@@ -32,6 +32,26 @@ export async function fetchOrderlist(
   return resJson;
 }
 
+export async function fetchQnaLecturelist(): Promise<
+  MultiItem<IOrderSaleList>
+> {
+  const session = await getSession();
+  const accesstoken = session?.accessToken;
+
+  const url = `${SERVER}/orders`;
+  const res = await fetch(url, {
+    headers: {
+      'client-id': `${CLIENT_ID}`,
+      Authorization: `Bearer ${accesstoken}`,
+    },
+  });
+  const resJson: ApiRes<MultiItem<IOrderSaleList>> = await res.json();
+  if (!resJson.ok) {
+    throw new Error('Qna 강의 목록 조회 실패');
+  }
+  return resJson;
+}
+
 export async function fetchSalelist(
   page?: string,
 ): Promise<MultiItem<IOrderSaleList>> {

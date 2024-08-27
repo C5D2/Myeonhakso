@@ -4,16 +4,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function RecentLecture({ item }: { item: IOrderSaleList }) {
-  const type = item.products[0].extra.type;
+  const type = item?.products[0]?.extra.type;
 
   return (
     <>
       {item ? (
         <Link
-          href={`/orders/${item._id}`}
+          href={`/order/${item._id}`}
           className="sm:h-10 sm:my-1 sm:px-2 flex gap-5 items-center bg-main-light-green rounded-lg w-[70%] h-[50px] text-gray-90"
         >
-          <img src={`/${type}.svg`} className="sm:hidden" />
+          <img src={`/${type}.svg`} className="sm:hidden px-3" />
           <p className="sm:text-xs">{item.products[0].name}</p>
         </Link>
       ) : (

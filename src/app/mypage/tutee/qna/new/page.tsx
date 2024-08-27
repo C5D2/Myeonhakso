@@ -1,16 +1,17 @@
 import QnaForm from './QnaForm';
-import { fetchOrderlist } from '@/data/fetchMypage';
+import { fetchQnaLecturelist } from '@/data/fetchMypage';
 
-async function page() {
-  const data = await fetchOrderlist();
+async function page({ searchParams }: { searchParams: URLSearchParams }) {
+  const prodId = Object.keys(searchParams)[0];
+
+  const data = await fetchQnaLecturelist();
   const productData = data?.item?.flatMap(item => item.products);
-  console.log('productData========>', productData);
 
   // const list = data?.item?.map((item, index) => (
   //   <OrderSaleList key={index} item={item} />
   // ));
 
-  return <QnaForm product={productData} />;
+  return <QnaForm product={productData} prodId={Number(prodId)} />;
 }
 
 export default page;

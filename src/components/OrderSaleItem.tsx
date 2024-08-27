@@ -44,7 +44,7 @@ function OrderSaleItem({ item }: ParamType) {
                       target.src = '/lecture-default.jpg';
                     }}
                   />
-                  <p className="truncate">한 입 크기로 잘라먹는 타입스크립트</p>
+                  <p className="truncate">{item?.name}</p>
                   <p className="ml-auto text-gray-50">
                     ₩{' '}
                     {item?.price
@@ -55,7 +55,7 @@ function OrderSaleItem({ item }: ParamType) {
                 {type === 'tutee' && (
                   <Link
                     className="bg-main-green px-2 py-1 w-fit rounded-md ml-auto text-white"
-                    href={`/lecture/${item?._id}`}
+                    href={`/order/${item?._id}`}
                   >
                     강의 가기
                   </Link>

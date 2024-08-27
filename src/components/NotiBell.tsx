@@ -2,56 +2,50 @@
 
 import NotificationsDropdown from '@/components/NotificationsDropdown';
 import { patchNotificationRead } from '@/data/actions/lectureAction';
-import { NotiMessageType } from '@/types/notification';
+import { NotiMessageType, NotiRes } from '@/types/notification';
 import { socket } from '@/utils/websocket';
 import { useEffect, useState } from 'react';
 import { Bounce, toast } from 'react-toastify';
 
-export default function NotiBell({ userId }: { userId: string }) {
+export type NotiBellProps = {
+  userId: string;
+};
+
+const NotiBell: React.FC<NotiBellProps> = ({ userId }: { userId: string }) => {
+  // export default function NotiBell({ userId }: { userId: string }) {
   // 서버 접속 상태
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [notiList, setNotiList] = useState<NotiMessageType[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // 새로운 noti 메세지 도착
-  const onNotiMessage = (data: NotiMessageType[]) => {
+  const onNotiMessage = (data: NotiRes) => {
     // 추가된 알림 목록을 받아서 보여줌
-    // setNotiList(data);
-    setNotiList(prevList => {
-      const newNotifications = data.filter(
-        noti => !prevList.some(prevNoti => prevNoti._id === noti._id),
-      );
-
-      if (newNotifications.length > 0) {
-        const latestNotification = newNotifications[0];
-        toast(latestNotification.content, {
-          position: 'top-right',
-          transition: Bounce,
-        });
-      }
-      return [...newNotifications, ...prevList];
-    });
+    setNotiList(data.list);
+    if (data.newNoti) {
+      toast(data.newNoti.content, {
+        position: 'top-center',
+        transition: Bounce,
+      });
+    }
   };
 
-  console.log(notiList);
-
   // 서버 접속 완료시
+  const onConnect = () => {
+    socket.emit('setUserId', userId, () => {
+      setIsConnected(true);
+    });
+    socket.off('notification', onNotiMessage);
+
+    socket.on('notification', onNotiMessage);
+  };
+
+  const onDisconnect = () => {
+    setIsConnected(false);
+    socket.off('notification', onNotiMessage);
+  };
+
   useEffect(() => {
-    const onConnect = () => {
-      socket.emit('setUserId', userId, (notiList: NotiMessageType[]) => {
-        // 초기 알림 목록을 받아서 보여줌
-        setNotiList(notiList);
-        setIsConnected(true);
-      });
-
-      socket.on('notiList', onNotiMessage);
-    };
-
-    const onDisconnect = () => {
-      setIsConnected(false);
-      socket.off('notiList', onNotiMessage);
-    };
-
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
 
@@ -61,19 +55,17 @@ export default function NotiBell({ userId }: { userId: string }) {
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
-      socket.off('notiList', onNotiMessage);
     };
-  }, [userId]);
+  }, []);
 
   const toggleDropdown = async () => {
     const newDropdownState = !isDropdownOpen;
     setIsDropdownOpen(newDropdownState);
 
     // 드롭다운이 닫힐 때 알림을 읽음 처리
-    if (!newDropdownState && notiList.length > 0) {
+    if (!newDropdownState && notiList?.length > 0) {
       try {
         const result = await patchNotificationRead();
-        console.log(result);
 
         setNotiList([]);
       } catch (error) {
@@ -122,4 +114,6 @@ export default function NotiBell({ userId }: { userId: string }) {
       </div>
     </>
   );
-}
+};
+
+export default NotiBell;
