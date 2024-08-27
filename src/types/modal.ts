@@ -1,8 +1,12 @@
-export interface ModalState {
+type ModalContent = string | React.ReactNode;
+
+interface ModalState {
   isOpen: boolean;
   title: string;
-  content: string;
-  callbackButton: Record<string, () => void>;
+  content: ModalContent;
+  callbackButton: {
+    [key: string]: () => void;
+  };
 }
 
 export interface ModalStore extends ModalState {

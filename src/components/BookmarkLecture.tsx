@@ -10,6 +10,8 @@ import {
 import { IBookmark } from '@/types/lecture';
 import Bookmark from '@/components/icons/Bookmark';
 import { Slide, toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import useModalStore from '@/zustand/useModalStore';
 
 export default function BookmarkLecture({
   params,
@@ -25,6 +27,8 @@ export default function BookmarkLecture({
   const { data, isLoading, mutate } = useFetchBookmark();
   const { user } = GetAuthInfo();
   const id = Number(params.id);
+  const router = useRouter();
+  const openModal = useModalStore(state => state.openModal);
 
   // 로컬로 북마크 여부 관리
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
@@ -59,6 +63,19 @@ export default function BookmarkLecture({
 
   const handleBookmarkToggle = async () => {
     if (!user) {
+      openModal({
+        title: '로그인',
+        content: (
+          <>
+            로그인 시 이용 가능합니다. <br />
+            로그인하시겠습니까?
+          </>
+        ),
+        callbackButton: {
+          확인: () => router.push('/login'),
+          취소: () => {},
+        },
+      });
       return;
     }
 
@@ -108,7 +125,7 @@ export default function BookmarkLecture({
       <Bookmark
         width={40}
         height={40}
-        fill={isBookmarked ? '#fac56c' : 'gray'}
+        fill={user && isBookmarked ? '#fac56c' : 'gray'}
         stroke={'current'}
       />
     </div>
