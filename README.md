@@ -15,9 +15,11 @@ IT, 어학, 취미 카테고리로 강의를 나누어져있으며, 강의는 **
 2. [프로젝트 개요](#-프로젝트-개요)
 3. [기술 스택](#%EF%B8%8F-기술-스택)
 4. [컨벤션](#-컨벤션)
-5. [담당 페이지 및 기능]() 
-7. [주요 기능 화면 구성](#주요-기능-화면-구성)
+5. [담당 페이지 및 기능](#-담당-페이지-및-기능)
+6. [주요 기능 화면 구성 - 웹](#%EF%B8%8F주요-기능-화면-구성---웹)
+7. [주요 기능 화면 구성 - 모바일](#주요-기능-화면-구성---모바일)
 8. [프로젝트 소감](#프로젝트-소감)
+9. [관련 문서](#관련-문서)
 
 
 <br />
@@ -113,54 +115,145 @@ Remove : 파일을 삭제하는 작업만 수행하는 경우
 
 <br />
 
----
 
-## 담당 페이지 및 기능
+## 🍕 담당 페이지 및 기능
+
 - 류채영
+  - 메인페이지
+  - 헤더, 푸터, 페이지네이션
+  - 카테고리별 상품 목록, 상품 정렬
+  - 구매, 판매 목록, 수강 후기
+  - 1:1 질의응답
+  - (강사, 학생) 대시보드
+ 
 - 김나라
+  - (결제 전, 결제 후) 상품 상세 조회
+  - 강의 결제 기능
+  - 강의 등록, 수정, 삭제 (Kakao API)
+  - (상품, 강사) 북마크, 북마크 목록
+  - 북마크 강사의 신규 강의 알림 (Socket IO)
+ 
+    
 - 홍설아
+  - 로그인, 구글, 카카오 SNS 로그인 (Oauth)
+  - 회원가입, 이메일 중복 체크
+  - 회원 정보 수정
+  - 상품 검색
+  - 전역 모달
 
+<br />
 
-## 🧑‍🏫주요 기능 화면 구성
+## 🖥️주요 기능 화면 구성 - 웹
 ### 1. 회원가입 및 로그인 (SNS 로그인)
-|회원가입|로그인(일반, SNS로그인)|로그아웃|
+|회원가입|로그인|로그아웃|
 |---|---|---|
+|<img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%9D%BC%EB%B0%98%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif" width="400" />| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%9D%BC%EB%B0%98%EB%A1%9C%EA%B7%B8%EC%9D%B8.gif"  width="400"/>| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%A1%9C%EA%B7%B8%EC%95%84%EC%9B%83.gif" width="400"/>
+
+|카카오 로그인|구글 로그인|
+|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%B9%B4%EC%B9%B4%EC%98%A4%EB%A1%9C%EA%B7%B8%EC%9D%B8.gif"  width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EA%B5%AC%EA%B8%80%EB%A1%9C%EA%B7%B8%EC%9D%B8.gif"  width="400"/>|
 
 ### 2. 메인페이지, 상품 목록
 |메인페이지|상품 목록|상품정렬, 상품검색|
 |---|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%83%81%ED%92%88%EB%AA%A9%EB%A1%9D.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%83%81%ED%92%88%EC%A0%95%EB%A0%AC%2C%EA%B2%80%EC%83%89.gif" width="400" /> |
 
 ### 3. 강의 상세페이지
-|상세페이지|수강하기|...|
-|---|---|---|
+|상세페이지|수강하기|
+|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%83%81%ED%92%88%EC%83%81%EC%84%B8.gif"  width="400"/> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%88%98%EA%B0%95%EC%8B%A0%EC%B2%AD(%EA%B2%B0%EC%A0%9C).gif" width="400" /> |
 
 ### 4. (강사) 강의등록, 강의관리
 |강의등록|강의수정|강의삭제|
 |---|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%83%81%ED%92%88%EB%93%B1%EB%A1%9D.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EA%B0%95%EC%9D%98%20%EC%88%98%EC%A0%95.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EA%B0%95%EC%9D%98%20%EC%82%AD%EC%A0%9C.gif" width="400" /> |
 
-### 5. (회원) 북마크
-|강의 북마크|강사 북마크|...|
-|---|---|---|
-
-### 6. 구매목록, 판매목록
-|(회원)구매목록|(강사)판매목록|
+### 5. 북마크
+|강의, 강사 북마크|북마크 목록|
 |---|---|
+|  <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%B6%81%EB%A7%88%ED%81%AC.gif" width="400" />  |   <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%B6%81%EB%A7%88%ED%81%AC%EB%AA%A9%EB%A1%9D.gif" width="400" /> |
+
+### 6. 판매목록, 구매목록, 후기
+|(강사)구매목록|(학생)구매목록, 후기 작성|
+|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EC%83%81%ED%92%88%20%ED%9B%84%EA%B8%B0.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%ED%8C%90%EB%A7%A4%EB%82%B4%EC%97%AD.gif" width="400" /> |
 
 ### 6. 알림 기능
 |북마크한 강사의 신규 강의 알림|
 |---|
+| <img src="" width="400" /> |
 
 ### 7. 1:1 질의응답
-|1:1 질의응답 리스트|질의 응답|
+|(학생)1:1 질의응답 작성|(강사)문의 응답|
 |---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AC%B8%EC%9D%98%ED%95%98%EA%B8%B0.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AC%B8%EC%9D%98%EB%8B%B5%EB%B3%80%EC%99%84%EB%A3%8C.gif" width="400" /> |
+
 
 ### 8. (강사, 회원) 대시보드
 |(강사)대시보드|(회원)대시보드|
 |---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EA%B0%95%EC%82%AC%20%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.gif" width="400" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%ED%95%99%EC%83%9D%20%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.gif" width="400" /> |
+
+<br />
+<br />
+
+## 📱주요 기능 화면 구성 - 모바일
+### 1. 회원가입 및 로그인 (SNS 로그인)
+|회원가입|로그인|
+|---|---|
+|<img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif" width="280" />| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EB%A1%9C%EA%B7%B8%EC%9D%B8.gif"  width="280"/>|
+
+### 2. 메인페이지, 상품 목록
+|메인페이지|상품 목록, 상품정렬|
+|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EB%A9%94%EC%9D%B8.gif" width="280" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EB%AA%A9%EB%A1%9D.gif" width="280" /> |
+
+### 3. 강의 상세페이지
+|상세페이지|수강하기|
+|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EC%83%81%EC%84%B8.gif"  width="280"/> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B2%B0%EC%A0%9C.gif" width="280" /> |
+
+### 4. (강사) 강의등록, 강의관리
+|강의등록|강의수정|강의삭제|
+|---|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B0%95%EC%9D%98%EB%93%B1%EB%A1%9D.gif" width="280" /> | <img src="" width="280" /> | <img src="" width="280" /> |
+
+### 5. 북마크
+|강의, 강사 북마크|북마크 목록|
+|---|---|
+|  <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EB%B6%81%EB%A7%88%ED%81%AC.gif" width="280" />  |   <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EB%B6%81%EB%A7%88%ED%81%AC%EB%AA%A9%EB%A1%9D.gif" width="280" /> |
+
+### 6. 판매목록, 구매목록, 후기
+|(강사)판매목록|(강사)판매목록, 후기 작성|
+|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%ED%8C%90%EB%A7%A4%EB%AA%A9%EB%A1%9D.gif" width="280" /> | <img src="" width="280" /> |
+
+### 6. 알림 기능
+|북마크한 강사의 신규 강의 알림|
+|---|
+| <img src="" width="300" /> |
+
+### 7. 1:1 질의응답
+|(학생)1:1 질의응답 작성|(강사)문의 응답|
+|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EC%A7%88%EC%9D%98%EC%9D%91%EB%8B%B5%EC%9E%91%EC%84%B1.gif" width="280" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EC%A7%88%EC%9D%98%EC%9D%91%EB%8B%B5%EB%8B%B5%EB%B3%80.gif" width="280" /> |
+
+
+### 8. (강사, 회원) 대시보드
+|(강사)대시보드|(회원)대시보드|
+|---|---|
+| <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%EA%B0%95%EC%82%AC%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.gif" width="280" /> | <img src="https://github.com/chaeyoungg/Myeonhakso/blob/dev/public/readme/%EB%AA%A8%EB%B0%94%EC%9D%BC%ED%95%99%EC%83%9D%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.gif" width="280" /> |
 
 
 <br />
 
-## 관련 문서
+## 😻프로젝트 소감
+
+
+
+<br />
+
+## 📁관련 문서
 [유저플로우, 화면 정의서](https://www.figma.com/design/uB7RPFGDbdejMkgmQGD8SG/MyeonHakSo?node-id=0-1&t=tcdw3SmsRPJIg7G4-1)
+
 [API 문서](https://api.fesp.shop/apidocs/)
