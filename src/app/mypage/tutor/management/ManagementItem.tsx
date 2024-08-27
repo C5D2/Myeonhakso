@@ -87,7 +87,7 @@ export default function ManagementItem({ item }: IProduct) {
           .toString()
           .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
       </p>
-      <div className=" items-center flex flex-col gap-2 basis-2/12">
+      <div className=" items-center flex flex-col gap-2 basis-2/12 sm:basis-4/12 ">
         <Link
           href={`/${item?.extra.type}/${item?._id}/edit`}
           className="lg:px-1 lg:text-xs xl:px-3 text-sm w-fit rounded-md py-1 px-5 border border-black"

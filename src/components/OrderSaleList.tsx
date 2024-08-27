@@ -73,7 +73,7 @@ export default function OrderList({ item }: itemParam) {
                 </p>
                 <button
                   onClick={setReviewState}
-                  className="px-2 py-1 border border-gray-50 rounded-md hover:bg-main-light-green"
+                  className="px-1 py-1 border border-gray-50 rounded-md hover:bg-main-light-green sm:w-28"
                 >
                   수강평 남기기
                 </button>

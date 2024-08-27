@@ -11,7 +11,6 @@ import ModalHandler from '@/components/layout/ModalHandler';
 import KakaoScript from '@/components/KakaoScript';
 import ToastProvider from '@/components/ToastProvider';
 
-
 declare global {
   interface Window {
     Kakao: any;
@@ -41,7 +40,7 @@ export default function RootLayout({
             </div>
           </ToastProvider>
           <Modal />
-          <ModalHandler />
+          {/* <ModalHandler />/ */}
         </NextAuthProvider>
       </body>
     </html>

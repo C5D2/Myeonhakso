@@ -25,7 +25,7 @@ async function Page({ searchParams }: { searchParams: { page: string } }) {
         <h3 className="basis-1/12 sm:hidden">평점</h3>
         <h3 className="basis-2/12 sm:hidden">총 수강생</h3>
         <h3 className="basis-2/12">총 수입</h3>
-        <h3 className="basis-2/12">관리</h3>
+        <h3 className="basis-2/12 sm:basis-4/12">관리</h3>
       </div>
       {list}
       <Pagination
