@@ -8,6 +8,7 @@ import {
   ILectureOrderResponse,
   ILectureRegister,
 } from '@/types/lecture';
+import { revalidatePath } from 'next/cache';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -48,6 +49,7 @@ export async function patchForm(
   });
 
   const data = await res.json();
+  revalidatePath('/mypage/tutor/management', 'page');
   return data;
 }
 

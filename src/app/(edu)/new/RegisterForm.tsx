@@ -31,6 +31,7 @@ import { Slide, toast } from 'react-toastify';
 // import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import './ScheduleDatePicker.css';
+import useUserStore from '@/zustand/userStore';
 interface IRegisterFormProps {
   params: {
     id?: string;
@@ -67,6 +68,7 @@ export default function RegisterForm({
     },
   });
 
+  const user = useUserStore(state => state.user);
   const [address, setAddress] = useState<string>('');
   const [tab, setTab] = useState(0);
 
@@ -160,7 +162,7 @@ export default function RegisterForm({
           }
 
           const bookmarkedUsers = bookmarkedData.item.byUser;
-          const byUser = bookmarkedData.item.byUser[0];
+          const seller = user?.name;
 
           const notifications = newLectureNotification(
             bookmarkedUsers,
@@ -169,7 +171,7 @@ export default function RegisterForm({
               name: resData.item.name,
               type: resData.item.extra?.type,
             },
-            byUser,
+            seller,
           );
 
           const notificationResults = await sendNotifications(notifications);
@@ -291,6 +293,10 @@ export default function RegisterForm({
             className="w-full p-2 border rounded-lg focus:outline-none focus:border-green-400"
             {...register('content', {
               required: '강의 소개를 입력해주시기 바랍니다.',
+              minLength: {
+                value: 10,
+                message: '강의 소개를 10글자 이상 입력해주시기 바랍니다.',
+              },
             })}
           />
           <InputError target={errors.content} />
