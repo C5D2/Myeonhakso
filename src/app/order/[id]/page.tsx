@@ -14,21 +14,31 @@ import {
 import { format, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import moment from 'moment';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-// function formatDate(date: any) {
-//   return format(parseISO(date), 'yyyy.MM.dd', { locale: ko });
-// }
-
-// function formatTime(date: any) {
-//   return format(parseISO(date), 'HH:mm', { locale: ko });
-// }
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const item = await fetchLectureDetail(params.id);
+  if (item === null) notFound();
+  return {
+    title: `${item.name}`,
+    description: `${item.content}`,
+    openGraph: {
+      title: `${item.name}`,
+      description: `${item.content}`,
+      url: `/order/${params.id}`,
+    },
+  };
+}
 
 async function OrderDetailPage({ params }: { params: { id: string } }) {
   const item = await fetchLectureDetail(params.id);
-  // const session = await getSession();
-  // const user = session?.user;
   const seller_id = item?.seller._id;
   const type = item?.extra.type;
   const otherData = await fetchOtherLectures(String(seller_id!), '4');

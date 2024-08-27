@@ -33,6 +33,22 @@ export function SharePopup({
 }) {
   const handleShareToKakao = () => {
     const { Kakao, location } = window;
+    // const lectureType = params.type;
+
+    // Kakao.Share.sendDefault({
+    //   objectType: 'feed',
+    //   content: {
+    //     title: `${lectureType} - ${item.name}`,
+    //     description: `${item.content}`,
+    //     imageUrl:
+    //       'https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg',
+    //     link: {
+    //       mobileWebUrl: location.href,
+    //       webUrl: location.href,
+    //     },
+    //   },
+    // });
+
     Kakao.Share.sendScrap({
       requestUrl: location.href,
     });

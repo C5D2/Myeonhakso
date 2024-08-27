@@ -114,6 +114,9 @@ export default function RegisterForm({
     }
 
     const newData = produce(data, draft => {
+      if (draft.price) {
+        draft.price = Number(draft.price);
+      }
       if (draft.extra) {
         draft.extra.options = draft.extra.options.map(option => ({
           ...option,
@@ -135,6 +138,10 @@ export default function RegisterForm({
     try {
       if (mode === 'edit') {
         resData = await patchForm(params.id!, newData);
+        toast('강의가 수정되었습니다.', {
+          position: 'top-center',
+          transition: Slide,
+        });
       } else {
         resData = await postForm(newData);
       }
@@ -152,7 +159,7 @@ export default function RegisterForm({
             throw new Error('북마크 데이터 가져오기 실패');
           }
 
-          const bookmarkedUsers = bookmarkedData.item.user;
+          const bookmarkedUsers = bookmarkedData.item.byUser;
           const byUser = bookmarkedData.item.byUser[0];
 
           const notifications = newLectureNotification(
@@ -171,7 +178,7 @@ export default function RegisterForm({
             result => result.ok,
           ).length;
           toast(
-            `새 강의 "${resData.item.name}" 등록 및 알림 전송 완료. 성공: ${successCount}/${notifications.length}`,
+            `새 강의 "${resData.item.name}" 등록 및 알림 전송이 완료되었습니다. ${successCount}/${notifications.length}개의 알림이 전송되었습니다.`,
             {
               position: 'top-center',
               transition: Slide,

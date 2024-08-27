@@ -10,7 +10,6 @@ import {
 } from '@/data/fetchLecture';
 import { IBookmark } from '@/types/lecture';
 import Image from 'next/image';
-import Tab from './Tab';
 import BookmarkLecture from '@/components/BookmarkLecture';
 import SubscribeButton from '@/app/(edu)/[type]/[id]/SubscribeButton';
 import { calculateDays } from '@/utils/calculateDays';
@@ -19,6 +18,8 @@ import moment from 'moment';
 import LectureLevel, { ILevelType } from '@/components/LectureLevel';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { fetchOrderProduct } from '@/data/fetchMypage';
+import Tab from '@/app/(edu)/[type]/[id]/Tab';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 
@@ -27,21 +28,25 @@ export async function generateMetadata({
 }: {
   params: { type: string; id: string };
 }): Promise<Metadata> {
-  const boardName = params.type;
+  const lectureType = params.type;
   const item = await fetchLectureDetail(params.id);
   if (item === null) notFound();
   return {
-    title: `${boardName} - ${item.name}`,
-    description: `${boardName} - ${item.content}`,
+    title: `${lectureType} - ${item.name}`,
+    description: `${lectureType} - ${item.content}`,
     openGraph: {
-      title: `${boardName} - ${item.name}`,
-      description: `${boardName} - ${item.content}`,
+      title: `${lectureType} - ${item.name}`,
+      description: `${lectureType} - ${item.content}`,
       url: `/${params.type}/${params.id}`,
     },
   };
 }
 
-async function DetailPage({ params }: { params: { id: string } }) {
+async function DetailPage({
+  params,
+}: {
+  params: { type: string; id: string };
+}) {
   const session = await getSession();
   const user = session?.user;
   const item = await fetchLectureDetail(params.id);
@@ -68,6 +73,7 @@ async function DetailPage({ params }: { params: { id: string } }) {
   let bookmarkId: number | null = null;
   let isSubscribed = false;
   let subscribeId: string | null = null;
+  let isOrdered = false;
 
   if (user) {
     // 강의 북마크 데이터
@@ -92,6 +98,18 @@ async function DetailPage({ params }: { params: { id: string } }) {
     if (bookmarkedTeacher) {
       isSubscribed = true;
       subscribeId = bookmarkedTeacher._id;
+    }
+
+    // 주문한 목록
+    const orderedData = await fetchOrderProduct();
+    const orderedList = orderedData.item;
+
+    const orderedItem = orderedList.find(item =>
+      item.products.some(product => product._id === Number(params.id)),
+    );
+
+    if (orderedItem) {
+      isOrdered = true;
     }
   }
 
@@ -143,7 +161,13 @@ async function DetailPage({ params }: { params: { id: string } }) {
                 </div>
 
                 <div className="rounded-3xl bg-gray-10 max-h-[300px] min-w-[300px] xxl:min-w-[450px] p-10 box-border border border-main-light-green/50 flex flex-col justify-center gap-5">
-                  {isClosed || item?.quantity == item?.buyQuantity ? (
+                  {isOrdered ? (
+                    <div className="flex place-content-center">
+                      <p className="font-black text-gray-800 text-3xl">
+                        이미 구매한 강의입니다.
+                      </p>
+                    </div>
+                  ) : isClosed || item?.quantity == item?.buyQuantity ? (
                     <div className="flex place-content-center">
                       <p className="font-black text-gray-800 text-3xl">
                         마감된 강의입니다.
@@ -255,19 +279,12 @@ async function DetailPage({ params }: { params: { id: string } }) {
                   )}
 
                   <div>
-                    <div className="flex justify-evenly items-center">
+                    <div className="flex flex-col justify-evenly items-center gap-3">
                       <h2 className="text-2xl font-black mr-3">
                         {item?.seller.name}
                       </h2>
-                      <Image
-                        src="/star.svg"
-                        width={20}
-                        height={20}
-                        alt="만족도"
-                      />
-                      <p className="inline">4.8</p>
+                      <p>{item?.seller.address}</p>
                     </div>
-                    <p>선생님 소개</p>
                   </div>
                 </div>
 

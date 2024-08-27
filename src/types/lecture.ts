@@ -66,6 +66,7 @@ export interface ILectureDetail extends Omit<ILectureRegister, 'seller'> {
     name: string;
     email: string;
     image: string;
+    address: string;
     profileImage: string | null | undefined;
   };
 }
