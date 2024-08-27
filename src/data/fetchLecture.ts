@@ -33,6 +33,7 @@ export async function fetchLecture(
     headers: {
       'client-id': `${CLIENT_ID}`,
     },
+    next: { revalidate: 10 },
   });
 
   const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
@@ -113,6 +114,7 @@ export async function fetchOtherLectures(_id: string, limit: string) {
     headers: {
       'client-id': `${CLIENT_ID}`,
     },
+    next: { revalidate: 10 },
   });
   const resJson: ApiRes<MultiItem<Ilecture>> = await res.json();
   if (!resJson.ok) {
