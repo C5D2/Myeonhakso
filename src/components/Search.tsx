@@ -44,8 +44,10 @@ function Search() {
         onKeyDown={handleKeyDown}
       />
       <button
+        type="button"
+        aria-label="검색 버튼"
         onClick={() => handleSearch(searchTerm)}
-        className="absolute right-3 top-1/2 transform -translate-y-1/2"
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 py-1 px-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

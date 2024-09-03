@@ -79,7 +79,7 @@ const NotiBell: React.FC<NotiBellProps> = ({ userId }: { userId: string }) => {
       {isDropdownOpen && <NotificationsDropdown notifications={notiList} />}
 
       <div className="flex relative">
-        <button type="button" onClick={toggleDropdown}>
+        <button aria-label="알림 버튼" type="button" onClick={toggleDropdown}>
           <svg
             width="53"
             height="30"
