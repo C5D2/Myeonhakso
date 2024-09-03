@@ -2,6 +2,7 @@
 
 import { fetchReview } from '@/data/fetchLecture';
 import { ILectureReview } from '@/types/lecture';
+import Image from 'next/image';
 import { ReactNode } from 'react';
 import useSWR from 'swr';
 
@@ -39,21 +40,17 @@ function Review({ id }: IPropId) {
       <div className="flex gap-3 items-center my-2">
         <div className="flex w-fit h-5">
           {Array.from({ length: 5 }, (_, index) => (
-            <img
+            <Image
               key={index}
               src={index < item.rating ? '/filled-star.svg' : '/empty-star.svg'}
+              width={24}
+              height={24}
+              alt="리뷰 별점"
             />
           ))}
         </div>
         <p className="text-gray-50">{item.rating}</p>
       </div>
-      {/* <div className="flex justify-center w-5 h-5 border border-black">
-        <img src="/filled-star.svg" alt="" />
-        <img src="/filled-star.svg" alt="" />
-        <img src="/filled-star.svg" alt="" />
-        <img src="/filled-star.svg" alt="" />
-        <img src="/empty-star.svg" alt="" />
-      </div> */}
       <p>{item.content}</p>
     </div>
   ));
@@ -63,7 +60,12 @@ function Review({ id }: IPropId) {
       {list?.length !== 0 && (
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 flex justify-center gap-2">
-            <img src="/filled-star.svg" />
+            <Image
+              src="/filled-star.svg"
+              width={24}
+              height={24}
+              alt="채워진 리뷰 별점"
+            />
             <p className="font-extrabold text-[50px]">
               {list?.length && (reviewCount / list?.length).toFixed(1)}
             </p>

@@ -3,6 +3,7 @@
 import TeacherInfo from '@/components/TeacherInfo';
 import { ITeacher } from '@/types';
 import { IBookmark } from '@/types/lecture';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -45,13 +46,17 @@ export default function TeacherCard({ item }: ICardProp) {
       <div className="w-full cursor-pointer" onClick={setSharePopupState}>
         <div className="w-full">
           <div className="min-w-34 h-36 rounded-xl ">
-            <img
+            <Image
               src={`${SERVER}/${
                 (item as IBookmark)?.user?.image ||
                 (item as ITeacher)?.image ||
                 ''
               }`}
-              className="w-full h-full object-cover"
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+              alt="선생님 대표 이미지"
               onError={e => {
                 const target = e.target as HTMLImageElement;
                 target.src = '/lecture-default.jpg';
@@ -61,10 +66,10 @@ export default function TeacherCard({ item }: ICardProp) {
         </div>
       </div>
       <div className="flex flex-col min-w-[30%] w-full h-36 px-3">
-        <h4 className="m-auto font-semibold text-md w-full h-[50%] sm:text-sm text-center">
+        <h3 className="m-auto font-semibold text-md w-full h-[50%] sm:text-sm text-center">
           {(item as IBookmark)?.user?.name || (item as ITeacher)?.name}
           <p className="font-light">선생님</p>
-        </h4>
+        </h3>
         <p className="text-sm mb-auto h-28 pt-2 box-border line-clamp-5 sm:text-xs">
           {(item as IBookmark)?.user?.address || (item as ITeacher)?.address}
         </p>

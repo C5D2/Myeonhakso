@@ -21,7 +21,7 @@ export default async function Header() {
 
   return (
     <>
-     {session?.user && <SSEHandler userId={session.user.id!} />}
+      {session?.user && <SSEHandler userId={session.user.id!} />}
       {/* 모바일헤더 */}
       <div className="bg-white z-30 fixed top-0 left-0 mb-auto w-full h-[50px] dsm:hidden flex justify-between px-5 py-3">
         <Back />
@@ -55,7 +55,7 @@ export default async function Header() {
             alt="면학소 로고"
             // height={100}
             // width={100}
-            layout="fill"
+            fill={true}
             objectFit="contain"
           />
         </Link>
@@ -68,7 +68,7 @@ export default async function Header() {
               </Button>
 
               <LoginInfo
-                // notifications={session.user.notifications}
+              // notifications={session.user.notifications}
               />
               <SessionHandler session={session} />
             </>

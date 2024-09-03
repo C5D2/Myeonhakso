@@ -7,6 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import './swiper.css';
 import { Autoplay } from 'swiper/modules';
+import Image from 'next/image';
 
 export default function SwiperBanner() {
   return (
@@ -17,22 +18,64 @@ export default function SwiperBanner() {
         modules={[Autoplay]}
       >
         <SwiperSlide>
-          <img src="/banner3.png" />
+          <Image
+            src="/banner3.png"
+            height={200}
+            width={2000}
+            alt="첫 번째 배너 이미지"
+            priority={true}
+            className="sm:h-[70px] sm:object-cover"
+          />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="/banner2.png" />
+          <Image
+            src="/banner2.png"
+            height={200}
+            width={2000}
+            alt="두 번째 배너 이미지"
+            priority={true}
+            className="sm:h-[70px] sm:object-cover"
+          />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="/banner1.png" />
+          <Image
+            src="/banner1.png"
+            height={200}
+            width={2000}
+            alt="세 번째 배너 이미지"
+            priority={true}
+            className="sm:h-[70px] sm:object-cover"
+          />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="/banner4.png" />
+          <Image
+            src="/banner4.png"
+            height={200}
+            width={2000}
+            alt="네 번째 배너 이미지"
+            priority={true}
+            className="sm:h-[70px] sm:object-cover"
+          />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="/banner5.png" />
+          <Image
+            src="/banner5.png"
+            height={200}
+            width={2000}
+            alt="다섯 번째 배너 이미지"
+            priority={true}
+            className="sm:h-[70px] sm:object-cover"
+          />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="/banner6.png" />
+          <Image
+            src="/banner6.png"
+            height={200}
+            width={2000}
+            alt="여섯 번째 배너 이미지"
+            priority={true}
+            className="sm:h-[70px] sm:object-cover"
+          />
         </SwiperSlide>
       </Swiper>
     </>

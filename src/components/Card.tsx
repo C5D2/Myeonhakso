@@ -87,9 +87,6 @@ export default function Card({ item }: ICardProp) {
           </p>
 
           <div className="flex">
-            {/* <div className="w-5 h-5">
-          <img src="/calendar.svg" alt="" />
-        </div> */}
             <p className="text-green-800 font-semibold">
               ₩
               {productItem?.price
@@ -154,9 +151,6 @@ export default function Card({ item }: ICardProp) {
           </p>
 
           <div className="flex">
-            {/* <div className="w-5 h-5">
-                <img src="/calendar.svg" alt="" />
-              </div> */}
             <p className="text-green-800 font-semibold">
               ₩
               {productItem?.price
@@ -221,9 +215,6 @@ export default function Card({ item }: ICardProp) {
           </p>
 
           <div className="flex">
-            {/* <div className="w-5 h-5">
-            <img src="/calendar.svg" alt="" />
-          </div> */}
             <p className="text-green-800 font-semibold">
               ₩
               {productItem?.price
