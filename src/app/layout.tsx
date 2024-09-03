@@ -5,11 +5,13 @@ import { Metadata } from 'next';
 import { NextAuthProvider } from './providers';
 import Script from 'next/script';
 
-import Modal from '@/components/Modal';
-import ModalHandler from '@/components/layout/ModalHandler';
+// import Modal from '@/components/Modal';
 
 import KakaoScript from '@/components/KakaoScript';
+// import ToastProvider from '@/components/ToastProvider';
+import dynamic from 'next/dynamic';
 import ToastProvider from '@/components/ToastProvider';
+import Modal from '@/components/Modal';
 
 declare global {
   interface Window {
@@ -26,6 +28,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const Modal = dynamic(() => import('../components/Modal'));
+  const ToastProvider = dynamic(() => import('../components/ToastProvider'));
+
   return (
     <html lang="ko">
       <body>
