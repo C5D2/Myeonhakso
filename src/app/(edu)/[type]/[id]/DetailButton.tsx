@@ -3,6 +3,8 @@
 import Button from '@/components/Button';
 import { orderLecture } from '@/data/actions/lectureAction';
 import { ILectureDetail } from '@/types/lecture';
+import { GetAuthInfo } from '@/utils/authUtils';
+import useModalStore from '@/zustand/useModalStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Slide, toast } from 'react-toastify';
@@ -16,19 +18,21 @@ declare global {
 interface IDetailButtonProps {
   params: { id: string };
   item: ILectureDetail | null;
-  user: { name: string | null; email: string | null };
+  userInfo: { name: string | null; email: string | null };
   id: string | Date | null | undefined;
 }
 
 export default function DetailButton({
   params,
   item,
-  user,
+  userInfo,
 }: IDetailButtonProps) {
   const router = useRouter();
   const price = item?.price;
-  const userName = user.name;
-  const userEmail = user.email;
+  const userName = userInfo.name;
+  const userEmail = userInfo.email;
+  const { user } = GetAuthInfo();
+  const openModal = useModalStore(state => state.openModal);
 
   useEffect(() => {
     const { IMP } = window;
@@ -40,6 +44,24 @@ export default function DetailButton({
   }, []);
 
   const paymentHandler = () => {
+    console.log(user);
+    if (!user) {
+      openModal({
+        title: '로그인',
+        content: (
+          <>
+            로그인 시 이용 가능합니다. <br />
+            로그인하시겠습니까?
+          </>
+        ),
+        callbackButton: {
+          확인: () => router.push('/login'),
+          취소: () => {},
+        },
+      });
+      return;
+    }
+
     if (!window.IMP) return;
     /* 1. 가맹점 식별하기 */
     const { IMP } = window;

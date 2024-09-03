@@ -114,6 +114,7 @@ async function DetailPage({
   }
 
   // TODO: 지금 강의는 다른 강의에서 빼야됨,,,
+  // TODO: overflow: hidden
   const otherLectureList = otherData?.map((item, index) => (
     <div
       className="max-w-[300px] h-[320px] rounded-xl flex flex-grow justify-between"
@@ -156,7 +157,9 @@ async function DetailPage({
                       bookmarkId={bookmarkId}
                       type={type}
                     />
-                    <ShareButton />
+                    <div className="flex items-center">
+                      <ShareButton />
+                    </div>
                   </div>
                 </div>
 
@@ -195,7 +198,7 @@ async function DetailPage({
                       <DetailButton
                         params={params}
                         item={item}
-                        user={{
+                        userInfo={{
                           name: user?.name ?? null,
                           email: user?.email ?? null,
                         }}
@@ -333,7 +336,10 @@ async function DetailPage({
                     </div>
                     <div className="flex flex-col gap-2">
                       {item?.extra?.options.map((option, index) => (
-                        <div className="flex items-center gap-2" key={index}>
+                        <div
+                          className="flex items-center justify-center gap-2"
+                          key={index}
+                        >
                           <span className="bg-main-yellow w-4 h-4 rounded-full"></span>
                           <p>
                             {option.days.join(', ')} {option.startTime ?? ''} ~{' '}
