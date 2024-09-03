@@ -1,6 +1,7 @@
 import MobileMypageButton from '@/app/mypage/MobileMypageButton';
 import { auth } from '@/auth';
 import { Session } from 'next-auth';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function Footer() {
@@ -19,62 +20,112 @@ export default async function Footer() {
         <ul className="flex gap-6 text-gray-50 font-thin justify-between">
           {session?.user ? (
             <>
-              <Link href={`/mypage/${type}/dashboard`} className="text-center">
-                <img src="/footer-dashboard.svg" alt="" className="mx-auto" />
-                <p className="text-[10px]">대시보드</p>
-              </Link>
-              <Link href="/tech" className="text-center">
-                <img
-                  src="/footer-lecture-list.svg"
-                  alt=""
-                  className="mx-auto"
-                />
-                <p className="text-[10px]">강의목록</p>
-              </Link>
-              <Link href="/" className="text-center">
-                <img src="/footer-home.svg" alt="" className="mx-auto" />
-                <p className="text-[10px]">홈</p>
-              </Link>
-              {session?.user?.type === 'seller' ? (
-                <Link href={`/mypage/${type}/management`}>
-                  <img
-                    src="/footer-management.svg"
-                    alt=""
-                    className="mx-auto"
+              <li>
+                <Link
+                  href={`/mypage/${type}/dashboard`}
+                  className="text-center"
+                >
+                  <Image
+                    src="/footer-dashboard.svg"
+                    alt="대시보드 아이콘"
+                    width={25}
+                    height={25}
+                    style={{ margin: '0 auto' }}
                   />
-                  <p className="text-[10px]">강의관리</p>
+                  <p className="text-[10px]">대시보드</p>
                 </Link>
+              </li>
+              <li>
+                <Link href="/tech" className="text-center">
+                  <Image
+                    src="/footer-lecture-list.svg"
+                    alt="강의목록 아이콘"
+                    width={25}
+                    height={25}
+                    style={{ margin: '0 auto' }}
+                  />
+                  <p className="text-[10px]">강의목록</p>
+                </Link>
+              </li>
+              <li>
+                <Link href="/" className="text-center">
+                  <Image
+                    src="/footer-home.svg"
+                    alt=""
+                    width={25}
+                    height={25}
+                    style={{ margin: '0 auto' }}
+                  />
+                  <p className="text-[10px]">홈</p>
+                </Link>
+              </li>
+              {session?.user?.type === 'seller' ? (
+                <li>
+                  <Link href={`/mypage/${type}/management`}>
+                    <Image
+                      src="/footer-management.svg"
+                      alt="강의 관리 아이콘"
+                      width={25}
+                      height={25}
+                      style={{ margin: '0 auto' }}
+                    />
+                    <p className="text-[10px]">강의관리</p>
+                  </Link>
+                </li>
               ) : (
-                <Link href={`/mypage/${type}/bookmark`}>
-                  <img src="/footer-heart.svg" alt="" className="mx-auto" />
-                  <p className="text-[10px]">북마크</p>
-                </Link>
+                <li>
+                  <Link href={`/mypage/${type}/bookmark`}>
+                    <Image
+                      src="/footer-heart.svg"
+                      alt="북마크 아이콘"
+                      width={25}
+                      height={25}
+                      style={{ margin: '0 auto' }}
+                    />
+                    <p className="text-[10px]">북마크</p>
+                  </Link>
+                </li>
               )}
               <MobileMypageButton type={type} />
-
-              {/* <Link href={`/mypage/${type}/dashboard`}>
-                <img src="/footer-mypage.svg" alt="" className="mx-auto" />
-                <p className="text-[10px]">내강의실</p>
-              </Link> */}
             </>
           ) : (
             <>
-              <Link href="/tech" className="text-center">
-                <img
-                  src="/footer-lecture-list.svg"
-                  alt=""
-                  className="mx-auto"
-                />
-                <p className="text-[10px]">강의목록</p>
-              </Link>
-              <Link href="/" className="text-center">
-                <img src="/footer-home.svg" alt="" className="mx-auto" />
-                <p className="text-[10px]">홈</p>
-              </Link>
-              <Link href={`/login`}>
-                <img src="/footer-mypage.svg" alt="" className="mx-auto" />
-                <p className="text-[10px]">로그인</p>
-              </Link>
+              <li>
+                <Link href="/tech" className="text-center">
+                  <Image
+                    src="/footer-lecture-list.svg"
+                    alt="강의 목록 아이콘"
+                    width={25}
+                    height={25}
+                    className="mx-auto"
+                  />
+                  <p className="text-[10px]">강의목록</p>
+                </Link>
+              </li>
+              <li>
+                <Link href="/" className="text-center">
+                  <Image
+                    src="/footer-home.svg"
+                    alt="홈 아이콘"
+                    width={25}
+                    height={25}
+                    className="mx-auto"
+                  />
+                  <p className="text-[10px]">홈</p>
+                </Link>
+              </li>
+              <li>
+                <Link href={`/login`}>
+                  <Image
+                    src="/footer-mypage.svg"
+                    alt="로그인 아이콘"
+                    width={25}
+                    height={25}
+                    className="mx-auto"
+                  />
+                  <p className="text-[10px]">로그인</p>
+                </Link>
+              </li>
             </>
           )}
         </ul>
