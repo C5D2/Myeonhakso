@@ -8,6 +8,7 @@ import 'swiper/css/pagination';
 import './swiper.css';
 import { Autoplay } from 'swiper/modules';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function SwiperBanner() {
   return (
@@ -18,64 +19,76 @@ export default function SwiperBanner() {
         modules={[Autoplay]}
       >
         <SwiperSlide>
-          <Image
-            src="/banner3.png"
-            height={200}
-            width={2000}
-            alt="첫 번째 배너 이미지"
-            priority={true}
-            className="sm:h-[70px] sm:object-cover"
-          />
+          <Link href="/hobby/63">
+            <Image
+              src="/banner3.png"
+              height={200}
+              width={2000}
+              alt="첫 번째 배너 이미지"
+              priority={true}
+              className="sm:h-[70px] sm:object-cover"
+            />
+          </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Image
-            src="/banner2.png"
-            height={200}
-            width={2000}
-            alt="두 번째 배너 이미지"
-            priority={true}
-            className="sm:h-[70px] sm:object-cover"
-          />
+          <Link href="/hobby/61">
+            <Image
+              src="/banner2.png"
+              height={200}
+              width={2000}
+              alt="두 번째 배너 이미지"
+              priority={true}
+              className="sm:h-[70px] sm:object-cover"
+            />
+          </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Image
-            src="/banner1.png"
-            height={200}
-            width={2000}
-            alt="세 번째 배너 이미지"
-            priority={true}
-            className="sm:h-[70px] sm:object-cover"
-          />
+          <Link href="/hobby/64">
+            <Image
+              src="/banner1.png"
+              height={200}
+              width={2000}
+              alt="세 번째 배너 이미지"
+              priority={true}
+              className="sm:h-[70px] sm:object-cover"
+            />
+          </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Image
-            src="/banner4.png"
-            height={200}
-            width={2000}
-            alt="네 번째 배너 이미지"
-            priority={true}
-            className="sm:h-[70px] sm:object-cover"
-          />
+          <Link href="/hobby/62">
+            <Image
+              src="/banner4.png"
+              height={200}
+              width={2000}
+              alt="네 번째 배너 이미지"
+              priority={true}
+              className="sm:h-[70px] sm:object-cover"
+            />
+          </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Image
-            src="/banner5.png"
-            height={200}
-            width={2000}
-            alt="다섯 번째 배너 이미지"
-            priority={true}
-            className="sm:h-[70px] sm:object-cover"
-          />
+          <Link href="/hobby/60">
+            <Image
+              src="/banner5.png"
+              height={200}
+              width={2000}
+              alt="다섯 번째 배너 이미지"
+              priority={true}
+              className="sm:h-[70px] sm:object-cover"
+            />
+          </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Image
-            src="/banner6.png"
-            height={200}
-            width={2000}
-            alt="여섯 번째 배너 이미지"
-            priority={true}
-            className="sm:h-[70px] sm:object-cover"
-          />
+          <Link href="/hobby/65">
+            <Image
+              src="/banner6.png"
+              height={200}
+              width={2000}
+              alt="여섯 번째 배너 이미지"
+              priority={true}
+              className="sm:h-[70px] sm:object-cover"
+            />
+          </Link>
         </SwiperSlide>
       </Swiper>
     </>

@@ -57,7 +57,7 @@ export default function NotificationsDropdown({
   // if (error) return console.log(error);
 
   return (
-    <div className="absolute w-[200px] top-16 md:right-5 md:top-11 text-center text-black bg-white rounded-lg shadow-md z-[99]">
+    <div className="absolute w-[200px] top-16 xxl:left-[calc(100%-396px)] md:right-2 md:top-8 dsm:right-5 dsm:top-11 text-center text-black bg-white rounded-lg shadow-md z-[99]">
       <div className="text-lg text-gray-700 font-black px-2 py-1 border-b-[2px] border-x-main-dark-green">
         알림
       </div>
