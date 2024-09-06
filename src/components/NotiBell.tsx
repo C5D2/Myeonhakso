@@ -24,7 +24,7 @@ const NotiBell: React.FC<NotiBellProps> = ({ userId }: { userId: string }) => {
     setNotiList(data.list);
     if (data.newNoti) {
       toast(data.newNoti.content, {
-        position: 'top-center',
+        position: 'top-right',
         transition: Bounce,
       });
     }
@@ -35,7 +35,7 @@ const NotiBell: React.FC<NotiBellProps> = ({ userId }: { userId: string }) => {
     socket.emit('setUserId', userId, () => {
       setIsConnected(true);
     });
-    socket.off('notification', onNotiMessage);
+    // socket.off('notification', onNotiMessage);
 
     socket.on('notification', onNotiMessage);
   };
