@@ -6,8 +6,8 @@ async function EditPage({ params }: { params: { id: string; type: string } }) {
   return (
     <RegisterForm
       mode="edit"
-      lectureDetailData={lectureDetailData}
       params={params}
+      lectureDetailData={lectureDetailData}
     />
   );
 }
