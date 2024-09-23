@@ -104,6 +104,7 @@ export async function postLectureBookmark(data: object) {
   });
 
   const resData = await res.json();
+  revalidatePath('/mypage/tutee/bookmark', 'page');
   return resData;
 }
 
@@ -121,6 +122,7 @@ export async function deleteBookmark(id: string) {
   });
 
   const resData = await res.json();
+  revalidatePath('/mypage/tutee/bookmark', 'page');
   return resData;
 }
 
@@ -138,6 +140,7 @@ export async function postTeacherBookmark(id: number) {
   });
 
   const resData = await res.json();
+  revalidatePath('/mypage/tutee/bookmark', 'page');
   return resData;
 }
 

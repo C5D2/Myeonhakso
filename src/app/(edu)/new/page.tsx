@@ -2,7 +2,7 @@ import RegisterForm from '@/app/(edu)/new/RegisterForm';
 
 function RegisterPage({ params }: { params: { type: string } }) {
   return (
-    <RegisterForm params={params} mode={'register'} lectureDetailData={null} />
+    <RegisterForm mode="register" params={params} lectureDetailData={null} />
   );
 }
 
