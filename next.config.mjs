@@ -8,6 +8,7 @@ const nextConfig = {
       'api.fesp.shop',
       'localhost',
       '*.googleusercontent.com',
+      '*',
     ],
     remotePatterns: [
       {

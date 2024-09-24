@@ -98,7 +98,7 @@ const config: Config = {
       md: { max: '768px' }, //모바일
       lg: { min: '769px', max: '1024px' },
       xl: { min: '1025px', max: '1280px' }, //태블릿
-      xxl: { min: '1279px', max: '1536px' },
+      xxl: { min: '1279px' },
       dsm: { min: '641px' },
     },
   },

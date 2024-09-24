@@ -26,7 +26,7 @@ export default async function Header() {
 
       {/* 단일 NotiBell 반응형으로 변경 */}
       {session?.user && (
-        <div className="fixed top-3 right-5 z-40 dsm:right-[5px] dsm:top-[25px] xxl:absolute xxl:top-[25px] xxl:left-[calc(100%-396px)] xxl:z-20">
+        <div className="fixed top-3 right-5 z-40 dsm:absolute dsm:right-[5px] dsm:top-[25px] dsm:z-10 xxl:absolute xxl:top-[25px] xxl:left-[calc(100%-396px)]">
           <NotiBell userId={session.user.id!} />
         </div>
       )}
@@ -63,13 +63,13 @@ export default async function Header() {
         <Categories />
         <div className="flex justify-end items-center ml-auto">
           {session?.user ? (
-            <>
+            <div className="flex z-10">
               <Button>
                 <Link href={`/mypage/${type}/dashboard`}> 내 강의실 </Link>
               </Button>
               <LoginInfo />
               <SessionHandler session={session} />
-            </>
+            </div>
           ) : (
             <div className="flex justify-end">
               <Link

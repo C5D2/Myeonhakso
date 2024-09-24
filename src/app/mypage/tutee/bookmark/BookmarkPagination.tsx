@@ -49,13 +49,15 @@ export default function BookmarkPagination({ items }: BookmarkPaginationProps) {
   return (
     <>
       {items.length > 0 ? (
-        <div className="grid grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-4 relative mx-5">
+        <div className="grid grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-4 relative mx-5 min-h-[640px]">
           {currentPageItems.map((item, index) => (
             <div className="max-w-[300px] h-[320px] rounded-xl" key={index}>
               {isLectureItem(item) ? (
                 <Card key={index} item={item} />
               ) : (
-                <TeacherCard key={index} item={item} />
+                <div className="w-[140px]">
+                  <TeacherCard key={index} item={item} />
+                </div>
               )}
             </div>
           ))}

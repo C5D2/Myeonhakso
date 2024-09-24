@@ -35,7 +35,6 @@ const NotiBell: React.FC<NotiBellProps> = ({ userId }: { userId: string }) => {
     socket.emit('setUserId', userId, () => {
       setIsConnected(true);
     });
-    // socket.off('notification', onNotiMessage);
 
     socket.on('notification', onNotiMessage);
   };
