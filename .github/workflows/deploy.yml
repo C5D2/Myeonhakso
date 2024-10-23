@@ -1,24 +1,119 @@
-on: # 아래 job을 실행시킬 상황
+# on: # 아래 job을 실행시킬 상황
+#   push:
+#     branches: [dev]
+
+# jobs:
+#   deploy:
+#     name: deploy
+#     runs-on: ubuntu-latest # 실행될 인스턴스 OS와 버전
+
+#     steps:
+#       - name: excuting remote ssh commands
+#         uses: appleboy/ssh-action@v1.0.3 # ssh 접속하는 오픈소스
+#         with:
+#           host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
+#           username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
+#           key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
+#           port: ${{ secrets.REMOTE_SSH_PORT }} # 접속포트
+#           script: | # 실행할 스크립트
+#             cd /home/ec2-user/Myeonhakso
+#             git pull origin dev
+#             pm2 kill
+#             npm i --force
+#             npm run build
+#             pm2 start dist/main.js
+
+name: Deploy to EC2
+
+on:
   push:
     branches: [dev]
 
 jobs:
   deploy:
-    name: deploy
-    runs-on: ubuntu-latest # 실행될 인스턴스 OS와 버전
+    runs-on: ubuntu-latest # 깃허브의 ubuntu Runner 사용
+
+    env: # 환경 변수 설정
+      EC2_HOST: ${{ secrets.REMOTE_IP }}
+      EC2_USER: ${{ secrets.REMOTE_USER }}
+      EC2_KEY: ${{ secrets.REMOTE_PRIVATE_KEY }}
+
+      PROJECT_NAME: ${{ github.event.repository.name }} # 프로젝트 이름을 환경 변수로 설정
 
     steps:
-      - name: excuting remote ssh commands
-        uses: appleboy/ssh-action@v1.0.3 # ssh 접속하는 오픈소스
+      - name: Checkout code # 소스코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js # Node.js 설정
+        uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
-          username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
-          key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
-          port: ${{ secrets.REMOTE_SSH_PORT }} # 접속포트
-          script: | # 실행할 스크립트
-            cd /home/ec2-user/Myeonhakso
-            git pull origin dev
-            pm2 kill
-            npm i --force
-            npm run build
-            pm2 start dist/main.js
+          node-version: '20'
+
+      - name: Install dependencies for build
+        run: npm install
+
+      - name: Build Next.js app
+        env:
+          NEXT_PUBLIC_API_SERVER: ${{ secrets.NEXT_PUBLIC_API_SERVER }}
+          NEXT_PUBLIC_LIST_LIMIT: ${{ secrets.NEXT_PUBLIC_LIST_LIMIT }}
+          NEXT_PUBLIC_DELAY: ${{ secrets.NEXT_PUBLIC_DELAY }}
+          NEXT_PUBLIC_CARD_LIMIT: ${{ secrets.NEXT_PUBLIC_CARD_LIMIT }}
+          NEXT_PUBLIC_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_CLIENT_ID }}
+
+          NEXT_PUBLIC_KAKAO_API_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }}
+          NEXT_PUBLIC_IAMPORT_IMP: ${{ secrets.NEXT_PUBLIC_IAMPORT_IMP }}
+
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+
+          KAKAO_CLIENT_ID: ${{secrets.KAKAO_CLIENT_ID}}
+          KAKAO_CLIENT_SECRET: ${{secrets.KAKAO_CLIENT_SECRET}}
+
+          GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+          GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+
+        run: npm run build
+
+      - name: Install dependencies for production
+        run: npm prune --omit=dev
+
+      - name: Compress build folder # 빌드 결과물 압축
+        run: tar -czf ${{ github.event.repository.name }}.tar.gz package.json public node_modules .next next.config.mjs
+
+      - name: Install SSH key # EC2 접속을 위한 SSH 키 생성
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ vars.EC2_HOST }} >> ~/.ssh/known_hosts
+          echo "${{ secrets.EC2_KEY }}" > ec2_key.pem 
+          chmod 600 ec2_key.pem
+
+      - name: Create project directory on EC2 # EC2에 프로젝트명의 폴더 생성
+        run: |
+          ssh -i ec2_key.pem ${{ vars.EC2_USER }}@${{ vars.EC2_HOST }} << EOF
+            mkdir -p /home/${{ vars.EC2_USER }}/${{ github.event.repository.name }}
+          EOF
+
+      - name: Copy files to EC2 # 압축한 빌드 파일 EC2에 업로드
+        run: |
+          scp -i ec2_key.pem ${{ github.event.repository.name }}.tar.gz ${{ vars.EC2_USER }}@${{ vars.EC2_HOST }}:/home/${{ vars.EC2_USER }}/${{ github.event.repository.name }}
+
+      - name: Deploy on EC2 # EC2에 SSH 접속 후 배포 완료
+        run: |
+          ssh -i ec2_key.pem ${{ vars.EC2_USER }}@${{ vars.EC2_HOST }} << EOF
+            cd /home/${{ vars.EC2_USER }}/${{ github.event.repository.name }}
+            
+            # 배포 파일을 현재 디렉토리에 풀기
+            tar -xzf ${{ github.event.repository.name }}.tar.gz
+
+            # 환경 변수를 .env 파일에 추가
+            echo "API_KEY_GOOGLE=${{ secrets.API_KEY_GOOGLE }}" >> .env
+            echo "AUTH_GITHUB_CLIENT_ID=${{ secrets.AUTH_GITHUB_CLIENT_ID }}" >> .env
+            echo "AUTH_GITHUB_CLIENT_SECRET=${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}" >> .env
+            echo "AUTH_GOOGLE_CLIENT_ID=${{ secrets.AUTH_GOOGLE_CLIENT_ID }}" >> .env
+            echo "AUTH_GOOGLE_CLIENT_SECRET=${{ secrets.AUTH_GOOGLE_CLIENT_SECRET }}" >> .env
+            echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env
+
+            # 프로세스 재시작
+            pm2 restart next-level || pm2 start npm --name "next-level" -- start
+            pm2 save
+          EOF
