@@ -1,11 +1,11 @@
 'use client';
 
-import AddressSearch from '@/app/(edu)/new/AddressSearch';
-import Category from '@/app/(edu)/new/Category';
-import Curriculum from '@/app/(edu)/new/Curriculum';
-import Level from '@/app/(edu)/new/Level';
-import Option from '@/app/(edu)/new/Option';
-import Quantity from '@/app/(edu)/new/Quantity';
+import AddressSearch from '@/app/(with-chatbot)/(edu)/new/AddressSearch';
+import Category from '@/app/(with-chatbot)/(edu)/new/Category';
+import Curriculum from '@/app/(with-chatbot)/(edu)/new/Curriculum';
+import Level from '@/app/(with-chatbot)/(edu)/new/Level';
+import Option from '@/app/(with-chatbot)/(edu)/new/Option';
+import Quantity from '@/app/(with-chatbot)/(edu)/new/Quantity';
 import Button from '@/components/Button';
 import InputError from '@/components/InputError';
 import KakaoMap from '@/components/KakaoMap';
@@ -41,9 +41,6 @@ interface IRegisterFormProps {
   lectureDetailData: ILectureRegister | ILectureDetail | null;
 }
 
-// TODO: validation 확인, extra.type 보내야 함;;;
-// 등록할 때 type 체크해서 그 페이지...로?
-// 강의 가격 최소 금액 100원
 export default function RegisterForm({
   params,
   mode,
@@ -382,7 +379,7 @@ export default function RegisterForm({
           />
           {/* <InputError target={errors.extra?.curriculum} /> */}
         </div>
-        {/* TODO: 탭 선택 시 표시 */}
+
         <div className="flex m-4 gap-3">
           <button
             type="button"

@@ -10,7 +10,6 @@ export default function MobileMypageButton({
   type: string | undefined;
 }) {
   const [modalActive, setModalActive] = useState(false);
-  console.log('modalActive', modalActive);
   return (
     <li>
       <button type="button" onClick={() => setModalActive(!modalActive)}>

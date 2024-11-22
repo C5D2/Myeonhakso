@@ -1,4 +1,3 @@
-import Button from '@/components/Button';
 import Pagination from '@/components/Pagination';
 import { fetchProductlist } from '@/data/fetchMypage';
 import { Metadata } from 'next';
@@ -15,7 +14,6 @@ async function Page({ searchParams }: { searchParams: { page: string } }) {
   const list = resData.item.map((item, index) => (
     <ManagementItem item={item} key={index} />
   ));
-  console.log('resData===========>', resData);
   return (
     <div className="">
       <h2 className="font-extrabold text-[30px] mb-10">강의 관리</h2>
