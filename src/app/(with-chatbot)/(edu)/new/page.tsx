@@ -1,4 +1,4 @@
-import RegisterForm from '@/app/(edu)/new/RegisterForm';
+import RegisterForm from '@/app/(with-chatbot)/(edu)/new/RegisterForm';
 
 function RegisterPage({ params }: { params: { type: string } }) {
   return (

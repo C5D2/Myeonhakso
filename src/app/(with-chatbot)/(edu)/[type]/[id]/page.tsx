@@ -1,4 +1,4 @@
-import DetailButton from '@/app/(edu)/[type]/[id]/DetailButton';
+import DetailButton from '@/app/(with-chatbot)/(edu)/[type]/[id]/DetailButton';
 import { getSession } from '@/auth';
 import Card from '@/components/Card';
 import KakaoMap from '@/components/KakaoMap';
@@ -11,15 +11,15 @@ import {
 import { IBookmark } from '@/types/lecture';
 import Image from 'next/image';
 import BookmarkLecture from '@/components/BookmarkLecture';
-import SubscribeButton from '@/app/(edu)/[type]/[id]/SubscribeButton';
+import SubscribeButton from '@/app/(with-chatbot)/(edu)/[type]/[id]/SubscribeButton';
 import { calculateDays } from '@/utils/calculateDays';
-import { ShareButton } from '@/app/(edu)/[type]/[id]/ShareButton';
+import { ShareButton } from '@/app/(with-chatbot)/(edu)/[type]/[id]/ShareButton';
 import moment from 'moment';
 import LectureLevel, { ILevelType } from '@/components/LectureLevel';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchOrderProduct } from '@/data/fetchMypage';
-import Tab from '@/app/(edu)/[type]/[id]/Tab';
+import Tab from '@/app/(with-chatbot)/(edu)/[type]/[id]/Tab';
 
 const SERVER = process.env.NEXT_PUBLIC_API_SERVER;
 

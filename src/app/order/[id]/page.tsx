@@ -1,7 +1,7 @@
 'use server';
 
-import DetailCurriculum from '@/app/(edu)/[type]/[id]/DetailCurriculum';
-import { ShareButton } from '@/app/(edu)/[type]/[id]/ShareButton';
+import DetailCurriculum from '@/app/(with-chatbot)/(edu)/[type]/[id]/DetailCurriculum';
+import { ShareButton } from '@/app/(with-chatbot)/(edu)/[type]/[id]/ShareButton';
 import BookmarkLecture from '@/components/BookmarkLecture';
 import Button from '@/components/Button';
 import Card from '@/components/Card';

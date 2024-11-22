@@ -1,4 +1,4 @@
-import RegisterForm from '@/app/(edu)/new/RegisterForm';
+import RegisterForm from '@/app/(with-chatbot)/(edu)/new/RegisterForm';
 import { fetchLectureDetail } from '@/data/fetchLecture';
 
 async function EditPage({ params }: { params: { id: string; type: string } }) {

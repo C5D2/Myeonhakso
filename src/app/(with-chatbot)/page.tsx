@@ -1,5 +1,5 @@
 import SwiperCard from '@/components/SwiperCard';
-import SwiperBanner from '../components/Swiper';
+import SwiperBanner from '../../components/Swiper';
 import Search from '@/components/Search';
 import Image from 'next/image';
 
