@@ -72,13 +72,16 @@ function SwiperCard({ sortParam }: { sortParam: string }) {
   return (
     <>
       <Swiper
-        slidesPerView={2}
+        slidesPerView={1}
         // centeredSlides={true}
         spaceBetween={0}
         navigation={true}
         modules={[Navigation]}
         className="cardSwiper"
         breakpoints={{
+          640: {
+            slidesPerView: 2,
+          },
           768: {
             slidesPerView: 3,
           },

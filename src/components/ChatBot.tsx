@@ -74,7 +74,6 @@ const ChatBot = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('API Response data:', data);
       setMessageParams(data);
       localStorage.setItem('messages', JSON.stringify(data));
     }

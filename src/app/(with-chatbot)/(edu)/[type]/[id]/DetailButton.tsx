@@ -44,7 +44,6 @@ export default function DetailButton({
   }, []);
 
   const paymentHandler = () => {
-    console.log(user);
     if (!user) {
       openModal({
         title: '로그인',
