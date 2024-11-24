@@ -1,47 +1,12 @@
 'use client';
 
 import useSWRMutation from 'swr/mutation';
-import axios from 'axios';
 import type { ChatCompletionMessageParam } from 'openai/resources/index';
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Button from './Button';
 import ImgButton from '@/components/ImgButton';
 import Message, { MessageProps } from '@/components/Message';
-
-async function sendMessage(
-  url: string,
-  { arg }: { arg: ChatCompletionMessageParam[] }
-) {
-  try {
-    const res = await axios.post(url, {
-      messages: arg,
-    }, {
-      validateStatus: (status) => status < 500,
-    });
-    
-    if (!res.data) {
-      console.error('Empty response');
-      throw new Error('Empty response');
-    }
-
-    if (!res.data.messages) {
-      console.error('Invalid response structure:', res.data);
-      throw new Error('Invalid response structure');
-    }
-    
-    return res.data.messages;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error('API Error:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message
-      });
-      throw new Error('강의 정보를 가져오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
-    }
-    throw error;
-  }
-}
+import { sendMessage } from '@/data/actions/completionActions';
 
 const ChatBot = () => {
   const inputRef = useRef<HTMLInputElement>(null);
