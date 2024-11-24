@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     domains: [
@@ -35,4 +39,10 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// export default nextConfig;
+
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
+export default process.env.ANALYZE === 'true'
+  ? withBundleAnalyzer()(nextConfig)
+  : nextConfig;
