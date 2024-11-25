@@ -12,6 +12,7 @@ function LoginInfo() {
   const clearUser = useUserStore(state => state.clearUser);
 
   const handleSignOut = async (event: React.FormEvent) => {
+    try{
     event.preventDefault();
     toast('로그아웃 완료되었습니다.', {
       position: 'top-center',
@@ -21,8 +22,13 @@ function LoginInfo() {
     clearUser();
 
     setTimeout(async () => {
-      await signOut({ redirect: true, callbackUrl: '/' });
-    }, 500);
+      await signOut({ redirect: false });
+      window.location.href = `${window.location.origin}`;
+    }, 800);
+  } catch (error) {
+    console.error('로그아웃 에러:', error);
+    window.location.href = `${window.location.origin}`;
+  }
   };
 
   return (
