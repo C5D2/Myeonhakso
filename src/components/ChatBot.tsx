@@ -7,11 +7,14 @@ import Button from './Button';
 import ImgButton from '@/components/ImgButton';
 import Message, { MessageProps } from '@/components/Message';
 import { sendMessage } from '@/data/actions/completionActions';
+import useModalStore from '@/zustand/useModalStore';
 
 const ChatBot = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const [messageParams, setMessageParams] = useState<ChatCompletionMessageParam[]>([]);
+  const openModal = useModalStore(state => state.openModal);
+
 
   const { trigger, isMutating, data } = useSWRMutation(
     '/api/completions',
@@ -45,10 +48,18 @@ const ChatBot = () => {
   }, [data]);
 
   const handleReset = useCallback(() => {
-    if (window.confirm('대화를 초기화 하시겠습니까?') === false) return;
-    setMessageParams([]);
-    localStorage.removeItem('messages');
-  }, []);
+    openModal({
+      title: '로그인',
+      content: '대화를 초기화하시겠습니까?',
+      callbackButton: {
+        확인: () => {
+          setMessageParams([]);
+          localStorage.removeItem('messages');
+        },
+        취소: () => {},
+      },
+    });
+  }, [openModal]);
 
   const handleSubmit = useCallback(
     (e?: FormEvent<HTMLFormElement>) => {
@@ -101,7 +112,7 @@ const ChatBot = () => {
   }, [messageParams]);
 
   return (
-    <div className="container flex flex-col overflow-hidden shadow-lg my-5 p-10 h-[calc(100vh-100px)]">
+    <div className="container flex flex-col overflow-hidden shadow-lg my-5 p-10 h-[calc(100vh-100px)] min-w-[350px]">
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto">
       <Message content="안녕하세요. 여러분의 강의 추천 도우미, 면학봇입니다.✨ 입문자부터 전문가까지, 다양한 레벨의 강의를 찾아드립니다.🐣🐥🐓 IT, 외국어, 취미 등 관심 있는 분야나 배우고 싶으신 것을 말씀해주세요!" role="assistant" />
         {messagePropsList.map((props, index) => (
@@ -122,6 +133,7 @@ const ChatBot = () => {
             placeholder="질문을 입력하세요."
             disabled={isMutating}
           />
+          {/* 반응형 확인하기... */}
           <ImgButton
             label="sendMessage"
             type="submit"
