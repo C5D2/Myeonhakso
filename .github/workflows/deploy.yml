@@ -62,6 +62,7 @@ jobs:
 
           NEXT_PUBLIC_KAKAO_API_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }}
           NEXT_PUBLIC_IAMPORT_IMP: ${{ secrets.NEXT_PUBLIC_IAMPORT_IMP }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
         run: npm run build
 
@@ -97,6 +98,8 @@ jobs:
             tar -xzf ${{ github.event.repository.name }}.tar.gz
 
             # 환경 변수를 .env 파일에 추가
+            echo "NEXT_PUBLIC_KAKAO_API_KEY=${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }}" >> .env
+            echo "NEXT_PUBLIC_IAMPORT_IMP=${{ secrets.NEXT_PUBLIC_IAMPORT_IMP }}" >> .env
             echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env
             echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> .env
             echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> .env
