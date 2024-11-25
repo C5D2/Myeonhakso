@@ -17,6 +17,7 @@ function MypageModal({
   let sideBar;
 
   const handleSignOut = async (event: React.FormEvent) => {
+    try {
     setModalActive(!modalActive);
     clearUser();
 
@@ -28,9 +29,15 @@ function MypageModal({
     clearUser();
 
     setTimeout(async () => {
-      await signOut({ redirect: true, callbackUrl: '/' });
-    }, 500);
-  };
+      await signOut({ redirect: false });
+      window.location.href = `${window.location.origin}`;
+    }, 800);
+  } catch (error) {
+  console.error('로그아웃 에러:', error);
+  window.location.href = `${window.location.origin}`;
+  }
+}
+
 
   if (user?.type === 'user') {
     sideBar = (

@@ -34,9 +34,9 @@ jobs:
     runs-on: ubuntu-latest # 깃허브의 ubuntu Runner 사용
 
     env: # 환경 변수 설정
-      EC2_HOST: ${{ secrets.REMOTE_IP }}
-      EC2_USER: ${{ secrets.REMOTE_USER }}
-      EC2_KEY: ${{ secrets.REMOTE_PRIVATE_KEY }}
+      EC2_HOST: ${{ secrets.EC2_HOST }}
+      EC2_USER: ${{ secrets.EC2_USER }}
+      EC2_KEY: ${{ secrets.EC2_KEY }}
 
       PROJECT_NAME: ${{ github.event.repository.name }} # 프로젝트 이름을 환경 변수로 설정
 
@@ -63,16 +63,6 @@ jobs:
           NEXT_PUBLIC_KAKAO_API_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }}
           NEXT_PUBLIC_IAMPORT_IMP: ${{ secrets.NEXT_PUBLIC_IAMPORT_IMP }}
 
-          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
-          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-
-          KAKAO_CLIENT_ID: ${{secrets.KAKAO_CLIENT_ID}}
-          KAKAO_CLIENT_SECRET: ${{secrets.KAKAO_CLIENT_SECRET}}
-
-          GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
-          GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
-          OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
-
         run: npm run build
 
       - name: Install dependencies for production
@@ -85,7 +75,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ vars.EC2_HOST }} >> ~/.ssh/known_hosts
-          echo "${{ secrets.EC2_KEY }}" > ec2_key.pem 
+          echo "${{ secrets.EC2_KEY }}" > ec2_key.pem
           chmod 600 ec2_key.pem
 
       - name: Create project directory on EC2 # EC2에 프로젝트명의 폴더 생성
@@ -107,12 +97,15 @@ jobs:
             tar -xzf ${{ github.event.repository.name }}.tar.gz
 
             # 환경 변수를 .env 파일에 추가
-            echo "API_KEY_GOOGLE=${{ secrets.API_KEY_GOOGLE }}" >> .env
-            echo "AUTH_GITHUB_CLIENT_ID=${{ secrets.AUTH_GITHUB_CLIENT_ID }}" >> .env
-            echo "AUTH_GITHUB_CLIENT_SECRET=${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}" >> .env
-            echo "AUTH_GOOGLE_CLIENT_ID=${{ secrets.AUTH_GOOGLE_CLIENT_ID }}" >> .env
-            echo "AUTH_GOOGLE_CLIENT_SECRET=${{ secrets.AUTH_GOOGLE_CLIENT_SECRET }}" >> .env
             echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env
+            echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> .env
+            echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> .env
+            echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+            echo "KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }}" >> .env
+            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+            echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+
 
             # 프로세스 재시작
             pm2 restart next-level || pm2 start npm --name "next-level" -- start
