@@ -75,24 +75,24 @@ jobs:
       - name: Install SSH key # EC2 접속을 위한 SSH 키 생성
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ vars.EC2_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
           echo "${{ secrets.EC2_KEY }}" > ec2_key.pem
           chmod 600 ec2_key.pem
 
       - name: Create project directory on EC2 # EC2에 프로젝트명의 폴더 생성
         run: |
-          ssh -i ec2_key.pem ${{ vars.EC2_USER }}@${{ vars.EC2_HOST }} << EOF
-            mkdir -p /home/${{ vars.EC2_USER }}/${{ github.event.repository.name }}
+          ssh -i ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            mkdir -p /home/${{ secrets.EC2_USER }}/${{ github.event.repository.name }}
           EOF
 
       - name: Copy files to EC2 # 압축한 빌드 파일 EC2에 업로드
         run: |
-          scp -i ec2_key.pem ${{ github.event.repository.name }}.tar.gz ${{ vars.EC2_USER }}@${{ vars.EC2_HOST }}:/home/${{ vars.EC2_USER }}/${{ github.event.repository.name }}
+          scp -i ec2_key.pem ${{ github.event.repository.name }}.tar.gz ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/${{ github.event.repository.name }}
 
       - name: Deploy on EC2 # EC2에 SSH 접속 후 배포 완료
         run: |
-          ssh -i ec2_key.pem ${{ vars.EC2_USER }}@${{ vars.EC2_HOST }} << EOF
-            cd /home/${{ vars.EC2_USER }}/${{ github.event.repository.name }}
+          ssh -i ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            cd /home/${{ secrets.EC2_USER }}/${{ github.event.repository.name }}
             
             # 배포 파일을 현재 디렉토리에 풀기
             tar -xzf ${{ github.event.repository.name }}.tar.gz
