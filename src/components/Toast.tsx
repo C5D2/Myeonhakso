@@ -21,10 +21,9 @@ function Toast({ text, duration = 3000 }: ToastProps) {
 
   return (
     <div
-      className={`fixed top-14 left-0 w-full flex justify-center items-center transition-opacity duration-300 ease-in-out ${
+      className={`fixed top-14 left-0 w-full z-[9999] flex justify-center items-center transition-opacity duration-300 ease-in-out ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
-      style={{ zIndex: 9999 }}
     >
       <div
         // className="bg-gradient-to-br from-[#E8EFDD] via-[#def7b9] to-[#c3ec87]
