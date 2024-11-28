@@ -9,6 +9,7 @@ export default function ImgButton({
   imageAlt?: string;
   width?: number;
   height?: number;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;}) {
 
     const buttonStyle = {
