@@ -19,7 +19,7 @@ export default function SwiperBanner() {
         modules={[Autoplay]}
       >
         <SwiperSlide>
-          <Link href="/hobby/63">
+          <Link href="/tech/66">
             <Image
               src="/banner3.png"
               height={200}
@@ -31,7 +31,7 @@ export default function SwiperBanner() {
           </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Link href="/hobby/61">
+          <Link href="/tech/61">
             <Image
               src="/banner2.png"
               height={200}
@@ -43,7 +43,7 @@ export default function SwiperBanner() {
           </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Link href="/hobby/64">
+          <Link href="/tech/64">
             <Image
               src="/banner1.png"
               height={200}
@@ -55,7 +55,7 @@ export default function SwiperBanner() {
           </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Link href="/hobby/62">
+          <Link href="/tech/62">
             <Image
               src="/banner4.png"
               height={200}

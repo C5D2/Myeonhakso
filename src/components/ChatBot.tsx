@@ -9,7 +9,7 @@ import Message, { MessageProps } from '@/components/Message';
 import { sendMessage } from '@/data/actions/completionActions';
 import useModalStore from '@/zustand/useModalStore';
 
-const ChatBot = () => {
+function ChatBot () {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const [messageParams, setMessageParams] = useState<ChatCompletionMessageParam[]>([]);
@@ -112,9 +112,9 @@ const ChatBot = () => {
   }, [messageParams]);
 
   return (
-    <div className="container flex flex-col overflow-hidden shadow-lg my-5 p-10 h-[calc(100vh-100px)] min-w-[350px]">
+    <div className="flex flex-col h-full p-5">
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto">
-      <Message content="안녕하세요. 여러분의 강의 추천 도우미, 면학봇입니다.✨ 입문자부터 전문가까지, 다양한 레벨의 강의를 찾아드립니다.🐣🐥🐓 IT, 외국어, 취미 등 관심 있는 분야나 배우고 싶으신 것을 말씀해주세요!" role="assistant" />
+      <Message content={`안녕하세요. 여러분의 강의 추천 도우미, 면학봇입니다.✨\n입문자부터 전문가까지, 다양한 레벨의 강의를 찾아드립니다.🐣🐥🐓\nIT, 외국어, 취미 등 관심 있는 분야나 배우고 싶으신 것을 말씀해주세요!`} role="assistant" />
         {messagePropsList.map((props, index) => (
           <Message {...props} key={`message-${index}`} />
         ))}

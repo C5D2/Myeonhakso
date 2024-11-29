@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import Image from 'next/image';
 import classNames from 'classnames';
 import { Ilecture } from '@/types/lecture';
@@ -11,7 +10,7 @@ export type MessageProps = {
   className?: string;
 };
 
-const Message: FC<MessageProps> = ({ content, role, lectures=[], className }) => {
+function Message ({ content, role, lectures=[], className }: MessageProps ) {
   const cleanContent = content.replace(/\*\*(.*?)\*\*/g, '$1');
 
   return (
@@ -42,7 +41,7 @@ const Message: FC<MessageProps> = ({ content, role, lectures=[], className }) =>
           
           {lectures && lectures.length > 0 && (
             <div className="w-full mt-4">
-            <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 xxl:grid-cols-3 gap-3">
+            <div className="grid gap-3">
               {lectures.map((item, index) => (
                 <MiniCard item={item} key={`${item._id}-${index}`} />
               ))}
