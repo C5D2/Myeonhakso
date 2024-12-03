@@ -86,10 +86,25 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'single-spin': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
+        'bottom-sheet-up': {
+          '0%': { transform: 'translateY(420px)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        'bottom-sheet-down': {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(420px)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'single-spin': 'single-spin 5s ease-in-out',
+        'bottom-sheet-up': 'bottom-sheet-up 0.2s ease-in-out',
+        'bottom-sheet-down': 'bottom-sheet-down 0.2s ease-in-out',
       },
     },
     screens: {

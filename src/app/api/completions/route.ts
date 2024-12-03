@@ -10,7 +10,7 @@ const openai = new OpenAI({
 
 let cachedLectureList: Ilecture[] | null = null;
 
-interface CustomChatCompletionMessage extends ChatCompletionMessage {
+interface ICustomChatCompletionMessage extends ChatCompletionMessage {
   lectures?: Ilecture[];
 }
 
@@ -43,7 +43,7 @@ ${JSON.stringify(cachedLectureList)}
       temperature: 0.5,
     });
 
-    const assistantMessage: CustomChatCompletionMessage = {
+    const assistantMessage: ICustomChatCompletionMessage = {
       ...completion.choices[0].message,
     };
 
