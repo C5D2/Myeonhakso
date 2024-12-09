@@ -22,6 +22,7 @@ export default function FloatingChatBotButton() {
       <div
         className={classNames(
           'fixed bottom-12 right-10 bg-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform duration-200 z-[105]',
+          'md:bottom-12 md:right-5',
           isModalOpen && 'md:hidden',
           isAnimating ? 'animate-single-spin' : '',
         )}
@@ -31,8 +32,8 @@ export default function FloatingChatBotButton() {
         <ImgButton
           label={isModalOpen ? 'close chatbot' : 'open chatbot'}
           imageSrc={isModalOpen ? '/close.svg' : '/chatbot.png'}
-          width={60}
           imageAlt={isModalOpen ? 'close chatbot' : 'open chatbot'}
+          className="w-16 md:w-12"
         />
       </div>
     </>

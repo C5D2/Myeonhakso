@@ -1,27 +1,40 @@
-import Image from "next/image";
-
+import Image from 'next/image';
 
 export default function ImgButton({
-  type='button', label, imageSrc, imageAlt, width = 30, height = 30, ...props}: {
+  type = 'button',
+  label,
+  imageSrc,
+  imageAlt,
+  width = 60,
+  height = 60,
+  className = '',
+  ...props
+}: {
   type?: 'button' | 'submit' | 'reset';
   label: string;
   imageSrc: string;
   imageAlt?: string;
   width?: number;
   height?: number;
+  className?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  disabled?: boolean;}) {
+  disabled?: boolean;
+}) {
+  const buttonStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
 
-    const buttonStyle = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    };
-  
-    return (
+  return (
     <button style={buttonStyle} type={type} aria-label={label} {...props}>
-      <Image src={imageSrc} alt={imageAlt || label} width={width} height={height} />
+      <Image
+        src={imageSrc}
+        alt={imageAlt || label}
+        width={width}
+        height={height}
+        className={className}
+      />
     </button>
   );
-
 }
