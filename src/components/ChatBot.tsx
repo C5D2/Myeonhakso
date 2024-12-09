@@ -2,23 +2,31 @@
 
 import useSWRMutation from 'swr/mutation';
 import type { ChatCompletionMessageParam } from 'openai/resources/index';
-import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import Button from './Button';
 import ImgButton from '@/components/ImgButton';
 import Message, { MessageProps } from '@/components/Message';
 import { sendMessage } from '@/data/actions/completionActions';
 import useModalStore from '@/zustand/useModalStore';
 
-function ChatBot () {
+function ChatBot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
-  const [messageParams, setMessageParams] = useState<ChatCompletionMessageParam[]>([]);
+  const [messageParams, setMessageParams] = useState<
+    ChatCompletionMessageParam[]
+  >([]);
   const openModal = useModalStore(state => state.openModal);
-
 
   const { trigger, isMutating, data } = useSWRMutation(
     '/api/completions',
-    sendMessage
+    sendMessage,
   );
 
   useEffect(() => {
@@ -83,19 +91,19 @@ function ChatBot () {
 
   const formatMessage = (message: any): MessageProps => {
     return {
-      content: Array.isArray(message.content) 
-        ? message.content.map((part:any) => part.text).join('')
+      content: Array.isArray(message.content)
+        ? message.content.map((part: any) => part.text).join('')
         : String(message.content || ''),
       role: message.role as MessageProps['role'],
-      lectures: message.lectures || []
+      lectures: message.lectures || [],
     };
   };
-  
+
   const messagePropsList = useMemo(() => {
     let result: MessageProps[] = [];
     let currentLectures = [];
-  
-    messageParams.forEach((cur) => {
+
+    messageParams.forEach(cur => {
       if (cur.role === 'function' && cur.content) {
         try {
           const parsedContent = JSON.parse(cur.content);
@@ -107,14 +115,17 @@ function ChatBot () {
         result.push(formatMessage(cur));
       }
     });
-  
+
     return result;
   }, [messageParams]);
 
   return (
     <div className="flex flex-col h-full p-5">
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto">
-      <Message content={`안녕하세요. 여러분의 강의 추천 도우미, 면학봇입니다.✨\n입문자부터 전문가까지, 다양한 레벨의 강의를 찾아드립니다.🐣🐥🐓\nIT, 외국어, 취미 등 관심 있는 분야나 배우고 싶으신 것을 말씀해주세요!`} role="assistant" />
+        <Message
+          content={`안녕하세요. 여러분의 강의 추천 도우미, 면학봇입니다.✨\n입문자부터 전문가까지, 다양한 레벨의 강의를 찾아드립니다.🐣🐥🐓\nIT, 외국어, 취미 등 관심 있는 분야나 배우고 싶으신 것을 말씀해주세요!`}
+          role="assistant"
+        />
         {messagePropsList.map((props, index) => (
           <Message {...props} key={`message-${index}`} />
         ))}
@@ -124,7 +135,7 @@ function ChatBot () {
       <div className="mt-auto py-4">
         <form
           onSubmit={handleSubmit}
-          className="flex items-center rounded-md border"
+          className="flex items-center rounded-md border-2 focus-within:border-main-yellow/50"
         >
           <input
             ref={inputRef}
@@ -139,6 +150,8 @@ function ChatBot () {
             type="submit"
             imageSrc="/send.png"
             disabled={isMutating}
+            width={40}
+            className="mr-3"
           />
         </form>
         <Button
@@ -151,6 +164,6 @@ function ChatBot () {
       </div>
     </div>
   );
-};
+}
 
 export default ChatBot;
