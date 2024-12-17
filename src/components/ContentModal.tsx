@@ -37,7 +37,7 @@ function ContentModal({
 
   return (
     <div
-      className="fixed inset-0 flex justify-center items-center bg-gray-500/50 z-[100]"
+      className="fixed inset-0 flex justify-center items-center bg-gray-500/50 z-40"
       onClick={setModal}
     >
       <div
