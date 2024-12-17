@@ -7,7 +7,7 @@ function ResponsiveModal(props: IContentModalProps) {
     <ContentModal
       {...props}
       className={classNames(
-        'fixed md:inset-x-0 md:bottom-0 md:h-[90vh] md:w-full md:m-0 md:rounded-none md:rounded-t-lg min-w-[23rem]',
+        'fixed md:inset-x-0 md:bottom-0 md:h-[85vh] md:w-full md:m-0 md:rounded-none md:rounded-t-lg min-w-[23rem]',
         props.className,
       )}
     />

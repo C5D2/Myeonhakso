@@ -15,6 +15,8 @@ import ImgButton from '@/components/ImgButton';
 import Message, { MessageProps } from '@/components/Message';
 import { sendMessage } from '@/data/actions/completionActions';
 import useModalStore from '@/zustand/useModalStore';
+import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 function ChatBot() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -70,9 +72,10 @@ function ChatBot() {
   }, [openModal]);
 
   const handleSubmit = useCallback(
-    (e?: FormEvent<HTMLFormElement>) => {
+    async (e?: FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
       if (isMutating || !inputRef.current) return;
+
       const nextMessages = [
         ...messageParams,
         {
@@ -82,9 +85,16 @@ function ChatBot() {
       ];
 
       setMessageParams(nextMessages);
-      trigger(nextMessages);
-
       inputRef.current.value = '';
+
+      try {
+        await trigger(nextMessages);
+      } catch (error) {
+        console.error('Error while sending message:', error);
+        toast.error(
+          '메시지를 전송하는 중 문제가 발생했습니다. 다시 시도해주세요.',
+        );
+      }
     },
     [isMutating, messageParams, trigger],
   );
@@ -129,7 +139,22 @@ function ChatBot() {
         {messagePropsList.map((props, index) => (
           <Message {...props} key={`message-${index}`} />
         ))}
-        {isMutating && <Message content="생각 중..." role="assistant" />}
+        {isMutating && (
+          <Message
+            content={
+              <div className="flex items-center">
+                <Image
+                  src="/thinking-animation.gif"
+                  alt="thinking"
+                  width={35}
+                  height={35}
+                />
+              </div>
+            }
+            role="assistant"
+            isLoading={true}
+          />
+        )}
       </div>
 
       <div className="mt-auto py-4">
@@ -144,7 +169,6 @@ function ChatBot() {
             placeholder="질문을 입력하세요."
             disabled={isMutating}
           />
-          {/* 반응형 확인하기... */}
           <ImgButton
             label="sendMessage"
             type="submit"
