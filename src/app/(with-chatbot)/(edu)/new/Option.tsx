@@ -3,6 +3,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { setHours, setMinutes, parseISO, formatISO } from 'date-fns';
 import {
   Control,
+  FieldErrors,
+  UseFormClearErrors,
   UseFormRegister,
   UseFormSetValue,
   UseFormWatch,
@@ -21,12 +23,20 @@ interface IOptionProps {
   register: UseFormRegister<ILectureRegister>;
   setValue: UseFormSetValue<ILectureRegister>;
   watch: UseFormWatch<ILectureRegister>;
+  errors: FieldErrors<ILectureRegister>;
+  clearErrors: UseFormClearErrors<ILectureRegister>;
   days: string[];
   startTime: string | null;
   endTime: string | null;
 }
 
-export default function Option({ control, setValue, watch }: IOptionProps) {
+export default function Option({
+  control,
+  setValue,
+  watch,
+  errors,
+  clearErrors,
+}: IOptionProps) {
   const { fields, append, remove } = useFieldArray<
     ILectureRegister,
     'extra.options'
@@ -44,6 +54,9 @@ export default function Option({ control, setValue, watch }: IOptionProps) {
       ? currentDays.filter(day => day !== item)
       : [...currentDays, item];
     setValue(`extra.options.${rowIndex}.days`, newDays);
+    if (newDays.length > 0) {
+      clearErrors(`extra.options.${rowIndex}`);
+    }
   };
 
   const onSelectStartTime = (time: Date | null, rowIndex: number) => {
@@ -52,7 +65,9 @@ export default function Option({ control, setValue, watch }: IOptionProps) {
         `extra.options.${rowIndex}.startTime`,
         moment(time).format('HH:mm'),
       );
-
+      if (options[rowIndex].days?.length && options[rowIndex].endTime) {
+        clearErrors(`extra.options.${rowIndex}`);
+      }
       // 종료 시간을 초기화
       setValue(`extra.options.${rowIndex}.endTime`, null);
     } else {
@@ -66,6 +81,9 @@ export default function Option({ control, setValue, watch }: IOptionProps) {
         `extra.options.${rowIndex}.endTime`,
         moment(time).format('HH:mm'),
       );
+    }
+    if (options[rowIndex].days?.length && options[rowIndex].startTime) {
+      clearErrors(`extra.options.${rowIndex}`);
     }
   };
 
@@ -183,6 +201,12 @@ export default function Option({ control, setValue, watch }: IOptionProps) {
                   )}
                 </div>
               </div>
+              {/* days 배열 필드로, InputError와 호환 불가 */}
+              {errors.extra?.options?.[rowIndex] && (
+                <p className="text-main-red">
+                  {errors.extra.options[rowIndex].message}
+                </p>
+              )}
             </div>
           ))}
         </div>

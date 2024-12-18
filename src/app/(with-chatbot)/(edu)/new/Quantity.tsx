@@ -10,16 +10,12 @@ export const QUANTITY = [
 ];
 
 export default function Quantity({ register }: IQuantityProps) {
-  const {
-    formState: { errors },
-  } = useForm();
-
   return (
     <select
       id="quantity"
       defaultValue=""
       {...register('quantity', {
-        required: '인원을 선택해주세요.',
+        required: '인원을 선택해주시기 바랍니다.',
       })}
     >
       <option value="" disabled>

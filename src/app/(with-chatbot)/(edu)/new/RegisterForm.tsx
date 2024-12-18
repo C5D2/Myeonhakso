@@ -21,7 +21,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, FieldError } from 'react-hook-form';
 import { produce } from 'immer';
 import moment from 'moment';
 import { newLectureNotification } from '@/utils/messageUtils';
@@ -56,6 +56,7 @@ export default function RegisterForm({
     watch,
     formState: { errors },
     setError,
+    clearErrors,
   } = useForm<ILectureRegister>({
     defaultValues: lectureDetailData || {
       extra: {
@@ -92,26 +93,40 @@ export default function RegisterForm({
     }
   };
 
-  const handleOpenModal = () => {
-    openModal({
-      title: mode === 'edit' ? '강의 수정' : '강의 등록',
-      content: `정말로 ${mode === 'edit' ? '수정' : '등록'}하시겠습니까?`,
-      callbackButton: {
-        확인: () => handleSubmit(handleFormSubmit)(),
-        취소: () => {},
-      },
-    });
-  };
+  const validateForm = (data: ILectureRegister) => {
+    let hasError = false;
 
-  const handleFormSubmit = async (data: ILectureRegister) => {
+    if (!data.extra?.schedule?.[0] || !data.extra?.schedule?.[1]) {
+      setError('extra.schedule', {
+        type: 'required',
+        message: '강의 시작 일자와 강의 종료 일자를 선택해주시기 바랍니다.',
+      });
+      hasError = true;
+    }
+
     if (!data.extra?.address && !data.extra?.url) {
       setError('extra.address', {
         type: 'tabError',
         message:
           '대면강의 주소 혹은 화상강의 URL 중 하나는 반드시 입력하셔야 합니다.',
       });
+      hasError = true;
     }
 
+    data.extra?.options.forEach((option, index) => {
+      if (!option.days?.length || !option.startTime || !option.endTime) {
+        setError(`extra.options.${index}`, {
+          type: 'optionError',
+          message: '요일과 시간을 모두 입력해주시기 바랍니다.',
+        });
+        hasError = true;
+      }
+    });
+
+    return !hasError;
+  };
+
+  const handleFormSubmit = async (data: ILectureRegister) => {
     const newData = produce(data, draft => {
       if (draft.price) {
         draft.price = Number(draft.price);
@@ -199,8 +214,21 @@ export default function RegisterForm({
     }
   };
 
+  const onSubmit = async (data: ILectureRegister) => {
+    if (!validateForm(data)) return;
+
+    openModal({
+      title: mode === 'edit' ? '강의 수정' : '강의 등록',
+      content: `정말로 ${mode === 'edit' ? '수정' : '등록'}하시겠습니까?`,
+      callbackButton: {
+        확인: () => handleFormSubmit(data),
+        취소: () => {},
+      },
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit(handleOpenModal)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="max-w-[1500px] min-w-[380px] mx-auto px-56 w-full my-[50px] xl:px-56 lg:px-36 md:px-10 md:my-[20px]">
         <div className="m-4">
           <label className="block font-black text-gray-600 mb-2" htmlFor="name">
@@ -247,7 +275,7 @@ export default function RegisterForm({
           <ul className="flex gap-3">
             <Category register={register} />
           </ul>
-          {/* <InputError target={errors.extra?.type} /> */}
+          <InputError target={errors.extra?.type as FieldError | undefined} />
         </div>
         <div className="m-4">
           <label
@@ -344,7 +372,9 @@ export default function RegisterForm({
               </div>
             )}
           />
-          {/* <InputError target={errors.extra?.schedule} /> */}
+          {errors.extra?.schedule && (
+            <p className="text-main-red">{errors.extra.schedule.message}</p>
+          )}
         </div>
         <div className="m-4">
           <label
@@ -358,11 +388,12 @@ export default function RegisterForm({
             register={register}
             setValue={setValue}
             watch={watch}
+            errors={errors}
+            clearErrors={clearErrors}
             days={[]}
             startTime={null}
             endTime={null}
           />
-          {/* <InputError target={errors.extra?.options} /> */}
         </div>
         <div className="m-4">
           <label
@@ -377,7 +408,6 @@ export default function RegisterForm({
             setValue={setValue}
             errors={errors}
           />
-          {/* <InputError target={errors.extra?.curriculum} /> */}
         </div>
 
         <div className="flex m-4 gap-3">
